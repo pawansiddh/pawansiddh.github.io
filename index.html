@@ -52,17 +52,16 @@
       <nav id="nav">
         <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
         <button data-view="subjects"><span>◫</span>Subjects</button>
-        <button data-view="today"><span>✓</span>Today Plan</button>
         <button data-view="tasks"><span>◷</span>Tasks</button>
-        <button data-view="analytics"><span>⌁</span>Analytics</button>
         <button data-view="notes"><span>✎</span>Notes</button>
         <button data-view="calendar"><span>▦</span>Calendar</button>
-        <button data-view="timer"><span>◉</span>Study Timer</button>
-        <button data-view="settings"><span>⚙</span>Settings</button>
+        <button data-view="jobs"><span>▤</span>Job Tracker</button>
       </nav>
       <div class="sidebar-footer">
-        <label class="workspace-switcher">Workspace<select id="workspaceSelect" aria-label="Current workspace"></select></label>
-        <button id="analogClock" class="analog-clock" aria-label="Open calendar"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
+        <div class="sidebar-tools">
+          <button id="analogClock" class="analog-clock" aria-label="Open calendar"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
+          <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
+        </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
         <button id="logoutBtn" class="nav-logout">↪ Sign out</button>
       </div>
@@ -88,6 +87,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
+  <script src="jobs.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

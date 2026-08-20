@@ -9,6 +9,8 @@ A responsive, local-first study planning and progress-tracking web application.
 - Today plan and future tasks
 - Progress analytics and streaks
 - Notes and calendar
+- Integrated job application tracker with documents, editing, search, status filters, follow-ups and exports
+- Job follow-ups displayed in the shared calendar and notification summary
 - Due/overdue states, sounds and notifications
 - Multiple themes and mobile layout
 - JSON backup/restore and Excel export
