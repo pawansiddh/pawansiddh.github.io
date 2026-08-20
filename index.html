@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#09111f" />
+  <meta name="description" content="A private-first, responsive study planning and progress tracker." />
+  <title>Study Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <section id="authScreen" class="auth-shell">
+    <div class="auth-art">
+      <div class="grid-glow"></div>
+      <div class="brand brand-large"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+      <div class="auth-copy">
+        <span class="eyebrow">YOUR LEARNING COMMAND CENTER</span>
+        <h1>Turn ambitious goals into a daily system.</h1>
+        <p>Plan subjects, track every module, protect your streak and see exactly what to study next.</p>
+      </div>
+      <div class="auth-proof">
+        <div><strong>100%</strong><span>Local-first</span></div>
+        <div><strong>20</strong><span>Core features</span></div>
+        <div><strong>∞</strong><span>Subjects</span></div>
+      </div>
+    </div>
+    <div class="auth-panel">
+      <form id="loginForm" class="auth-card">
+        <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <span class="eyebrow">WELCOME BACK</span>
+        <h2>Continue your journey</h2>
+        <p>Your data stays in this browser unless you export it.</p>
+        <label>Name<input id="loginName" required autocomplete="name" placeholder="Pawan" /></label>
+        <label>PIN<input id="loginPin" type="password" minlength="4" required inputmode="numeric" placeholder="4+ digit PIN" /></label>
+        <button class="btn primary wide" type="submit">Enter dashboard <span>→</span></button>
+        <small>First time? Enter any name and PIN to create your local profile.</small>
+      </form>
+    </div>
+  </section>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+      <nav id="nav">
+        <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
+        <button data-view="subjects"><span>◫</span>Subjects</button>
+        <button data-view="today"><span>✓</span>Today Plan</button>
+        <button data-view="tasks"><span>◷</span>Tasks</button>
+        <button data-view="analytics"><span>⌁</span>Analytics</button>
+        <button data-view="notes"><span>✎</span>Notes</button>
+        <button data-view="calendar"><span>▦</span>Calendar</button>
+        <button data-view="settings"><span>⚙</span>Settings</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="streak-mini"><span>🔥</span><div><strong id="sideStreak">0 day streak</strong><small>Keep showing up</small></div></div>
+        <button id="logoutBtn" class="nav-logout">↪ Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn mobile-only" aria-label="Open navigation">☰</button>
+        <div class="search-wrap"><span>⌕</span><input id="globalSearch" placeholder="Search subjects, tasks, notes..." /></div>
+        <div class="top-actions">
+          <button id="quickAdd" class="btn primary">+ New task</button>
+          <button id="notifBtn" class="icon-btn" aria-label="Notifications">♢<span id="notifDot" class="dot"></span></button>
+          <div class="avatar" id="avatar">P</div>
+        </div>
+      </header>
+      <div id="view" class="view"></div>
+    </main>
+  </div>
+
+  <dialog id="modal"><form method="dialog" id="modalForm"><div id="modalBody"></div></form></dialog>
+  <input id="importInput" class="hidden" type="file" accept="application/json" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
