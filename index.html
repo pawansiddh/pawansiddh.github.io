@@ -36,11 +36,12 @@
         <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
         <span class="eyebrow">WELCOME BACK</span>
         <h2>Continue your journey</h2>
-        <p>Your data stays in this browser unless you export it.</p>
-        <label>Name<input id="loginName" required autocomplete="name" placeholder="Pawan" /></label>
-        <label>PIN<input id="loginPin" type="password" minlength="4" required inputmode="numeric" placeholder="4+ digit PIN" /></label>
-        <button class="btn primary wide" type="submit">Enter dashboard <span>→</span></button>
-        <small>First time? Enter any name and PIN to create your local profile.</small>
+        <p>Sign in to sync your workspaces safely across devices.</p>
+        <label>Email or name<input id="loginName" required autocomplete="username" placeholder="pawan@example.com" /></label>
+        <label>Password / local PIN<input id="loginPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Password" /></label>
+        <button class="btn primary wide" type="submit">Continue <span>→</span></button>
+        <button id="googleLoginBtn" class="btn ghost wide" type="button">Continue with Google</button>
+        <small>Cloud sign-in activates after Supabase is connected. Local mode remains available offline.</small>
       </form>
     </div>
   </section>
@@ -60,7 +61,9 @@
         <button data-view="settings"><span>⚙</span>Settings</button>
       </nav>
       <div class="sidebar-footer">
-        <div class="streak-mini"><span>🔥</span><div><strong id="sideStreak">0 day streak</strong><small>Keep showing up</small></div></div>
+        <label class="workspace-switcher">Workspace<select id="workspaceSelect" aria-label="Current workspace"></select></label>
+        <button id="analogClock" class="analog-clock" aria-label="Open calendar"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
+        <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
         <button id="logoutBtn" class="nav-logout">↪ Sign out</button>
       </div>
     </aside>
@@ -72,7 +75,7 @@
         <div class="top-actions">
           <button id="quickAdd" class="btn primary">+ New task</button>
           <button id="notifBtn" class="icon-btn" aria-label="Notifications">♢<span id="notifDot" class="dot"></span></button>
-          <div class="avatar" id="avatar">P</div>
+          <button class="avatar" id="avatar" aria-label="Open user settings">P</button>
         </div>
       </header>
       <div id="view" class="view"></div>
@@ -83,6 +86,8 @@
   <input id="importInput" class="hidden" type="file" accept="application/json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
