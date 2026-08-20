@@ -18,18 +18,21 @@
 
   <section id="authScreen" class="auth-shell">
     <div class="auth-art">
+      <img class="auth-portrait" src="pawan-kumar-siddh.jpg" alt="Pawan Kumar Siddh, Cyber Security Analyst" />
       <div class="grid-glow"></div>
       <div class="brand brand-large"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
       <div class="auth-copy">
-        <span class="eyebrow">YOUR LEARNING COMMAND CENTER</span>
+        <span class="eyebrow">CREATED BY PAWAN KUMAR SIDDH</span>
         <h1>Turn ambitious goals into a daily system.</h1>
         <p>Plan subjects, track every module, protect your streak and see exactly what to study next.</p>
+        <div class="creator-card"><strong>Pawan Kumar Siddh</strong><span>Cyber Security Analyst</span></div>
       </div>
       <div class="auth-proof">
         <div><strong>100%</strong><span>Local-first</span></div>
         <div><strong>20</strong><span>Core features</span></div>
         <div><strong>∞</strong><span>Subjects</span></div>
       </div>
+      <small class="auth-credit">Study Tracker · Designed and developed by Pawan Kumar Siddh</small>
     </div>
     <div class="auth-panel">
       <form id="loginForm" class="auth-card">
@@ -63,7 +66,6 @@
           <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
-        <button id="logoutBtn" class="nav-logout">↪ Sign out</button>
       </div>
     </aside>
 
@@ -81,7 +83,7 @@
     </main>
   </div>
 
-  <dialog id="modal"><form method="dialog" id="modalForm"><div id="modalBody"></div></form></dialog>
+  <dialog id="modal"><form method="dialog" id="modalForm"><button id="modalClose" class="modal-close" type="button" aria-label="Close dialog">×</button><div id="modalBody"></div></form></dialog>
   <input id="importInput" class="hidden" type="file" accept="application/json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
