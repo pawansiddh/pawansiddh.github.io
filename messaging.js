@@ -271,11 +271,12 @@ function familyMessageBeep() {
 }
 
 function familyMessagingPaintBadge(total) {
-  const badge = document.querySelector('#messageBadge');
-  if (!badge) return;
   const visible = total > 0 && familyData?.settings?.messageNotifications !== false;
-  badge.textContent = total > 99 ? '99+' : String(total);
-  badge.classList.toggle('hidden', !visible);
+  document.querySelectorAll('#messageBadge,#floatingMessageBadge').forEach(badge => {
+    badge.textContent = total > 99 ? '99+' : String(total);
+    badge.classList.toggle('hidden', !visible);
+  });
+  document.querySelector('#floatingMessages')?.classList.toggle('has-unread', visible);
 }
 
 window.familyMessagingRefreshBadge = async () => {
@@ -357,11 +358,76 @@ window.enhanceSettingsNavigation = () => {
 };
 
 function addMessagingToManual(html) {
-  const nav = `<button onclick="scrollManual('messaging')">Family messaging<span>→</span></button>`;
+  const nav = `<button onclick="scrollManual('extension')">Browser extension<span>→</span></button><button onclick="scrollManual('storage')">Documents & storage<span>→</span></button><button onclick="scrollManual('messaging')">Family messaging<span>→</span></button>`;
   html = html.replace('</aside><div class="manual-content">', `${nav}</aside><div class="manual-content">`);
   html = html.replace('Family activity or settings', 'Family activity, messages or settings');
-  const section = manualSection('messaging','12','Family messaging and automatic deletion','Private text updates for linked Learners and Parents.',`<ul><li>Messaging works only for cloud Learner and Parent/Admin accounts connected with a Family code. Local-only accounts cannot message across devices.</li><li>Each Learner has one private family room. Every currently linked Parent/Admin can participate; a Parent linked to multiple learners sees one room per learner.</li><li>Messages are text only, with a maximum of 2,000 characters. Voice notes, video, file attachments and public conversations are not stored.</li><li>Every message is permanently deleted after 30 days. The sender may delete it sooner, and may edit their own text for 15 minutes.</li><li>If the Supabase database reaches 75% of the free 500 MB quota, the oldest messages more than one day old are deleted earlier. This is irreversible and protects the rest of Study Tracker from reaching the database cap.</li><li>Family messages are never included in Subject import/export, Job CSV export, or workspace transfers.</li></ul>`);
-  return html.replace(/<\/div><\/div>$/, `${section}</div></div>`);
+  const components = [
+    ['setup','Login & accounts'],['daily','Dashboard'],['daily','Daily briefing'],['subjects','Subjects'],['subjects','Modules & topics'],
+    ['planning','Tasks'],['planning','Calendar'],['planning','Today plan'],['notes','Notes'],['notes','Study timer'],['jobs','Job Tracker'],
+    ['extension','Browser extension'],['storage','Documents & storage'],['workspaces','Settings'],['workspaces','Workspaces'],['family','Parent portal'],
+    ['family','Activity monitoring'],['messaging','Messages'],['transfer','Import / export'],['security','Sign out & deletion']
+  ];
+  const directory = `<div id="manualSearchStatus" class="manual-search-status" role="status"></div><div class="manual-component-directory"><strong>All components</strong><div>${components.map(([id,label])=>`<button type="button" onclick="scrollManual('${id}')">${label}</button>`).join('')}</div></div>`;
+  html = html.replace('</label><div class="manual-layout">', `</label>${directory}<div class="manual-layout">`);
+  const extension = manualSection('extension','12','Browser extension: install, capture and troubleshoot','Capture LinkedIn, Indeed, Naukri and career-page jobs into a review draft.',`<ol><li>Open <strong>Job Tracker</strong> and select <strong>Browser extension</strong> to download <code>study-tracker-job-capture.zip</code>.</li><li>Extract the ZIP. Open <code>chrome://extensions</code> or <code>edge://extensions</code>, enable <strong>Developer mode</strong>, select <strong>Load unpacked</strong>, and choose the extracted <code>extension</code> folder.</li><li>Open the complete job-posting page on LinkedIn, Indeed, Naukri or a company career site. Select the extension icon, then <strong>Capture job</strong>.</li><li>The extension reads the visible company, role, location, posting URL and job description only after you click Capture. It briefly stores the draft in browser storage and opens Study Tracker.</li><li>Study Tracker always opens a review form. Correct missing or inaccurate fields, choose a status, add documents, then select <strong>Save application</strong>.</li><li>The extension does not apply for jobs, submit forms, bypass a portal login, collect passwords or save a record without your review.</li></ol><div class="faq-list"><details><summary>The extension says no job details were found</summary><p>Open the full job-details page—not a search-results list—refresh that tab, and capture again. Some portals load the description only after expanding it.</p></details><details><summary>It opens Study Tracker but no review form appears</summary><p>Refresh Study Tracker, confirm the extension is version 1.0.1, then reload the job tab after installing or updating the extension.</p></details><details><summary>Can it capture protected browser pages?</summary><p>No. Chrome settings, extension-store pages, PDFs opened by the browser and other protected URLs cannot be read. Use the actual job webpage or paste the JD manually.</p></details></div>`);
+  const storage = manualSection('storage','13','Resumes, JDs, cover letters and storage','Understand exactly where job documents are stored.',`<ul><li>The main Supabase Postgres database stores only the application record and document metadata such as name, size and storage path.</li><li>For a cloud user, the actual PDF, DOCX or TXT bytes are uploaded to the private <strong>job-documents</strong> Supabase Storage bucket when it is available.</li><li>If cloud upload is unavailable, the file falls back to this browser’s IndexedDB. A local fallback remains only on the device where it was uploaded and cannot be downloaded from another device.</li><li>Resume, cover-letter and JD uploads are limited to 10 MB each. Pasted JD text is part of the application record rather than a file attachment.</li><li>Subject import/export and Job CSV export never include attachment bytes.</li><li>Moving attachments to Google Drive or another provider requires a separate provider connection and migration. Study Tracker does not silently copy existing documents to an external account.</li></ul>`);
+  const messaging = manualSection('messaging','14','Family messaging and automatic deletion','Private text updates for linked Learners and Parents.',`<ul><li>Open the floating message button at the lower-right or select <strong>Messages</strong> in the sidebar. A red counter means unread messages are waiting.</li><li>Messaging works only for cloud Learner and Parent/Admin accounts connected with a Family code. Local-only accounts cannot message across devices.</li><li>Each Learner has one private family room. Every currently linked Parent/Admin can participate; a Parent linked to multiple learners sees one room per learner.</li><li>Messages are text only, with a maximum of 2,000 characters. Voice notes, video, file attachments and public conversations are not stored.</li><li>Every message is permanently deleted after 30 days. The sender may delete it sooner, and may edit their own text for 15 minutes.</li><li>If the Supabase database reaches 75% of the free 500 MB quota, the oldest messages more than one day old are deleted earlier. This is irreversible and protects the rest of Study Tracker from reaching the database cap.</li><li>Family messages are never included in Subject import/export, Job CSV export, or workspace transfers.</li></ul>`);
+  return html.replace(/<\/div><\/div>$/, `${extension}${storage}${messaging}</div></div>`);
+}
+
+const MANUAL_ALIASES = {
+  setup:'login signin signup register google password pin account learner parent role authentication',
+  daily:'dashboard home analytics chart progress greeting popup welcome briefing today due upcoming notification',
+  subjects:'subject course syllabus module chapter topic lesson progress status deadline',
+  planning:'task todo calendar calander event schedule today plan tomorrow future due followup',
+  notes:'note notebook editor timer stopwatch focus pomodoro study time clock streak',
+  jobs:'job tracker application carrer career company role applied interview resume cover letter jd description status sort filter csv',
+  extension:'browser chrome edge extension extention linkedin indeed naukri capture plugin zip load unpacked developer mode',
+  storage:'document attachment file pdf docx txt resume cover letter jd storage bucket cloud indexeddb local drive gdrive r2 download upload',
+  workspaces:'setting settings theme appearance sound voice workspace archive profile notification briefing popup',
+  family:'family parent admin child learner linking code monitor activity screen changes portal privacy',
+  transfer:'import export json sample template subject transfer csv',
+  security:'security signout logout delete account permanent session password profile',
+  faq:'faq question help problem troubleshoot issue',
+  messaging:'message messages chat chatbot conversation unread badge red indicator retention delete 30 days family text'
+};
+
+function manualNormalize(value='') {
+  return String(value).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,' ').trim();
+}
+
+function manualDistance(a,b) {
+  const row=Array.from({length:b.length+1},(_,index)=>index);
+  for(let i=1;i<=a.length;i++){
+    let previous=row[0];row[0]=i;
+    for(let j=1;j<=b.length;j++){
+      const saved=row[j];
+      row[j]=Math.min(row[j]+1,row[j-1]+1,previous+(a[i-1]===b[j-1]?0:1));
+      previous=saved;
+    }
+  }
+  return row[b.length];
+}
+
+function manualTokenMatches(term,words) {
+  if(words.some(word=>word===term||word.includes(term)||term.includes(word)))return true;
+  if(term.length<4)return false;
+  const allowance=term.length>=8?2:1;
+  return words.some(word=>Math.abs(word.length-term.length)<=allowance&&manualDistance(term,word)<=allowance);
+}
+
+function filterManualComponents(query) {
+  const normalized=manualNormalize(query),terms=normalized.split(' ').filter(Boolean),sections=[...document.querySelectorAll('.manual-section')];
+  let matches=0,only=null;
+  sections.forEach(section=>{
+    const id=section.id.replace('manual-',''),haystack=manualNormalize(`${section.innerText} ${MANUAL_ALIASES[id]||''}`),words=haystack.split(' ');
+    const matched=!normalized||haystack.includes(normalized)||terms.every(term=>manualTokenMatches(term,words));
+    section.hidden=!matched;
+    if(matched&&normalized){section.open=true;matches++;only=section}
+  });
+  const status=document.querySelector('#manualSearchStatus');
+  if(status)status.textContent=!normalized?'':matches?`${matches} manual section${matches===1?'':'s'} found for “${query}”.`:`No manual section found for “${query}”. Try a component name such as calendar, extension, resume, parent or messages.`;
+  if(matches===1&&only)setTimeout(()=>only.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -369,6 +435,9 @@ document.addEventListener('DOMContentLoaded', () => {
   settings = () => baseSettings().replace(/<\/div>$/, familyMessagingSettingsCard() + familyManualSettingsCard() + '</div>');
   const baseHelpView = helpView;
   helpView = () => addMessagingToManual(baseHelpView());
+  window.filterManual = filterManualComponents;
+  const floating = document.querySelector('#floatingMessages');
+  if(floating)floating.onclick=()=>typeof isParentSession==='function'&&isParentSession()?familyOpenMessaging():setView('messages');
   document.querySelector('#modal')?.addEventListener('close', () => {
     if (document.querySelector('.parent-chat-root')) familyMessagingStopRoomSubscription();
   });
