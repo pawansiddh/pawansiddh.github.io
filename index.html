@@ -31,6 +31,7 @@
     <div class="auth-panel">
       <form id="loginForm" class="auth-card">
         <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <div class="auth-mode-tabs"><button class="active" type="button" data-auth-mode="learner">Learner login</button><button type="button" data-auth-mode="parent">Parent / Admin</button></div>
         <span class="eyebrow">WELCOME BACK</span>
         <h2>Continue your journey</h2>
         <p>Sign in to sync your workspaces safely across devices.</p>
@@ -39,6 +40,18 @@
         <button class="btn primary wide" type="submit">Continue <span>→</span></button>
         <button id="googleLoginBtn" class="btn ghost wide" type="button">Continue with Google</button>
         <small>Cloud sign-in activates after Supabase is connected. Local mode remains available offline.</small>
+      </form>
+      <form id="parentLoginForm" class="auth-card hidden">
+        <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <div class="auth-mode-tabs"><button type="button" data-auth-mode="learner">Learner login</button><button class="active" type="button" data-auth-mode="parent">Parent / Admin</button></div>
+        <span class="eyebrow">FAMILY STUDY MODE</span>
+        <h2 id="parentAuthTitle">Parent access</h2>
+        <p id="parentAuthCopy">Use your separate Parent/Admin credentials to monitor linked learners.</p>
+        <label id="parentNameLabel" class="hidden">Parent name<input id="parentName" autocomplete="name" placeholder="Parent name" /></label>
+        <label>Parent ID<input id="parentId" required autocomplete="username" placeholder="Create or enter parent ID" /></label>
+        <label>Parent password / PIN<input id="parentPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Minimum 4 characters" /></label>
+        <button id="parentLoginButton" class="btn primary wide" type="submit">Open Parent Portal <span>→</span></button>
+        <small>Local Parent Mode stays on this device. Secure cross-device monitoring requires the supplied Supabase family schema.</small>
       </form>
     </div>
   </section>
@@ -84,6 +97,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="jobs.js"></script>
+  <script src="family.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
