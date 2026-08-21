@@ -37,7 +37,8 @@
         <p>Sign in to sync your workspaces safely across devices.</p>
         <label>Email or name<input id="loginName" required autocomplete="username" placeholder="pawan@example.com" /></label>
         <label>Password / local PIN<input id="loginPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Password" /></label>
-        <button class="btn primary wide" type="submit">Continue <span>→</span></button>
+        <button class="btn primary wide" type="submit">Sign in <span>→</span></button>
+        <button id="createLearnerAccountBtn" class="btn ghost wide" type="button">Create new Learner account</button>
         <button id="googleLoginBtn" class="btn ghost wide" type="button">Continue with Google</button>
         <small>Cloud sign-in activates after Supabase is connected. Local mode remains available offline.</small>
       </form>
@@ -51,6 +52,7 @@
         <label>Parent ID<input id="parentId" required autocomplete="username" placeholder="Create or enter parent ID" /></label>
         <label>Parent password / PIN<input id="parentPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Minimum 4 characters" /></label>
         <button id="parentLoginButton" class="btn primary wide" type="submit">Open Parent Portal <span>→</span></button>
+        <button id="createParentAccountBtn" class="btn ghost wide" type="button">Create new Parent account</button>
         <button id="googleParentLoginBtn" class="btn ghost wide" type="button">Continue with Google as Parent</button>
         <small>Use a separate Parent/Admin account. Email, Google and cross-device monitoring are securely connected through Supabase.</small>
       </form>

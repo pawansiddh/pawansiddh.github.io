@@ -150,3 +150,18 @@ grant select,insert,update on public.family_profiles to authenticated;
 grant select,delete on public.family_links to authenticated;
 grant select on public.family_invites to authenticated;
 grant select,insert,update,delete on public.family_activity to authenticated;
+
+-- Deletes only the currently authenticated account. All tracker and Family rows
+-- are removed by their ON DELETE CASCADE foreign keys.
+create or replace function public.delete_own_account()
+returns boolean
+language plpgsql security definer set search_path=pg_catalog,public,auth as $$
+declare account_id uuid:=auth.uid();
+begin
+ if account_id is null then raise exception 'Authentication required'; end if;
+ delete from auth.users where id=account_id;
+ if not found then raise exception 'Account no longer exists'; end if;
+ return true;
+end $$;
+revoke all on function public.delete_own_account() from public,anon;
+grant execute on function public.delete_own_account() to authenticated;
