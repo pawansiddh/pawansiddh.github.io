@@ -119,9 +119,9 @@ begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
  if not exists(select 1 from public.family_profiles where user_id=auth.uid() and role='parent') then raise exception 'Parent/Admin role required'; end if;
  if normalized !~ '^FAM-[A-Z0-9]{6}$' then raise exception 'Invalid family code format'; end if;
- delete from public.family_invites where parent_id=auth.uid() and (used_at is not null or expires_at<=now());
+ delete from public.family_invites fi where fi.parent_id=auth.uid() and (fi.used_at is not null or fi.expires_at<=now());
  return query insert into public.family_invites(parent_id,code_hash,expires_at)
- values(auth.uid(),encode(digest(normalized,'sha256'),'hex'),now()+interval '15 minutes') returning id,family_invites.expires_at;
+ values(auth.uid(),encode(extensions.digest(normalized,'sha256'),'hex'),now()+interval '15 minutes') returning family_invites.id,family_invites.expires_at;
 end $$;
 
 create or replace function public.family_redeem_invite(p_code text)
@@ -132,11 +132,11 @@ begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
  if normalized !~ '^FAM-[A-Z0-9]{6}$' then raise exception 'Invalid or expired family code'; end if;
  if not exists(select 1 from public.family_profiles where user_id=auth.uid() and role='learner') then raise exception 'Register this account as learner first'; end if;
- select * into chosen from public.family_invites where code_hash=encode(digest(normalized,'sha256'),'hex') and used_at is null and expires_at>now() for update;
+ select fi.* into chosen from public.family_invites fi where fi.code_hash=encode(extensions.digest(normalized,'sha256'),'hex') and fi.used_at is null and fi.expires_at>now() for update;
  if chosen.id is null then raise exception 'Invalid or expired family code'; end if;
  if chosen.parent_id=auth.uid() then raise exception 'You cannot link an account to itself'; end if;
  insert into public.family_links(parent_id,learner_id) values(chosen.parent_id,auth.uid()) on conflict do nothing;
- update public.family_invites set used_at=now(),used_by=auth.uid() where id=chosen.id;
+ update public.family_invites fi set used_at=now(),used_by=auth.uid() where fi.id=chosen.id;
  return query select chosen.parent_id,p.display_name,l.linked_at from public.family_links l
  join public.family_profiles p on p.user_id=l.parent_id where l.parent_id=chosen.parent_id and l.learner_id=auth.uid();
 end $$;
