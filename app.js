@@ -133,4 +133,7 @@ boot();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js'
 
 googleLoginBtn.onclick=async()=>{if(!sb)return toast('Cloud login is unavailable');if(typeof familyPrepareLearnerLogin==='function')familyPrepareLearnerLogin();const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(error)toast(error.message)};
 
-setInterval(async()=>{if(!sb||!cloudUser||invalidatingSession)return;const {data,error}=await sb.auth.getUser();if(error||!data?.user||data.user.id!==cloudUser.id)invalidateCloudSession('This account was deleted. Create a new account to continue.')},60000);
+async function validateCloudAccount(){if(!sb||!cloudUser||invalidatingSession)return;const {data,error}=await sb.auth.getUser();if(error||!data?.user||data.user.id!==cloudUser.id)invalidateCloudSession('This account was deleted. Create a new account to continue.')}
+setInterval(validateCloudAccount,30000);
+addEventListener('focus',validateCloudAccount);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')validateCloudAccount()});
