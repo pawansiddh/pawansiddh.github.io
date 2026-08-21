@@ -1,6 +1,8 @@
 /* Secure, text-only Family Messaging. Cloud-linked accounts only. */
 const FAMILY_CHAT_LIMIT = 2000;
 const FAMILY_CHAT_RETENTION_DAYS = 30;
+const SETTINGS_CATEGORY_KEY = 'studyTracker.settings.category';
+let activeSettingsCategory = sessionStorage.getItem(SETTINGS_CATEGORY_KEY) || 'account';
 let familyChatState = {
   user: null,
   rooms: [],
@@ -31,6 +33,17 @@ function familyChatDate(value) {
 function familyChatCloudOnly() {
   return `<div class="family-chat-empty"><span>☁</span><h3>Cloud account required</h3><p>Family messages work only between linked Learner and Parent/Admin cloud accounts. Sign in with email or Google, then connect the accounts using a Family code.</p><button type="button" class="btn primary" onclick="setView('settings')">Open Family settings</button></div>`;
 }
+
+window.copyMessagingDatabaseFix = async () => {
+  try {
+    const response = await fetch('./supabase-messaging-hotfix.sql', {cache:'no-store'});
+    if (!response.ok) throw Error('Database fix could not be loaded');
+    await navigator.clipboard.writeText(await response.text());
+    toast('Messaging database fix copied. Paste it into Supabase SQL Editor and select Run.');
+  } catch (error) {
+    toast(error.message || 'Open the database fix file from the project repository.');
+  }
+};
 
 window.familyMessagingView = () => {
   setTimeout(() => familyMessagingBoot(false));
@@ -69,7 +82,8 @@ async function familyMessagingBoot(parentMode = false) {
   if (!cleanup.error) familyChatState.cleanup = cleanup.data;
   const {data, error} = await sb.rpc('family_chat_list_rooms');
   if (error) {
-    root.innerHTML = `<div class="family-chat-empty"><span>!</span><h3>Messaging is not ready</h3><p>${familyChatEscape(error.message)}</p><small>Run the current Supabase Family schema, then refresh this page.</small></div>`;
+    const ambiguous = /learner_id.*ambiguous/i.test(error.message || '');
+    root.innerHTML = `<div class="family-chat-empty"><span>!</span><h3>${ambiguous?'One-time messaging database update required':'Messaging is not ready'}</h3><p>${ambiguous?'The installed chat function is an older version. Copy the repaired function below and run it once in the Supabase SQL Editor.':familyChatEscape(error.message)}</p>${ambiguous?'<div class="family-chat-fix-actions"><button type="button" class="btn primary" onclick="copyMessagingDatabaseFix()">Copy SQL fix</button><a class="btn ghost" href="supabase-messaging-hotfix.sql" download>Download SQL fix</a></div>':'<small>Run the current Supabase Family schema, then refresh this page.</small>'}</div>`;
     return;
   }
   familyChatState.rooms = data || [];
@@ -314,6 +328,8 @@ function familyManualSettingsCard() {
 window.enhanceSettingsNavigation = () => {
   const grid = document.querySelector('.settings-grid');
   if (!grid || grid.closest('.settings-shell')) return;
+  const appearanceCard = [...grid.children].find(card => /Appearance/.test(card.querySelector('h3')?.textContent || ''));
+  if (appearanceCard && typeof appearanceSettingsMarkup === 'function') appearanceCard.innerHTML = appearanceSettingsMarkup();
   const categoryFor = title => {
     if (/Profile/.test(title)) return 'account';
     if (/Workspace/.test(title)) return 'workspaces';
@@ -342,6 +358,8 @@ window.enhanceSettingsNavigation = () => {
   grid.parentNode.insertBefore(shell, grid);
   shell.append(aside, grid);
   const showCategory = key => {
+    activeSettingsCategory = categories.some(([category]) => category === key) ? key : 'account';
+    sessionStorage.setItem(SETTINGS_CATEGORY_KEY, activeSettingsCategory);
     aside.querySelectorAll('[data-setting-nav]').forEach(button => button.classList.toggle('active', button.dataset.settingNav === key));
     [...grid.children].forEach(card => card.classList.toggle('setting-hidden', card.dataset.settingCategory !== key));
   };
@@ -354,13 +372,14 @@ window.enhanceSettingsNavigation = () => {
     if (!query) return showCategory(aside.querySelector('[data-setting-nav].active')?.dataset.settingNav || 'account');
     [...grid.children].forEach(card => card.classList.toggle('setting-hidden', !card.textContent.toLowerCase().includes(query)));
   };
-  showCategory('account');
+  showCategory(activeSettingsCategory);
 };
 
 function addMessagingToManual(html) {
   const nav = `<button onclick="scrollManual('extension')">Browser extension<span>→</span></button><button onclick="scrollManual('storage')">Documents & storage<span>→</span></button><button onclick="scrollManual('messaging')">Family messaging<span>→</span></button>`;
   html = html.replace('</aside><div class="manual-content">', `${nav}</aside><div class="manual-content">`);
   html = html.replace('Family activity or settings', 'Family activity, messages or settings');
+  html = html.replace('change theme, completion sound and notifications.', 'choose an optimized theme, text style, text size and custom login background; also change completion sound and notifications.');
   const components = [
     ['setup','Login & accounts'],['daily','Dashboard'],['daily','Daily briefing'],['subjects','Subjects'],['subjects','Modules & topics'],
     ['planning','Tasks'],['planning','Calendar'],['planning','Today plan'],['notes','Notes'],['notes','Study timer'],['jobs','Job Tracker'],

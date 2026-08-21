@@ -246,7 +246,7 @@ begin
  insert into public.family_chat_rooms(learner_id)
  select distinct l.learner_id from public.family_links l
  where l.parent_id=auth.uid() or l.learner_id=auth.uid()
- on conflict(learner_id) do nothing;
+ on conflict on constraint family_chat_rooms_learner_id_key do nothing;
  return query
  select r.id,r.learner_id,coalesce(p.display_name,'Learner'),
   case when r.learner_id=auth.uid() then 'learner' else 'parent' end,

@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#09111f" />
   <meta name="description" content="A private-first, responsive study planning and progress tracker." />
   <title>Study Tracker</title>
+  <script>try{const saved=JSON.parse(localStorage.getItem('studyTracker.v30')||'{}');if(localStorage.getItem('studyTracker.cloudAccount')||saved.profile)document.documentElement.classList.add('session-pending')}catch{}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -24,7 +25,7 @@
           <span class="eyebrow">CYBER SECURITY ANALYST</span>
           <h1>Pawan Kumar Siddh</h1>
           <p>I created Study Tracker to turn demanding learning goals into a clear, consistent daily practice—one subject, module and milestone at a time.</p>
-          <div class="identity-signature"><span></span><small>Designed &amp; developed by Pawan Kumar Siddh</small></div>
+          <div class="identity-signature"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
         </div>
       </div>
     </div>
@@ -78,6 +79,7 @@
           <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
+        <div class="product-credit"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
       </div>
     </aside>
 
@@ -97,6 +99,7 @@
       <span>✉</span>
       <i id="floatingMessageBadge" class="floating-message-badge hidden">0</i>
     </button>
+    <div class="parent-product-credit"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
   </div>
 
   <dialog id="modal"><form method="dialog" id="modalForm"><button id="modalClose" class="modal-close" type="button" aria-label="Close dialog">×</button><div id="modalBody"></div></form></dialog>
