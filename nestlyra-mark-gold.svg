@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Nestlyra</title>
+  <desc id="desc">A gold protective nest surrounding five rising focus points.</desc>
+  <defs>
+    <linearGradient id="gold" x1="82" y1="54" x2="430" y2="462" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d68b"/>
+      <stop offset=".48" stop-color="#c9983c"/>
+      <stop offset="1" stop-color="#8f6424"/>
+    </linearGradient>
+    <linearGradient id="nest" x1="132" y1="310" x2="382" y2="406" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffaf0"/>
+      <stop offset="1" stop-color="#d8c7a5"/>
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="218" fill="none" stroke="url(#gold)" stroke-width="8"/>
+  <path d="M109 345c39-43 91-65 147-65s108 22 147 65c-39 43-91 65-147 65s-108-22-147-65Z" fill="url(#nest)" stroke="url(#gold)" stroke-width="7"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-width="9">
+    <path d="M177 320c-7-92-27-163-61-216"/>
+    <path d="M221 310c-3-103-16-181-39-240"/>
+    <path d="M256 306V57"/>
+    <path d="M291 310c3-103 16-181 39-240"/>
+    <path d="M335 320c7-92 27-163 61-216"/>
+  </g>
+  <g fill="#f3c969" stroke="#8f6424" stroke-width="5">
+    <circle cx="116" cy="104" r="16"/>
+    <circle cx="182" cy="70" r="15"/>
+    <circle cx="256" cy="57" r="15"/>
+    <circle cx="330" cy="70" r="15"/>
+    <circle cx="396" cy="104" r="16"/>
+  </g>
+</svg>
