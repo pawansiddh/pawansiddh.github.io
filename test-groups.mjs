@@ -30,6 +30,7 @@ assert.match(schema,/delete from public\.group_invites where group_id=p_group_id
 assert.match(schema,/interval '15 minutes'/);
 assert.match(schema,/interval '30 days'/);
 assert.match(schema,/legacy_family_learner_id/,'Legacy Family links must migrate instead of being discarded');
+assert.match(schema,/then group_profiles\.display_name/,'Blank internal profile setup must preserve an existing display name');
 assert.match(schema,/drop policy if exists "linked parents read learner tracker"/,'Legacy full-tracker observer access must be removed');
 assert.match(schema,/Transfer ownership or delete the group before leaving/);
 assert.match(schema,/Version conflict: reload the record before saving/);

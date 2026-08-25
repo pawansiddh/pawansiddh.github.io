@@ -180,7 +180,12 @@ declare result public.group_profiles;
 begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
  insert into public.group_profiles(user_id,display_name) values(auth.uid(),left(coalesce(nullif(trim(p_display_name),''),'Nestlyra user'),120))
- on conflict(user_id) do update set display_name=excluded.display_name,updated_at=now()
+ on conflict(user_id) do update set
+  display_name=case
+   when nullif(trim(coalesce(p_display_name,'')),'') is null then group_profiles.display_name
+   else excluded.display_name
+  end,
+  updated_at=now()
  returning * into result;
  return result;
 end $$;
