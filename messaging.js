@@ -344,7 +344,7 @@ window.enhanceSettingsNavigation = () => {
     if (/Sound/.test(title)) return 'notifications';
     if (/Daily briefing/.test(title)) return 'briefing';
     if (/Voice/.test(title)) return 'voice';
-    if (/Family access|Activity privacy/.test(title)) return 'family';
+    if (/Group connections|Activity privacy/.test(title)) return 'groups';
     if (/Messaging/.test(title)) return 'messaging';
     if (/import|export/i.test(title)) return 'data';
     if (/Help/.test(title)) return 'help';
@@ -354,7 +354,7 @@ window.enhanceSettingsNavigation = () => {
   const categories = [
     ['account','Profile & account','♙'],['modules','Navigation & modules','☷'],['appearance','Appearance','◐'],['notifications','Notifications','♢'],
     ['briefing','Daily briefing popup','☀'],['voice','Voice & accessibility','◖'],['workspaces','Workspaces','▦'],
-    ['family','Family & Parent controls','⌂'],['messaging','Messaging & privacy','✉'],['data','Import / export','⇄'],
+    ['groups','Groups & privacy','◎'],['messaging','Messaging & privacy','✉'],['data','Import / export','⇄'],
     ['security','Security & danger zone','◇'],['help','Help & user manual','?']
   ];
   const shell = document.createElement('div');

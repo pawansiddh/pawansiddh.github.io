@@ -27,7 +27,7 @@
 
   const DATA_KEYS = ['certifications','examPlans','mockTests','revisionItems','habits','goals','interviewPrep'];
   const EXISTING_DEFAULTS = ['subjects','tasks','calendar','notes','jobs','timer'];
-  const FIT_VIEWS = new Set(['dashboard','calendar','timer','settings','certifications','exams','mocks','revision','habits','goals','interviews']);
+  const FIT_VIEWS = new Set(['dashboard','calendar','timer','settings','groups','messages','certifications','exams','mocks','revision','habits','goals','interviews']);
   const ENTITY_DEFS = {
     certifications:{title:'Certification Planner',subtitle:'Organize certification targets, providers and exam dates',array:'certifications',singular:'certification',fields:[['name','Certification','text','Security+'],['provider','Provider','text','CompTIA'],['examDate','Target exam date','date',''],['status','Status','select',['Planning','Learning','Revision','Booked','Completed']]],meta:item=>[item.provider,item.examDate,item.status].filter(Boolean).join(' · ')},
     exams:{title:'Exam Planner',subtitle:'Plan school, university and competitive examinations',array:'examPlans',singular:'exam plan',fields:[['name','Exam name','text','Final examination'],['category','Exam type','select',['School','University','Competitive','Entrance','Other']],['examDate','Exam date','date',''],['progress','Syllabus progress %','number','0']],meta:item=>[item.category,item.examDate,`${Number(item.progress||0)}% syllabus`].filter(Boolean).join(' · ')},
@@ -109,7 +109,7 @@
   function trackerNavMarkup() {
     ensureTrackerState();
     const enabled = MODULES.filter(item => state.moduleConfig.enabled.includes(item.id) && item.id !== 'timer');
-    return `<button data-view="dashboard"><span>⌂</span>Dashboard</button>${enabled.map(item=>`<button data-view="${item.id}"><span>${item.icon}</span>${item.label}</button>`).join('')}<div class="nav-divider"></div><button data-view="settings"><span>⚙</span>Settings</button><button data-view="help"><span>?</span>Manual & FAQ</button>`;
+    return `<button data-view="dashboard"><span>⌂</span>Dashboard</button>${enabled.map(item=>`<button data-view="${item.id}"><span>${item.icon}</span>${item.label}</button>`).join('')}<button data-view="groups"><span>◎</span>Groups</button><div class="nav-divider"></div><button data-view="settings"><span>⚙</span>Settings</button><button data-view="help"><span>?</span>Manual & FAQ</button>`;
   }
 
   function updateTrackerNavigation() {
@@ -347,7 +347,7 @@
     if(optionalView&&!trackerModuleEnabled(viewName))viewName='dashboard';
     const custom=ENTITY_DEFS[viewName];
     updateTrackerNavigation();
-    if(custom){sideStreak.textContent=`${streak()} days`;view.innerHTML=trackerEntityView(viewName)}else baseRender();
+    if(viewName==='groups'&&typeof groupsView==='function'){sideStreak.textContent=`${streak()} days`;view.innerHTML=groupsView()}else if(custom){sideStreak.textContent=`${streak()} days`;view.innerHTML=trackerEntityView(viewName)}else baseRender();
     updateTrackerNavigation();trackerViewClass();
     if(viewName==='settings')setTimeout(filterDisabledSettings,80);
   };
@@ -469,6 +469,7 @@
   const baseHelpView=helpView;
   helpView=()=>{
     let html=baseHelpView();
+    if(html.includes('id="manual-modules"'))return html;
     const section=manualSection('modules','15','Navigation, presets and optional modules','Make each workspace fit a child, learner, exam candidate or job seeker.',`<ul><li>Open <strong>Settings → Navigation & modules</strong>.</li><li>Choose School / Child, Certification Preparation, Competitive Exam, Job Seeker, Daily Planner or Custom.</li><li>Use individual switches to show or hide Subjects, Certification Planner, Exam Planner, Mock Tests, Revision & Mistakes, Tasks, Calendar, Notes, Habits, Goals, Interview Preparation, Job Tracker and Study Timer.</li><li>Dashboard, Settings, the Manual and the floating Messages button remain available.</li><li>Turning a section off never deletes its data. The section also stops contributing to navigation, Dashboard cards, search, briefing and module-specific settings until re-enabled.</li><li>Module choices are stored per workspace, so a certification workspace and a job-search workspace can use different layouts.</li></ul>`);
     html=html.replace('</aside><div class="manual-content">','<button onclick="scrollManual(\'modules\')">Navigation & modules<span>→</span></button></aside><div class="manual-content">');
     return html.replace(/<\/div><\/div>$/,`${section}</div></div>`);

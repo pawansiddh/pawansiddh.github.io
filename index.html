@@ -34,32 +34,17 @@
     <div class="auth-panel">
       <form id="loginForm" class="auth-card">
         <div class="mobile-brand brand"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
-        <div class="auth-mode-tabs"><button class="active" type="button" data-auth-mode="learner">Learner login</button><button type="button" data-auth-mode="parent">Parent / Admin</button></div>
+        <div class="auth-account-note"><span>◎</span><strong>One Nestlyra account</strong><small>Create or join groups after signing in</small></div>
         <span class="eyebrow">WELCOME BACK</span>
         <h2>Continue your journey</h2>
         <p>Sign in to sync your workspaces safely across devices.</p>
         <label>Email or name<input id="loginName" required autocomplete="username" placeholder="pawan@example.com" /></label>
         <label>Password / local PIN<input id="loginPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Password" /></label>
         <button class="btn primary wide" type="submit">Sign in <span>→</span></button>
-        <button id="createLearnerAccountBtn" class="btn ghost wide" type="button">Create new Learner account</button>
+        <button id="createLearnerAccountBtn" class="btn ghost wide" type="button">Create new account</button>
         <button id="googleLoginBtn" class="btn ghost wide" type="button">Continue with Google</button>
         <small>Cloud sign-in activates after Supabase is connected. Local mode remains available offline.</small>
         <button class="auth-help-link" data-login-faq type="button">❔ Login help &amp; FAQ</button>
-      </form>
-      <form id="parentLoginForm" class="auth-card hidden">
-        <div class="mobile-brand brand"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
-        <div class="auth-mode-tabs"><button type="button" data-auth-mode="learner">Learner login</button><button class="active" type="button" data-auth-mode="parent">Parent / Admin</button></div>
-        <span class="eyebrow">FAMILY STUDY MODE</span>
-        <h2 id="parentAuthTitle">Parent access</h2>
-        <p id="parentAuthCopy">Use your separate Parent/Admin credentials to monitor linked learners.</p>
-        <label id="parentNameLabel" class="hidden">Parent name<input id="parentName" autocomplete="name" placeholder="Parent name" /></label>
-        <label>Parent ID<input id="parentId" required autocomplete="username" placeholder="Create or enter parent ID" /></label>
-        <label>Parent password / PIN<input id="parentPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Minimum 4 characters" /></label>
-        <button id="parentLoginButton" class="btn primary wide" type="submit">Open Parent Portal <span>→</span></button>
-        <button id="createParentAccountBtn" class="btn ghost wide" type="button">Create new Parent account</button>
-        <button id="googleParentLoginBtn" class="btn ghost wide" type="button">Continue with Google as Parent</button>
-        <small>Use a separate Parent/Admin account. Email, Google and cross-device monitoring are securely connected through Supabase.</small>
-        <button class="auth-help-link" data-login-faq type="button">❔ Parent login help &amp; FAQ</button>
       </form>
     </div>
   </section>
@@ -74,6 +59,7 @@
         <button data-view="notes"><span>✎</span>Notes</button>
         <button data-view="calendar"><span>▦</span>Calendar</button>
         <button data-view="jobs"><span>▤</span>Job Tracker</button>
+        <button data-view="groups"><span>◎</span>Groups</button>
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-tools">
@@ -97,7 +83,7 @@
       </header>
       <div id="view" class="view"></div>
     </main>
-    <button id="floatingMessages" class="floating-messages" type="button" aria-label="Open family messages" title="Family messages">
+    <button id="floatingMessages" class="floating-messages" type="button" aria-label="Open group messages" title="Group messages">
       <span>✉</span>
       <i id="floatingMessageBadge" class="floating-message-badge hidden">0</i>
     </button>
@@ -113,6 +99,7 @@
   <script src="jobs.js"></script>
   <script src="family.js"></script>
   <script src="messaging.js"></script>
+  <script src="groups.js"></script>
   <script src="app.js"></script>
   <script src="tracker-modules.js"></script>
 </body>

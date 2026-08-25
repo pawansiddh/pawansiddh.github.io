@@ -5,7 +5,7 @@ import {JSDOM, VirtualConsole} from 'jsdom';
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const browserErrors=[];
 const virtualConsole=new VirtualConsole();
-virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas/i.test(error.message))browserErrors.push(error.message)});
+virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas/i.test(error.message)){browserErrors.push(error.message);console.error(error.detail?.stack||error.stack||error.message)}});
 const dom=new JSDOM(source,{url:'http://127.0.0.1:4173/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole});
 const {window}=dom,{document}=window;
 
@@ -25,7 +25,7 @@ window.URL.revokeObjectURL=()=>{};
 window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setAttribute('open','')};
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 
-const application=['config.js','jobs.js','family.js','messaging.js','app.js','tracker-modules.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -39,6 +39,8 @@ const clickText=(selector,text)=>{
 await wait(40);
 
 assert.equal(document.title,'Nestlyra Focus');
+assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login should use one neutral account flow');
+assert.match(document.querySelector('.auth-account-note').textContent,/One Nestlyra account/);
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
@@ -48,6 +50,7 @@ assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users 
 document.querySelector('#modalClose').click();
 
 assert.match(document.querySelector('.sidebar>.brand').textContent,/Nestlyra\s*Focus/);
+assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
 
@@ -77,6 +80,10 @@ assert.match(document.querySelector('.timeline-event')?.textContent||'',/Nestlyr
 
 window.setTheme('dark');assert.equal(document.body.classList.contains('theme-nestlyra'),false);
 window.setTheme('nestlyra');assert.equal(document.body.classList.contains('theme-nestlyra'),true);
+clickText('#nav button','Groups');await wait();
+assert.match(document.querySelector('#groupsRoot').textContent,/Cloud account required/,'Local accounts should keep personal tracking but require cloud identity for Groups');
+window.setView('help');await wait();
+assert.match(document.querySelector('#view').textContent,/Groups, roles and invitations/,'Manual should explain the account-neutral Groups model');
 assert.deepEqual(browserErrors,[],browserErrors.join('\n'));
-console.log('Nestlyra regression passed: brand, default theme, sample course, modules, calendar views and event editing.');
+console.log('Nestlyra regression passed: unified accounts, Groups, privacy manual, brand, default theme, sample course, modules and Calendar.');
 dom.window.close();
