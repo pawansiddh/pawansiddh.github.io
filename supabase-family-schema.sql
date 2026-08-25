@@ -1,4 +1,4 @@
--- Study Tracker secure cross-device Family Mode. Safe to run repeatedly.
+-- Nestlyra Focus secure cross-device Family Mode. Safe to run repeatedly.
 create extension if not exists pgcrypto;
 
 create table if not exists public.family_profiles (
@@ -82,9 +82,7 @@ drop policy if exists "linked parents read learner tracker" on public.user_track
 drop policy if exists "linked parents update learner tracker" on public.user_tracker_data;
 create policy "linked parents read learner tracker" on public.user_tracker_data for select to authenticated using(exists(
  select 1 from public.family_links l where l.parent_id=auth.uid() and l.learner_id=user_tracker_data.user_id));
-create policy "linked parents update learner tracker" on public.user_tracker_data for update to authenticated using(exists(
- select 1 from public.family_links l where l.parent_id=auth.uid() and l.learner_id=user_tracker_data.user_id)) with check(exists(
- select 1 from public.family_links l where l.parent_id=auth.uid() and l.learner_id=user_tracker_data.user_id));
+-- Parent/Admin is an observer. Only the Learner may update learner tracker data.
 
 create or replace function public.family_register_learner(p_display_name text default '') returns public.family_profiles
 language plpgsql security definer set search_path=public,auth as $$
@@ -119,7 +117,9 @@ begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
  if not exists(select 1 from public.family_profiles where user_id=auth.uid() and role='parent') then raise exception 'Parent/Admin role required'; end if;
  if normalized !~ '^FAM-[A-Z0-9]{6}$' then raise exception 'Invalid family code format'; end if;
- delete from public.family_invites fi where fi.parent_id=auth.uid() and (fi.used_at is not null or fi.expires_at<=now());
+ -- A Parent/Admin owns one current code. Creating another immediately revokes
+ -- every earlier code, even when the earlier code still has time remaining.
+ delete from public.family_invites fi where fi.parent_id=auth.uid();
  return query insert into public.family_invites(parent_id,code_hash,expires_at)
  values(auth.uid(),encode(extensions.digest(normalized,'sha256'),'hex'),now()+interval '15 minutes') returning family_invites.id,family_invites.expires_at;
 end $$;

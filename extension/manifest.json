@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Study Tracker Job Capture",
-  "version": "1.0.1",
-  "description": "Capture job details from LinkedIn, Indeed and career pages into Pawan's Study Tracker.",
+  "name": "Nestlyra Focus Job Capture",
+  "version": "1.2.0",
+  "description": "Capture job details from LinkedIn, Indeed and career pages into Nestlyra Focus.",
   "permissions": ["activeTab", "storage", "tabs", "scripting"],
   "host_permissions": ["<all_urls>"],
-  "action": {"default_title": "Capture job", "default_popup": "popup.html"},
+  "icons": {"16":"icons/icon-16.png","32":"icons/icon-32.png","48":"icons/icon-48.png","128":"icons/icon-128.png"},
+  "action": {"default_title": "Capture job to Nestlyra Focus", "default_popup": "popup.html","default_icon":{"16":"icons/icon-16.png","32":"icons/icon-32.png","48":"icons/icon-48.png","128":"icons/icon-128.png"}},
   "content_scripts": [{"matches": ["<all_urls>"], "js": ["content.js"], "run_at": "document_idle"}]
 }
