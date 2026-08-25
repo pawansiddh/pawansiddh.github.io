@@ -17,8 +17,8 @@
     <path d="M64 221c35-29 77-29 112 0" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="5"/>
     <g fill="${accent}" stroke="#fff" stroke-opacity=".7" stroke-width="2"><circle cx="120" cy="230" r="13"/><circle cx="120" cy="205" r="7"/><circle cx="96" cy="239" r="7"/><circle cx="144" cy="239" r="7"/></g>
     <g fill="#fff" opacity=".38"><circle cx="75" cy="255" r="5"/><circle cx="168" cy="274" r="4"/><circle cx="94" cy="291" r="4"/><circle cx="145" cy="304" r="5"/></g>
-    <g class="doll-arm left-arm"><path d="M69 207Q46 222 48 250" fill="none" stroke="${accent}" stroke-width="17" stroke-linecap="round"/><circle cx="48" cy="252" r="11" fill="url(#face${index})"/><path d="M43 251h10" stroke="#b97665" stroke-width="2" stroke-linecap="round"/></g>
-    <g class="doll-arm right-arm"><path d="M171 207Q194 222 196 250" fill="none" stroke="${accent}" stroke-width="17" stroke-linecap="round"/><circle cx="196" cy="252" r="11" fill="url(#face${index})"/><path d="M191 251h13" stroke="#b97665" stroke-width="2" stroke-linecap="round"/><path d="M203 248l9-5" stroke="#b97665" stroke-width="3" stroke-linecap="round"/></g>
+    <g class="doll-arm left-arm"><path d="M69 207Q42 229 35 268" fill="none" stroke="${accent}" stroke-width="17" stroke-linecap="round"/><circle cx="35" cy="270" r="11" fill="url(#face${index})"/><path d="M30 269h10" stroke="#b97665" stroke-width="2" stroke-linecap="round"/></g>
+    <g class="doll-arm right-arm"><path d="M171 207Q198 229 205 268" fill="none" stroke="${accent}" stroke-width="17" stroke-linecap="round"/><circle cx="205" cy="270" r="11" fill="url(#face${index})"/><path d="M200 269h13" stroke="#b97665" stroke-width="2" stroke-linecap="round"/><path d="M212 266l9-5" stroke="#b97665" stroke-width="3" stroke-linecap="round"/></g>
   </svg>`;
 
   function setLiveState(stage,mode){
