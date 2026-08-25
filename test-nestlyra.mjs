@@ -31,6 +31,8 @@ const application=['config.js','jobs.js','family.js','messaging.js','groups.js',
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
+assert.doesNotMatch(application,/https:\/\/www\.googleapis\.com\/auth\/drive\.file/,'Google login must not request unverified Drive access');
+assert.match(application,/Drive PDF · Coming soon/,'Resource PDF storage must remain disabled until OAuth verification');
 document.dispatchEvent(new window.Event('DOMContentLoaded',{bubbles:true}));
 
 const wait=(ms=20)=>new Promise(resolve=>setTimeout(resolve,ms));
