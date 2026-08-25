@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {JSDOM, VirtualConsole} from 'jsdom';
 
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
+const trackerCss=fs.readFileSync(new URL('./tracker-update.css',import.meta.url),'utf8');
 const browserErrors=[];
 const virtualConsole=new VirtualConsole();
 virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas/i.test(error.message)){browserErrors.push(error.message);console.error(error.detail?.stack||error.stack||error.message)}});
@@ -24,6 +25,7 @@ window.URL.createObjectURL=()=>"blob:test";
 window.URL.revokeObjectURL=()=>{};
 window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setAttribute('open','')};
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
+window.HTMLElement.prototype.scrollIntoView=function(){};
 
 const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
@@ -53,6 +55,37 @@ assert.match(document.querySelector('.sidebar>.brand').textContent,/Nestlyra\s*F
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
+assert.ok(document.querySelector('[data-nav-entry="assignments"]'),'School preset should include functional Assignments');
+assert.ok(document.querySelector('[data-nav-entry="resources"]'),'School preset should include the Resource Library');
+assert.ok(document.querySelector('[data-nav-entry="settings"]'),'Settings should be enabled by default');
+assert.ok(document.querySelector('[data-nav-entry="help"]'),'Manual & FAQ should be enabled by default');
+assert.equal(document.querySelectorAll('#nav .nav-entry').length,document.querySelectorAll('#nav .nav-help').length,'Every navigation section should have contextual help');
+assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.task-row/,'Light themes must normalize task rows');
+assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,'Light themes must normalize note cards');
+assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');
+
+clickText('#nav button','Assignments');await wait();
+window.trackerItemModal('assignments');
+document.querySelector('#trackerField_title').value='Science project write-up';
+document.querySelector('#trackerField_subject').value='Science';
+document.querySelector('#trackerField_dueDate').value=new Date().toISOString().slice(0,10);
+document.querySelector('#trackerField_status').value='In progress';
+window.trackerSaveItem('assignments');await wait();
+assert.match(document.querySelector('.entity-row')?.textContent||'',/Science project write-up/,'New customizable modules must store real records');
+
+assert.match(document.querySelector('[data-nav-entry="assignments"] .nav-help').getAttribute('onclick'),/openSectionHelp\('assignments'/);
+window.openSectionHelp('assignments');await wait(120);
+assert.ok(document.querySelector('#manual-assignments[open]'),'A section ? button should open its exact manual entry');
+
+window.setView('settings');await wait();
+window.toggleTrackerModule('settings');window.toggleTrackerModule('help');await wait();
+assert.equal(document.querySelector('[data-nav-entry="settings"]'),null,'Users may hide Settings from navigation');
+assert.equal(document.querySelector('[data-nav-entry="help"]'),null,'Users may hide Manual & FAQ from navigation');
+document.querySelector('#avatar').click();await wait();
+assert.match(document.querySelector('#view').textContent,/Navigation & modules/,'Avatar must keep Settings accessible when hidden');
+window.openSectionHelp('tasks');await wait(120);
+assert.ok(document.querySelector('#manual-tasks[open]'),'Context help must keep Manual accessible when hidden');
+window.toggleTrackerModule('settings');window.toggleTrackerModule('help');await wait();
 
 clickText('#nav button','Subjects');await wait();
 const sampleId=document.querySelector('.subject-card').getAttribute('onclick').match(/'([^']+)'/)[1];
@@ -85,5 +118,5 @@ assert.match(document.querySelector('#groupsRoot').textContent,/Cloud account re
 window.setView('help');await wait();
 assert.match(document.querySelector('#view').textContent,/Groups, roles and invitations/,'Manual should explain the account-neutral Groups model');
 assert.deepEqual(browserErrors,[],browserErrors.join('\n'));
-console.log('Nestlyra regression passed: unified accounts, Groups, privacy manual, brand, default theme, sample course, modules and Calendar.');
+console.log('Nestlyra regression passed: unified accounts, Groups, brand, consistent themes, configurable navigation, contextual manuals, functional modules and Calendar.');
 dom.window.close();
