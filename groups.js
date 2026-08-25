@@ -104,8 +104,41 @@ function groupPaint(){const root=document.querySelector('#groupsRoot');if(root)r
 
 window.groupCreateModal=()=>modal(`<h2>Create a Nestlyra group</h2><p class="task-meta">Your account stays personal. The group receives only permissions and aggregate information defined below.</p><div class="form-grid"><label class="full">Group name<input id="groupName" maxlength="80" placeholder="OSCP accountability group"></label><label>Group type<select id="groupKind">${GROUP_TYPES.map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></label><label>Collaboration<select id="groupMode"><option value="view">View-only progress</option><option value="limited">Limited co-edit</option></select></label></div><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="groupCreate()">Create group</button></div>`);
 window.groupCreate=async()=>{const name=field('groupName').value.trim();if(!name)return toast('Enter a group name');const {data,error}=await sb.rpc('group_create',{p_name:name,p_kind:field('groupKind').value,p_mode:field('groupMode').value});if(error)return toast(error.message);closeModal();groupState.selectedId=Array.isArray(data)?data[0]?.group_id:data?.group_id;await groupBoot(true);toast('Group created')};
-window.groupJoinModal=()=>{if(!cloudUser)return toast('Sign in with a cloud account to join a group');modal(`<h2>Join a group</h2><p>Enter the current single-use invitation code from a group owner or admin.</p><label>Invitation code<input id="groupJoinCode" maxlength="11" placeholder="NEST-XXXXXX" oninput="this.value=this.value.toUpperCase()"></label><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="groupJoin()">Join group</button></div>`)};
-window.groupJoin=async()=>{const code=field('groupJoinCode').value.trim().toUpperCase();const {data,error}=await sb.rpc('group_redeem_invite',{p_code:code});if(error)return toast(error.message);closeModal();groupState.selectedId=Array.isArray(data)?data[0]?.group_id:data?.group_id;await groupBoot(true);toast('Group connected')};
+function groupNormalizeInviteCode(value=''){
+  const compact=String(value).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  return compact.startsWith('NEST')&&compact.length===10?`NEST-${compact.slice(4)}`:String(value).trim().toUpperCase();
+}
+function groupJoinMessage(message=''){
+  if(/expired|invalid|not found|used/i.test(message))return 'This invitation is expired, already used, or was replaced. Ask the owner for the current code.';
+  if(/authentication|jwt|session/i.test(message))return 'Your cloud session expired. Sign in again, then enter the code.';
+  if(groupMissingSchema({message}))return 'Groups needs its one-time Supabase database update before invitations can be joined.';
+  return message||'The group could not be joined. Please try the current invitation code again.';
+}
+window.groupJoinModal=async()=>{
+  const user=await groupCurrentUser();
+  if(!user)return toast('Sign in with an email or Google cloud account to join a group');
+  cloudUser=user;groupState.user=user;
+  modal(`<div class="group-join-form"><span class="eyebrow">SECURE GROUP INVITATION</span><h2>Join a group</h2><p>Paste the owner’s current single-use code. Spaces and copied punctuation are cleaned automatically.</p><label>Invitation code<input id="groupJoinCode" maxlength="32" autocomplete="one-time-code" spellcheck="false" placeholder="NEST-XXXXXX" oninput="this.value=groupNormalizeInviteCode(this.value);document.querySelector('#groupJoinStatus').textContent=''" onkeydown="if(event.key==='Enter'){event.preventDefault();groupJoin()}" autofocus></label><p id="groupJoinStatus" class="group-join-status" role="status" aria-live="polite"></p><div class="modal-actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button id="groupJoinSubmit" type="button" class="btn primary" onclick="groupJoin()">Join group</button></div></div>`);
+  setTimeout(()=>field('groupJoinCode')?.focus(),30);
+};
+window.groupJoin=async()=>{
+  const input=field('groupJoinCode'),status=document.querySelector('#groupJoinStatus'),button=document.querySelector('#groupJoinSubmit');
+  const code=groupNormalizeInviteCode(input?.value||'');
+  if(input)input.value=code;
+  if(!/^NEST-[A-Z0-9]{6}$/.test(code)){if(status)status.textContent='Enter the complete code in the format NEST-XXXXXX.';input?.focus();return}
+  if(button){button.disabled=true;button.textContent='Connecting…'}
+  if(status)status.textContent='Validating this invitation securely…';
+  try{
+    const user=await groupCurrentUser();if(!user)throw Error('Authentication required');
+    cloudUser=user;groupState.user=user;await groupEnsureProfile(user);
+    const {data,error}=await sb.rpc('group_redeem_invite',{p_code:code});if(error)throw error;
+    const joinedId=(Array.isArray(data)?data[0]:data)?.group_id;if(!joinedId)throw Error('The server did not confirm the group membership');
+    groupState.selectedId=joinedId;await groupBoot(true);
+    if(!groupState.groups.some(item=>item.group_id===joinedId))throw Error('The membership was created but could not be loaded. Refresh and open Groups.');
+    closeModal();toast('Group connected successfully')
+  }catch(error){const message=groupJoinMessage(error?.message);if(status)status.textContent=message;toast(message)}
+  finally{if(button?.isConnected){button.disabled=false;button.textContent='Join group'}}
+};
 window.groupInviteModal=(groupId=groupState.selectedId)=>{if(!groupId)return;modal(`<h2>Generate group invitation</h2><p>The code expires after ${GROUP_INVITE_MINUTES} minutes and works once. Generating another code immediately invalidates the previous one for this group.</p><label>Permission for the new member<select id="groupInviteRole">${GROUP_ROLES.map(([value,label])=>`<option value="${value}">${label}${value==='observer'?' — read-only':''}</option>`).join('')}</select></label><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="groupGenerateInvite('${groupId}')">Generate code</button></div>`)};
 window.groupGenerateInvite=async groupId=>{const code=`NEST-${Math.random().toString(36).slice(2,8).toUpperCase()}`,role=field('groupInviteRole').value;const {data,error}=await sb.rpc('group_generate_invite',{p_group_id:groupId,p_code:code,p_role:role});if(error)return toast(error.message);const row=Array.isArray(data)?data[0]:data;groupState.activeInvites[groupId]={code,expiresAt:new Date(row.expires_at).getTime(),role};closeModal();groupPaint();toast('One valid invitation code generated')};
 window.groupChangeRole=async(userId,role)=>{const {error}=await sb.rpc('group_change_member_role',{p_group_id:groupState.selectedId,p_user_id:userId,p_role:role});if(error)return toast(error.message);await groupLoadDetails(groupState.selectedId);toast('Permission updated')};
