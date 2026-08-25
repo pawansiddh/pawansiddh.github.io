@@ -142,7 +142,7 @@ async function boot(){
   }else if(state.profile)showApp()
  }finally{document.documentElement.classList.remove('session-pending')}
 }
-boot();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+boot();if('serviceWorker'in navigator){const hadController=Boolean(navigator.serviceWorker.controller);let refreshing=false;navigator.serviceWorker.addEventListener?.('controllerchange',()=>{if(!hadController||refreshing)return;refreshing=true;location.reload()});navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(()=>{})}
 
 googleLoginBtn.onclick=async()=>{if(!sb)return toast('Cloud login is unavailable');if(typeof familyPrepareLearnerLogin==='function')familyPrepareLearnerLogin();const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(error)toast(error.message)};
 
