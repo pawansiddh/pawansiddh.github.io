@@ -29,6 +29,7 @@ create table if not exists public.group_members (
   role text not null default 'member' check(role in ('owner','admin','contributor','member','observer')),
   share_progress boolean not null default true,
   share_activity boolean not null default true,
+  share_config jsonb not null default '{"modules":["overall","subjects","tasks","certifications","exams","mocks","revision","assignments","resources","practice","projects","habits","goals","interviews","jobs","timer"],"fields":["progress","counts","study","mock","activity"],"records":["task","goal","plan","note"]}'::jsonb,
   joined_at timestamptz not null default now(),
   primary key(group_id,user_id)
 );
@@ -204,16 +205,19 @@ begin
  return query select created;
 end $$;
 
-create or replace function public.group_list()
-returns table(group_id uuid,group_name text,group_kind text,group_mode text,viewer_role text,share_progress boolean,share_activity boolean,member_count integer,last_message_at timestamptz,unread_count bigint)
+alter table public.group_members add column if not exists share_config jsonb not null default '{"modules":["overall","subjects","tasks","certifications","exams","mocks","revision","assignments","resources","practice","projects","habits","goals","interviews","jobs","timer"],"fields":["progress","counts","study","mock","activity"],"records":["task","goal","plan","note"]}'::jsonb;
+
+drop function if exists public.group_list();
+create function public.group_list()
+returns table(group_id uuid,group_name text,group_kind text,group_mode text,viewer_role text,share_progress boolean,share_activity boolean,share_config jsonb,member_count integer,last_message_at timestamptz,unread_count bigint)
 language sql security definer set search_path=public,auth as $$
- select g.id,g.name,g.kind,g.mode,m.role,m.share_progress,m.share_activity,
+ select g.id,g.name,g.kind,g.mode,m.role,m.share_progress,m.share_activity,m.share_config,
   (select count(*)::integer from public.group_members all_members where all_members.group_id=g.id),
   (select max(msg.created_at) from public.group_messages msg where msg.group_id=g.id),
   (select count(*) from public.group_messages msg where msg.group_id=g.id and msg.sender_id<>auth.uid() and msg.created_at>coalesce((select reads.last_read_at from public.group_message_reads reads where reads.group_id=g.id and reads.user_id=auth.uid()),'epoch'::timestamptz))
  from public.group_members m join public.groups g on g.id=m.group_id
  where m.user_id=auth.uid() and g.deleted_at is null
- order by 9 desc nulls last,g.updated_at desc,g.name
+ order by 10 desc nulls last,g.updated_at desc,g.name
 $$;
 
 create or replace function public.group_members_list(p_group_id uuid)
@@ -306,14 +310,40 @@ begin
  update public.group_members set share_progress=coalesce(p_share_progress,true),share_activity=coalesce(p_share_activity,true) where group_id=p_group_id and user_id=auth.uid();if not found then raise exception 'Group membership not found';end if;return true;
 end $$;
 
+create or replace function public.group_update_share_config(p_group_id uuid,p_config jsonb)
+returns boolean language plpgsql security definer set search_path=public,auth as $$
+declare clean jsonb;
+begin
+ if not public.group_is_member(p_group_id) then raise exception 'Group membership not found'; end if;
+ if jsonb_typeof(p_config)<>'object' or jsonb_typeof(p_config->'modules')<>'array' or jsonb_typeof(p_config->'fields')<>'array' or jsonb_typeof(p_config->'records')<>'array' then raise exception 'Invalid sharing configuration'; end if;
+ if exists(select 1 from jsonb_array_elements_text(p_config->'modules') value where value not in ('overall','subjects','tasks','certifications','exams','mocks','revision','assignments','resources','practice','projects','habits','goals','interviews','jobs','timer')) then raise exception 'Invalid shared module'; end if;
+ if exists(select 1 from jsonb_array_elements_text(p_config->'fields') value where value not in ('progress','counts','study','mock','activity')) then raise exception 'Invalid shared field'; end if;
+ if exists(select 1 from jsonb_array_elements_text(p_config->'records') value where value not in ('task','goal','plan','note')) then raise exception 'Invalid shared-record type'; end if;
+ clean:=jsonb_build_object('modules',p_config->'modules','fields',p_config->'fields','records',p_config->'records');
+ update public.group_members set share_config=clean where group_id=p_group_id and user_id=auth.uid();
+ delete from public.group_progress_snapshots where group_id=p_group_id and user_id=auth.uid() and not(module_type=any(array(select jsonb_array_elements_text(clean->'modules'))));
+ update public.group_progress_snapshots set
+  progress_percent=case when clean->'fields' ? 'progress' then progress_percent else 0 end,
+  completed_count=case when clean->'fields' ? 'counts' then completed_count else 0 end,
+  total_count=case when clean->'fields' ? 'counts' then total_count else 0 end,
+  study_minutes=case when clean->'fields' ? 'study' then study_minutes else 0 end,
+  mock_average=case when clean->'fields' ? 'mock' then mock_average else 0 end,
+  active_minutes=case when clean->'fields' ? 'activity' then active_minutes else 0 end,
+  screen_changes=case when clean->'fields' ? 'activity' then screen_changes else 0 end,
+  last_seen=case when clean->'fields' ? 'activity' then last_seen else null end
+ where group_id=p_group_id and user_id=auth.uid();
+ return true;
+end $$;
+
 create or replace function public.group_publish_snapshot(p_group_id uuid,p_snapshot jsonb)
 returns boolean language plpgsql security definer set search_path=public,auth as $$
 declare member public.group_members;profile_name text;module_name text:=left(coalesce(nullif(trim(p_snapshot->>'module_type'),''),'overall'),40);
 begin
  select * into member from public.group_members where group_id=p_group_id and user_id=auth.uid();if member.user_id is null then raise exception 'Group membership not found';end if;
+ if not(member.share_config->'modules' ? module_name) then delete from public.group_progress_snapshots where group_id=p_group_id and user_id=auth.uid() and module_type=module_name;return true;end if;
  select display_name into profile_name from public.group_profiles where user_id=auth.uid();
  insert into public.group_progress_snapshots(group_id,user_id,module_type,display_name,progress_percent,completed_count,total_count,study_minutes,mock_average,active_minutes,screen_changes,last_seen,last_updated)
- values(p_group_id,auth.uid(),module_name,coalesce(profile_name,'Group member'),case when member.share_progress then least(100,greatest(0,coalesce((p_snapshot->>'progress_percent')::numeric,0))) else 0 end,case when member.share_progress then greatest(0,coalesce((p_snapshot->>'completed_count')::integer,0)) else 0 end,case when member.share_progress then greatest(0,coalesce((p_snapshot->>'total_count')::integer,0)) else 0 end,case when member.share_progress then greatest(0,coalesce((p_snapshot->>'study_minutes')::integer,0)) else 0 end,case when member.share_progress then least(100,greatest(0,coalesce((p_snapshot->>'mock_average')::numeric,0))) else 0 end,case when member.share_activity then greatest(0,coalesce((p_snapshot->>'active_minutes')::integer,0)) else 0 end,case when member.share_activity then greatest(0,coalesce((p_snapshot->>'screen_changes')::integer,0)) else 0 end,case when member.share_activity then nullif(p_snapshot->>'last_seen','')::timestamptz else null end,now())
+ values(p_group_id,auth.uid(),module_name,coalesce(profile_name,'Group member'),case when member.share_progress and member.share_config->'fields' ? 'progress' then least(100,greatest(0,coalesce((p_snapshot->>'progress_percent')::numeric,0))) else 0 end,case when member.share_progress and member.share_config->'fields' ? 'counts' then greatest(0,coalesce((p_snapshot->>'completed_count')::integer,0)) else 0 end,case when member.share_progress and member.share_config->'fields' ? 'counts' then greatest(0,coalesce((p_snapshot->>'total_count')::integer,0)) else 0 end,case when member.share_progress and member.share_config->'fields' ? 'study' then greatest(0,coalesce((p_snapshot->>'study_minutes')::integer,0)) else 0 end,case when member.share_progress and member.share_config->'fields' ? 'mock' then least(100,greatest(0,coalesce((p_snapshot->>'mock_average')::numeric,0))) else 0 end,case when member.share_activity and member.share_config->'fields' ? 'activity' then greatest(0,coalesce((p_snapshot->>'active_minutes')::integer,0)) else 0 end,case when member.share_activity and member.share_config->'fields' ? 'activity' then greatest(0,coalesce((p_snapshot->>'screen_changes')::integer,0)) else 0 end,case when member.share_activity and member.share_config->'fields' ? 'activity' then nullif(p_snapshot->>'last_seen','')::timestamptz else null end,now())
  on conflict(group_id,user_id,module_type) do update set display_name=excluded.display_name,progress_percent=excluded.progress_percent,completed_count=excluded.completed_count,total_count=excluded.total_count,study_minutes=excluded.study_minutes,mock_average=excluded.mock_average,active_minutes=excluded.active_minutes,screen_changes=excluded.screen_changes,last_seen=excluded.last_seen,last_updated=now();
  return true;
 end $$;
@@ -324,6 +354,7 @@ declare result public.group_shared_records;
 begin
  if not public.group_has_role(p_group_id,array['owner','admin','contributor']) or not exists(select 1 from public.groups where id=p_group_id and mode='limited') then raise exception 'This group is not editable';end if;
  if p_type not in ('task','goal','plan','note') then raise exception 'Invalid shared-record type';end if;
+ if not exists(select 1 from public.group_members where group_id=p_group_id and user_id=auth.uid() and share_config->'records' ? p_type) then raise exception 'This shared-record type is disabled in your sharing controls';end if;
  if p_id is null then
   insert into public.group_shared_records(group_id,record_type,title,details,due_date,created_by,updated_by) values(p_group_id,p_type,left(trim(p_title),160),left(coalesce(p_details,''),2000),p_due_date,auth.uid(),auth.uid()) returning * into result;
  else
@@ -400,8 +431,8 @@ begin
  delete from auth.users where id=account_id;if not found then raise exception 'Account no longer exists';end if;return true;
 end $$;
 
-revoke all on function public.group_ensure_profile(text),public.group_create(text,text,text),public.group_list(),public.group_members_list(uuid),public.group_generate_invite(uuid,text,text),public.group_redeem_invite(text),public.group_change_member_role(uuid,uuid,text),public.group_transfer_ownership(uuid,uuid),public.group_remove_member(uuid,uuid),public.group_leave(uuid),public.group_delete(uuid),public.group_update_sharing(uuid,boolean,boolean),public.group_publish_snapshot(uuid,jsonb),public.group_save_shared_record(uuid,uuid,text,text,text,date,integer),public.group_delete_shared_record(uuid,uuid),public.group_mark_read(uuid),public.cleanup_group_messages(),public.delete_own_account() from public,anon;
-grant execute on function public.group_ensure_profile(text),public.group_create(text,text,text),public.group_list(),public.group_members_list(uuid),public.group_generate_invite(uuid,text,text),public.group_redeem_invite(text),public.group_change_member_role(uuid,uuid,text),public.group_transfer_ownership(uuid,uuid),public.group_remove_member(uuid,uuid),public.group_leave(uuid),public.group_delete(uuid),public.group_update_sharing(uuid,boolean,boolean),public.group_publish_snapshot(uuid,jsonb),public.group_save_shared_record(uuid,uuid,text,text,text,date,integer),public.group_delete_shared_record(uuid,uuid),public.group_mark_read(uuid),public.cleanup_group_messages(),public.delete_own_account() to authenticated;
+revoke all on function public.group_ensure_profile(text),public.group_create(text,text,text),public.group_list(),public.group_members_list(uuid),public.group_generate_invite(uuid,text,text),public.group_redeem_invite(text),public.group_change_member_role(uuid,uuid,text),public.group_transfer_ownership(uuid,uuid),public.group_remove_member(uuid,uuid),public.group_leave(uuid),public.group_delete(uuid),public.group_update_sharing(uuid,boolean,boolean),public.group_update_share_config(uuid,jsonb),public.group_publish_snapshot(uuid,jsonb),public.group_save_shared_record(uuid,uuid,text,text,text,date,integer),public.group_delete_shared_record(uuid,uuid),public.group_mark_read(uuid),public.cleanup_group_messages(),public.delete_own_account() from public,anon;
+grant execute on function public.group_ensure_profile(text),public.group_create(text,text,text),public.group_list(),public.group_members_list(uuid),public.group_generate_invite(uuid,text,text),public.group_redeem_invite(text),public.group_change_member_role(uuid,uuid,text),public.group_transfer_ownership(uuid,uuid),public.group_remove_member(uuid,uuid),public.group_leave(uuid),public.group_delete(uuid),public.group_update_sharing(uuid,boolean,boolean),public.group_update_share_config(uuid,jsonb),public.group_publish_snapshot(uuid,jsonb),public.group_save_shared_record(uuid,uuid,text,text,text,date,integer),public.group_delete_shared_record(uuid,uuid),public.group_mark_read(uuid),public.cleanup_group_messages(),public.delete_own_account() to authenticated;
 
 grant select on public.group_profiles,public.groups,public.group_members,public.group_invites,public.group_progress_snapshots,public.group_shared_records,public.group_messages,public.group_message_reads to authenticated;
 grant insert,update on public.group_profiles to authenticated;

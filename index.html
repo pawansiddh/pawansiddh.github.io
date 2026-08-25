@@ -10,25 +10,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=36" />
-  <link rel="stylesheet" href="enhancements.css?v=36" />
-  <link rel="stylesheet" href="tracker-update.css?v=36" />
-  <link rel="manifest" href="manifest.webmanifest?v=36" />
+  <link rel="stylesheet" href="styles.css?v=37" />
+  <link rel="stylesheet" href="enhancements.css?v=37" />
+  <link rel="stylesheet" href="tracker-update.css?v=37" />
+  <link rel="stylesheet" href="nestlyra-v37.css?v=37" />
+  <link rel="manifest" href="manifest.webmanifest?v=37" />
   <link rel="icon" type="image/png" href="nestlyra-icon-192.png" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <section id="authScreen" class="auth-shell">
-    <div class="auth-art">
-      <div class="auth-identity">
-        <div class="brand brand-large"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
-        <div class="identity-story">
-          <span class="eyebrow">CYBER SECURITY ANALYST</span>
-          <h1>Pawan Kumar Siddh</h1>
-          <p>I created Nestlyra Focus to turn demanding learning, exam and career goals into a clear, consistent daily system—one milestone at a time.</p>
-          <div class="identity-signature"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
-        </div>
+    <div class="auth-art" aria-live="polite">
+      <div class="doll-stage" data-doll-state="idle">
+        <img class="login-dolls login-dolls-point" src="login-dolls-point.webp" alt="Nestlyra dolls following the pointer">
+        <img class="login-dolls login-dolls-watch" src="login-dolls-watch.webp" alt="Nestlyra dolls watching while you type">
+        <img class="login-dolls login-dolls-idle" src="login-dolls-idle.webp" alt="Nestlyra dolls respectfully covering their eyes">
+        <div class="doll-caption"><strong id="dollStateTitle">Privacy mode</strong><span id="dollStateText">We look away when you pause.</span></div>
+      </div>
+      <div class="auth-brand-story">
+        <img src="nestlyra-brand-gold.png" alt="Nestlyra">
+        <p>A calm, private workspace for learning, exams, projects and careers.</p>
       </div>
     </div>
     <div class="auth-panel">
@@ -67,7 +69,7 @@
           <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
-        <div class="product-credit"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
+        <div class="product-credit"><img src="nestlyra-brand-gold.png" alt="Nestlyra"><span><small>Designed &amp; developed by</small><strong>Nestlyra</strong><em>© 2026</em></span></div>
       </div>
     </aside>
 
@@ -78,7 +80,7 @@
         <div class="top-actions">
           <button id="quickAdd" class="btn primary">+ New task</button>
           <button id="notifBtn" class="icon-btn" aria-label="Notifications">♢<span id="notifDot" class="dot"></span></button>
-          <button class="avatar" id="avatar" aria-label="Open user settings">P</button>
+          <button class="avatar" id="avatar" aria-label="Open user settings"><img id="avatarImage" alt="" class="hidden"><span id="avatarInitial">P</span></button>
         </div>
       </header>
       <div id="view" class="view"></div>
@@ -87,7 +89,7 @@
       <span>✉</span>
       <i id="floatingMessageBadge" class="floating-message-badge hidden">0</i>
     </button>
-    <div class="parent-product-credit"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
+    <div class="parent-product-credit"><img src="nestlyra-brand-gold.png" alt="Nestlyra"><span><small>Designed &amp; developed by</small><strong>Nestlyra</strong><em>© 2026</em></span></div>
   </div>
 
   <dialog id="modal"><form method="dialog" id="modalForm"><button id="modalClose" class="modal-close" type="button" aria-label="Close dialog">×</button><div id="modalBody"></div></form></dialog>
@@ -95,12 +97,13 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js?v=36"></script>
-  <script src="jobs.js?v=36"></script>
-  <script src="family.js?v=36"></script>
-  <script src="messaging.js?v=36"></script>
-  <script src="groups.js?v=36"></script>
-  <script src="app.js?v=36"></script>
-  <script src="tracker-modules.js?v=36"></script>
+  <script src="config.js?v=37"></script>
+  <script src="jobs.js?v=37"></script>
+  <script src="family.js?v=37"></script>
+  <script src="messaging.js?v=37"></script>
+  <script src="groups.js?v=37"></script>
+  <script src="app.js?v=37"></script>
+  <script src="tracker-modules.js?v=37"></script>
+  <script src="nestlyra-v37.js?v=37"></script>
 </body>
 </html>
