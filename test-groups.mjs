@@ -10,9 +10,10 @@ const worker=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');
 assert.doesNotMatch(html,/data-auth-mode=/,'Separate Parent/Learner login tabs must be removed');
 assert.doesNotMatch(html,/id="parentLoginForm"/,'Legacy Parent login form must not remain reachable');
 assert.match(html,/One Nestlyra account/);
-assert.match(html,/src="groups\.js\?v=34"/);
+assert.match(html,/src="groups\.js\?v=35"/);
 assert.match(app,/await familyResolveAuthenticatedRole\(cloudUser\);\s*await loadCloud\(\)/);
 assert.doesNotMatch(app,/role!==['"]learner|role===['"]parent/,'Login must not enforce a permanent Parent/Learner role');
+assert.match(app,/document\.getElementById\('progressChart'\)/,'Charts must resolve canvases explicitly instead of relying on element-name globals');
 
 for(const role of ['owner','admin','contributor','member','observer'])assert.match(groups,new RegExp(`\\b${role}\\b`));
 for(const kind of ['study','exam','certification','accountability','family'])assert.match(groups,new RegExp(`\\b${kind}\\b`));
@@ -35,7 +36,7 @@ assert.match(schema,/drop policy if exists "linked parents read learner tracker"
 assert.match(schema,/Transfer ownership or delete the group before leaving/);
 assert.match(schema,/Version conflict: reload the record before saving/);
 assert.match(schema,/if database_bytes>=393216000/,'75% free-tier pressure cleanup must remain server enforced');
-assert.match(worker,/nestlyra-focus-v34-atomic-update/);
+assert.match(worker,/nestlyra-focus-v35-dashboard-charts/);
 assert.match(worker,/skipWaiting/);
 assert.match(worker,/clients\.claim/);
 assert.match(worker,/\.\/groups\.js/);
