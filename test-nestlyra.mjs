@@ -27,7 +27,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -44,8 +44,10 @@ await wait(40);
 
 assert.equal(document.title,'Nestlyra Focus');
 assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login should use one neutral account flow');
-assert.match(document.querySelector('.auth-account-note').textContent,/One Nestlyra account/);
-assert.equal(document.querySelectorAll('.login-dolls').length,3,'Login must provide point, watch and privacy animation states');
+assert.match(document.querySelector('.auth-account-note').textContent,/One secure Nestlyra account/);
+assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
+assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
+assert.ok(document.querySelector('img[src="nestlyra-mark-gold.svg"]'),'Login must use the extracted Nestlyra emblem, not the full brand rectangle');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
