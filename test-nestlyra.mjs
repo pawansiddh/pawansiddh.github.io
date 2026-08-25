@@ -27,7 +27,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -43,6 +43,7 @@ await wait(40);
 assert.equal(document.title,'Nestlyra Focus');
 assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login should use one neutral account flow');
 assert.match(document.querySelector('.auth-account-note').textContent,/One Nestlyra account/);
+assert.equal(document.querySelectorAll('.login-dolls').length,3,'Login must provide point, watch and privacy animation states');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
@@ -50,6 +51,8 @@ await wait(90);
 assert.equal(document.querySelector('#app').classList.contains('hidden'),false,`Learner workspace should open: ${document.querySelector('#toast').textContent||'no message'}`);
 assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users should receive the Nestlyra theme');
 document.querySelector('#modalClose').click();
+assert.ok(document.querySelector('#v37ModuleChart'),'Dashboard should render an adaptive module-readiness graph');
+assert.ok(document.querySelector('#v37FocusChart'),'Dashboard should render a seven-day focus graph');
 
 assert.match(document.querySelector('.sidebar>.brand').textContent,/Nestlyra\s*Focus/);
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
@@ -66,11 +69,11 @@ assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/
 
 clickText('#nav button','Assignments');await wait();
 window.trackerItemModal('assignments');
-document.querySelector('#trackerField_title').value='Science project write-up';
-document.querySelector('#trackerField_subject').value='Science';
-document.querySelector('#trackerField_dueDate').value=new Date().toISOString().slice(0,10);
-document.querySelector('#trackerField_status').value='In progress';
-window.trackerSaveItem('assignments');await wait();
+document.querySelector('#v37Field_title').value='Science project write-up';
+document.querySelector('#v37Field_subject').value='Science';
+document.querySelector('#v37Field_dueDate').value=new Date().toISOString().slice(0,10);
+document.querySelector('#v37Field_status').value='In progress';
+window.trackerSaveItemV37('assignments');await wait();
 assert.match(document.querySelector('.entity-row')?.textContent||'',/Science project write-up/,'New customizable modules must store real records');
 
 assert.match(document.querySelector('[data-nav-entry="assignments"] .nav-help').getAttribute('onclick'),/openSectionHelp\('assignments'/);
@@ -113,6 +116,8 @@ assert.match(document.querySelector('.timeline-event')?.textContent||'',/Nestlyr
 
 window.setTheme('dark');assert.equal(document.body.classList.contains('theme-nestlyra'),false);
 window.setTheme('nestlyra');assert.equal(document.body.classList.contains('theme-nestlyra'),true);
+window.setView('timer');await wait();
+assert.ok(document.querySelector('#customTimerMinutes'),'Study Timer should accept a custom duration');
 clickText('#nav button','Groups');await wait();
 assert.match(document.querySelector('#groupsRoot').textContent,/Cloud account required/,'Local accounts should keep personal tracking but require cloud identity for Groups');
 window.setView('help');await wait();

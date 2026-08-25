@@ -1,6 +1,6 @@
 # Nestlyra Focus
 
-A responsive, private-first learning, exam, planning and career workspace by PODGiftCreations.
+A responsive, private-first learning, exam, planning and career workspace designed and developed by Nestlyra.
 
 ## Features
 
