@@ -1,4 +1,4 @@
--- Study Tracker messaging hotfix
+-- Nestlyra Focus messaging hotfix
 -- Run this once in Supabase SQL Editor to replace the older ambiguous function.
 create or replace function public.family_chat_list_rooms()
 returns table(

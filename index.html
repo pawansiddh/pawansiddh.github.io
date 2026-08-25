@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#09111f" />
-  <meta name="description" content="A private-first, responsive study planning and progress tracker." />
-  <title>Study Tracker</title>
+  <meta name="theme-color" content="#4C5FD5" />
+  <meta name="description" content="Nestlyra Focus is a private-first, customizable learning, exam, planning and career workspace." />
+  <title>Nestlyra Focus</title>
   <script>try{const saved=JSON.parse(localStorage.getItem('studyTracker.v30')||'{}');if(localStorage.getItem('studyTracker.cloudAccount')||saved.profile)document.documentElement.classList.add('session-pending')}catch{}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="enhancements.css" />
+  <link rel="stylesheet" href="tracker-update.css" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" href="nestlyra-icon-192.png" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
@@ -20,18 +22,18 @@
   <section id="authScreen" class="auth-shell">
     <div class="auth-art">
       <div class="auth-identity">
-        <div class="brand brand-large"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <div class="brand brand-large"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
         <div class="identity-story">
           <span class="eyebrow">CYBER SECURITY ANALYST</span>
           <h1>Pawan Kumar Siddh</h1>
-          <p>I created Study Tracker to turn demanding learning goals into a clear, consistent daily practice—one subject, module and milestone at a time.</p>
+          <p>I created Nestlyra Focus to turn demanding learning, exam and career goals into a clear, consistent daily system—one milestone at a time.</p>
           <div class="identity-signature"><img src="podgiftcreations-logo.png" alt="PODGiftCreations"><span><small>Designed &amp; developed by</small><strong>PODGiftCreations</strong><em>© 2026</em></span></div>
         </div>
       </div>
     </div>
     <div class="auth-panel">
       <form id="loginForm" class="auth-card">
-        <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <div class="mobile-brand brand"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
         <div class="auth-mode-tabs"><button class="active" type="button" data-auth-mode="learner">Learner login</button><button type="button" data-auth-mode="parent">Parent / Admin</button></div>
         <span class="eyebrow">WELCOME BACK</span>
         <h2>Continue your journey</h2>
@@ -45,7 +47,7 @@
         <button class="auth-help-link" data-login-faq type="button">❔ Login help &amp; FAQ</button>
       </form>
       <form id="parentLoginForm" class="auth-card hidden">
-        <div class="mobile-brand brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+        <div class="mobile-brand brand"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
         <div class="auth-mode-tabs"><button type="button" data-auth-mode="learner">Learner login</button><button class="active" type="button" data-auth-mode="parent">Parent / Admin</button></div>
         <span class="eyebrow">FAMILY STUDY MODE</span>
         <h2 id="parentAuthTitle">Parent access</h2>
@@ -64,7 +66,7 @@
 
   <div id="app" class="app hidden">
     <aside class="sidebar">
-      <div class="brand"><span class="brand-mark">Ψ</span><span>Study Tracker</span></div>
+      <div class="brand"><span class="brand-mark"><img src="nestlyra-logo.png" alt=""></span><span>Nestlyra <small>Focus</small></span></div>
       <nav id="nav">
         <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
         <button data-view="subjects"><span>◫</span>Subjects</button>
@@ -112,5 +114,6 @@
   <script src="family.js"></script>
   <script src="messaging.js"></script>
   <script src="app.js"></script>
+  <script src="tracker-modules.js"></script>
 </body>
 </html>
