@@ -6,6 +6,10 @@
     {id:'exams',label:'Exam Planner',icon:'◎',description:'School and competitive exam plans'},
     {id:'mocks',label:'Mock Tests',icon:'◉',description:'Scores, attempts and improvement'},
     {id:'revision',label:'Revision & Mistakes',icon:'↻',description:'Revision queue and mistake log'},
+    {id:'assignments',label:'Assignments',icon:'▣',description:'Homework, submissions and grades'},
+    {id:'resources',label:'Resource Library',icon:'⌘',description:'Books, courses, links and study tools'},
+    {id:'practice',label:'Practice Log',icon:'⚗',description:'Labs, problem sets and practice scores'},
+    {id:'projects',label:'Project Planner',icon:'◆',description:'Projects, milestones and completion'},
     {id:'tasks',label:'Tasks',icon:'◷',description:'Daily and scheduled tasks'},
     {id:'calendar',label:'Calendar',icon:'▦',description:'Deadlines, events and today plan'},
     {id:'notes',label:'Notes',icon:'✎',description:'Study and preparation notes'},
@@ -13,30 +17,60 @@
     {id:'goals',label:'Goals',icon:'⌁',description:'Milestones and progress'},
     {id:'interviews',label:'Interview Prep',icon:'◈',description:'Rounds, dates and preparation'},
     {id:'jobs',label:'Job Tracker',icon:'▤',description:'Applications, JDs and documents'},
-    {id:'timer',label:'Study Timer',icon:'◌',description:'Focused study sessions'}
+    {id:'timer',label:'Study Timer',icon:'◌',description:'Focused study sessions'},
+    {id:'groups',label:'Groups',icon:'◎',description:'Private collaboration and group roles',utility:true},
+    {id:'settings',label:'Settings',icon:'⚙',description:'Profile, appearance and workspace controls',utility:true},
+    {id:'help',label:'Manual & FAQ',icon:'?',description:'Searchable help for every component',utility:true}
   ];
 
   const PRESETS = {
-    school:{label:'School / Child',description:'Learning, homework and healthy routines',modules:['subjects','tasks','calendar','notes','habits','timer']},
-    certification:{label:'Certification Preparation',description:'Course progress, exams, mocks and revision',modules:['subjects','certifications','mocks','revision','tasks','calendar','notes','timer']},
-    competitive:{label:'Competitive Exam',description:'Syllabus, mock tests, mistakes and revision',modules:['subjects','exams','mocks','revision','tasks','calendar','notes','timer']},
-    job:{label:'Job Seeker',description:'Applications, interviews and daily follow-ups',modules:['jobs','interviews','tasks','calendar','notes','goals','timer']},
-    daily:{label:'Daily Planner',description:'Tasks, routines, goals and notes',modules:['tasks','calendar','notes','habits','goals','timer']},
-    custom:{label:'Custom',description:'Choose every visible section yourself',modules:['subjects','tasks','calendar','notes','jobs','timer']}
+    school:{label:'School / Child',description:'Learning, homework and healthy routines',modules:['subjects','assignments','resources','tasks','calendar','notes','habits','timer','groups','settings','help']},
+    certification:{label:'Certification Preparation',description:'Course progress, exams, practice and revision',modules:['subjects','certifications','mocks','revision','resources','practice','projects','tasks','calendar','notes','timer','groups','settings','help']},
+    competitive:{label:'Competitive Exam',description:'Syllabus, mocks, mistakes and timed practice',modules:['subjects','exams','mocks','revision','assignments','resources','practice','tasks','calendar','notes','timer','groups','settings','help']},
+    job:{label:'Job Seeker',description:'Applications, interviews, projects and follow-ups',modules:['jobs','interviews','projects','resources','tasks','calendar','notes','goals','timer','groups','settings','help']},
+    daily:{label:'Daily Productivity',description:'Tasks, routines, goals, projects and notes',modules:['tasks','calendar','notes','habits','goals','projects','timer','groups','settings','help']},
+    custom:{label:'Custom',description:'Choose every visible section yourself',modules:['subjects','tasks','calendar','notes','jobs','timer','groups','settings','help']}
   };
 
-  const DATA_KEYS = ['certifications','examPlans','mockTests','revisionItems','habits','goals','interviewPrep'];
-  const EXISTING_DEFAULTS = ['subjects','tasks','calendar','notes','jobs','timer'];
-  const FIT_VIEWS = new Set(['dashboard','calendar','timer','settings','groups','messages','certifications','exams','mocks','revision','habits','goals','interviews']);
+  const DATA_KEYS = ['certifications','examPlans','mockTests','revisionItems','assignments','resources','practiceItems','projects','habits','goals','interviewPrep'];
+  const UTILITY_DEFAULTS = ['groups','settings','help'];
+  const EXISTING_DEFAULTS = ['subjects','tasks','calendar','notes','jobs','timer',...UTILITY_DEFAULTS];
+  const MODULE_CONFIG_VERSION = 2;
+  const FIT_VIEWS = new Set(['dashboard','calendar','timer','settings','groups','messages','certifications','exams','mocks','revision','assignments','resources','practice','projects','habits','goals','interviews']);
   const ENTITY_DEFS = {
     certifications:{title:'Certification Planner',subtitle:'Organize certification targets, providers and exam dates',array:'certifications',singular:'certification',fields:[['name','Certification','text','Security+'],['provider','Provider','text','CompTIA'],['examDate','Target exam date','date',''],['status','Status','select',['Planning','Learning','Revision','Booked','Completed']]],meta:item=>[item.provider,item.examDate,item.status].filter(Boolean).join(' · ')},
     exams:{title:'Exam Planner',subtitle:'Plan school, university and competitive examinations',array:'examPlans',singular:'exam plan',fields:[['name','Exam name','text','Final examination'],['category','Exam type','select',['School','University','Competitive','Entrance','Other']],['examDate','Exam date','date',''],['progress','Syllabus progress %','number','0']],meta:item=>[item.category,item.examDate,`${Number(item.progress||0)}% syllabus`].filter(Boolean).join(' · ')},
     mocks:{title:'Mock Tests',subtitle:'Record attempts, scores and what to improve next',array:'mockTests',singular:'mock test',fields:[['name','Test name','text','Mock test 1'],['date','Attempt date','date',''],['score','Score','number','0'],['total','Maximum score','number','100'],['notes','Improvement notes','textarea','']],meta:item=>[item.date,`${Number(item.score||0)} / ${Number(item.total||100)}`].filter(Boolean).join(' · ')},
     revision:{title:'Revision & Mistake Log',subtitle:'Turn weak areas and mistakes into a focused revision queue',array:'revisionItems',singular:'revision item',fields:[['topic','Topic or mistake','text','Network protocols'],['kind','Type','select',['Revision','Mistake','Weak area']],['nextReview','Next review','date',''],['confidence','Confidence','select',['Low','Medium','High']],['notes','What to remember','textarea','']],meta:item=>[item.kind,item.confidence&&`${item.confidence} confidence`,item.nextReview].filter(Boolean).join(' · ')},
+    assignments:{title:'Assignments',subtitle:'Track homework, submissions, priorities and grades',array:'assignments',singular:'assignment',fields:[['title','Assignment','text','Complete chapter exercise'],['subject','Subject or area','text','Mathematics'],['dueDate','Due date','date',''],['priority','Priority','select',['Low','Medium','High']],['status','Status','select',['Not started','In progress','Submitted','Graded']],['grade','Grade or result','text','']],meta:item=>[item.subject,item.dueDate,item.status,item.grade].filter(Boolean).join(' · ')},
+    resources:{title:'Resource Library',subtitle:'Keep useful books, courses, links and tools in one place',array:'resources',singular:'resource',fields:[['title','Resource title','text','Official study guide'],['type','Resource type','select',['Book','Course','Video','Article','Tool','Website','Other']],['url','Link','url','https://'],['status','Status','select',['Saved','In use','Completed']],['notes','Why it is useful','textarea','']],meta:item=>[item.type,item.status,item.url].filter(Boolean).join(' · ')},
+    practice:{title:'Practice Log',subtitle:'Record labs, problem sets, past papers and improvement',array:'practiceItems',singular:'practice entry',fields:[['title','Practice activity','text','Timed practice set'],['category','Type','select',['Lab','Problem set','Past paper','Quiz','Exercise','Other']],['date','Practice date','date',''],['score','Score','number','0'],['total','Maximum score','number','100'],['notes','Mistakes and next action','textarea','']],meta:item=>[item.category,item.date,`${Number(item.score||0)} / ${Number(item.total||100)}`].filter(Boolean).join(' · ')},
+    projects:{title:'Project Planner',subtitle:'Plan practical projects, milestones and completion',array:'projects',singular:'project',fields:[['title','Project name','text','Portfolio project'],['area','Area','text','Cybersecurity'],['targetDate','Target date','date',''],['progress','Progress %','number','0'],['status','Status','select',['Planning','Active','Blocked','Completed']],['notes','Milestones and next steps','textarea','']],meta:item=>[item.area,item.targetDate,`${Number(item.progress||0)}% complete`,item.status].filter(Boolean).join(' · ')},
     habits:{title:'Habits',subtitle:'Build consistent daily learning and preparation routines',array:'habits',singular:'habit',fields:[['name','Habit name','text','Study for 30 minutes'],['frequency','Frequency','select',['Daily','Weekdays','Weekly']],['target','Weekly target','number','5']],meta:item=>[item.frequency,`${(item.completedDates||[]).length} check-ins`].filter(Boolean).join(' · ')},
     goals:{title:'Goals',subtitle:'Define milestones and keep progress visible',array:'goals',singular:'goal',fields:[['title','Goal','text','Finish the complete syllabus'],['targetDate','Target date','date',''],['progress','Progress %','number','0'],['notes','Success criteria','textarea','']],meta:item=>[item.targetDate,`${Number(item.progress||0)}% complete`].filter(Boolean).join(' · ')},
     interviews:{title:'Interview Preparation',subtitle:'Prepare every interview round with clear next actions',array:'interviewPrep',singular:'interview plan',fields:[['company','Company','text','Example company'],['role','Role','text','Security Analyst'],['round','Round','select',['Preparation','Recruiter','Technical','Managerial','Final']],['date','Interview date','date',''],['status','Status','select',['Preparing','Scheduled','Completed','Passed','Closed']],['topics','Topics and questions','textarea','']],meta:item=>[item.role,item.round,item.date,item.status].filter(Boolean).join(' · ')}
   };
+  const HELP_TARGETS = Object.freeze({dashboard:'dashboard',subjects:'subjects',certifications:'certifications',exams:'exams',mocks:'mocks',revision:'revision',assignments:'assignments',resources:'resources',practice:'practice',projects:'projects',tasks:'tasks',calendar:'calendar',notes:'notes',habits:'habits',goals:'goals',interviews:'interviews',jobs:'jobs',timer:'timer',groups:'groups',settings:'settings',help:'faq'});
+  const MODULE_HELP_SECTIONS = [
+    ['certifications','C1','Certification Planner','Track a certification from decision to completed exam.',`<ol><li>Add the certification name, provider, target exam date and current stage.</li><li>Move it through Planning, Learning, Revision, Booked and Completed.</li><li>The target date appears in Calendar when both modules are enabled.</li><li>Use Resources, Practice Log and Revision together for preparation evidence.</li></ol>`],
+    ['exams','C2','Exam Planner','Organize school, university, entrance and competitive exams.',`<ol><li>Add the exam name, category, date and syllabus progress.</li><li>Update the percentage as preparation advances.</li><li>The exam appears in Calendar and contributes to the relevant preset.</li><li>Use Mock Tests and Revision & Mistakes to record performance, not only the final date.</li></ol>`],
+    ['mocks','C3','Mock Tests','Record attempts and turn scores into improvement actions.',`<ol><li>Add a test name, attempt date, score, maximum score and improvement notes.</li><li>Nestlyra calculates the percentage from score and maximum score.</li><li>Keep one record per attempt so progress remains visible.</li><li>Move repeated errors into Revision & Mistakes and schedule another attempt.</li></ol>`],
+    ['revision','C4','Revision & Mistakes','Convert weak areas into a review queue.',`<ol><li>Add the topic or mistake and classify it as Revision, Mistake or Weak area.</li><li>Choose the next review date and current confidence.</li><li>After reviewing, update confidence rather than deleting useful history.</li><li>Use the notes field for the rule, method or correction you must remember.</li></ol>`],
+    ['assignments','C5','Assignments','Track homework, submissions, priorities and results.',`<ol><li>Add the assignment, subject, due date and priority.</li><li>Move it from Not started to In progress, Submitted and Graded.</li><li>Add the grade or result when returned.</li><li>Active assignment deadlines appear in Calendar while this module is enabled.</li></ol>`],
+    ['resources','C6','Resource Library','Save useful learning material without mixing it into Notes.',`<ol><li>Add a title and choose Book, Course, Video, Article, Tool, Website or Other.</li><li>Store the original link and a short reason it is useful.</li><li>Use Saved, In use and Completed to control the reading queue.</li><li>Turning the module off hides the library without deleting saved resources.</li></ol>`],
+    ['practice','C7','Practice Log','Keep evidence of labs, questions and past-paper work.',`<ol><li>Add the activity and classify it as Lab, Problem set, Past paper, Quiz or Exercise.</li><li>Record date, score and maximum score when applicable.</li><li>Write mistakes and the next action before closing the entry.</li><li>Practice dates appear in Calendar while both modules are enabled.</li></ol>`],
+    ['projects','C8','Project Planner','Manage practical work and portfolio milestones.',`<ol><li>Add a project name, area, target date and success notes.</li><li>Update progress and move the status through Planning, Active, Blocked and Completed.</li><li>Use the notes field for milestones and the immediate next step.</li><li>Incomplete target dates appear in Calendar.</li></ol>`],
+    ['tasks','C9','Tasks','Plan daily and future actions with clear priorities.',`<ol><li>Create a task with title, subject, priority, date and optional time.</li><li>Use the edit icon to change it later and the check control to complete it.</li><li>Overdue tasks remain visible until completed or deleted.</li><li>Task dates feed Calendar, Today plan, briefing and notifications when enabled.</li></ol>`],
+    ['calendar','C10','Calendar','Review all enabled deadlines in Day, Week or Month.',`<ol><li>Use previous, next and Today to change the date range.</li><li>Switch between Day, Week and Month; select a month date to open its timeline.</li><li>Filters independently show tasks, study dates, exams, assignments, practice, projects, events and job follow-ups.</li><li>Select an item to open its own editor. Filters hide records temporarily and never delete them.</li></ol>`],
+    ['notes','C11','Notes','Keep methodology, revision and reference text together.',`<ol><li>Create a note and select it from the list.</li><li>Edit the title and content directly; changes stay in the current workspace.</li><li>Use Resource Library for links and Notes for your own working knowledge.</li><li>Deleting a note is permanent, so keep important material in the correct workspace.</li></ol>`],
+    ['habits','C12','Habits','Track repeatable routines without turning them into one-time tasks.',`<ol><li>Add the habit, frequency and weekly target.</li><li>Select Mark today after completing it; select again to undo an accidental check-in.</li><li>Use Habits for repetition and Tasks for specific deliverables.</li><li>The Dashboard shows enabled habit progress without exposing private details to groups.</li></ol>`],
+    ['goals','C13','Goals','Keep larger outcomes visible above daily tasks.',`<ol><li>Add the goal, target date, progress percentage and success criteria.</li><li>Update progress as milestones are completed.</li><li>Use Projects for structured delivery work and Goals for the final outcome.</li><li>Limited co-edit groups can use separate shared goals; personal goals remain private.</li></ol>`],
+    ['interviews','C14','Interview Preparation','Prepare company-specific rounds and follow-up work.',`<ol><li>Add company, role, round, interview date, status and preparation topics.</li><li>Keep one plan per active interview process or important round.</li><li>Use Job Tracker for the application record and Interview Prep for questions and preparation.</li><li>Private interview details are never included in aggregate group progress.</li></ol>`],
+    ['timer','C15','Study Timer','Record focused sessions and study time.',`<ol><li>Open the timer from the sidebar and choose 25, 45 or 60 minutes.</li><li>Start, pause or reset the current session.</li><li>A completed session is added to activity and Dashboard focused-study time.</li><li>Hiding Study Timer removes its sidebar control but does not erase recorded activity.</li></ol>`]
+  ];
+  window.trackerManualSections=()=>MODULE_HELP_SECTIONS.map(section=>[...section]);
+  window.trackerManualDirectory=()=>[{id:'dashboard',label:'Dashboard'},...MODULES.map(item=>({id:HELP_TARGETS[item.id]||item.id,label:item.label}))];
+  window.openSectionHelp=(section,event)=>{event?.stopPropagation?.();viewName='help';render();setTimeout(()=>scrollManual(HELP_TARGETS[section]||section),80)};
 
   let moduleStateReady = false;
   let parentObserverTab = 'overview';
@@ -45,7 +79,7 @@
   let parentObserverTimer = null;
   let inviteCountdownTimer = null;
   let calendarMode = 'month';
-  let calendarFilters = new Set(['tasks','study','exams','events','jobs']);
+  let calendarFilters = new Set(['tasks','study','exams','assignments','practice','projects','events','jobs']);
 
   const clone = value => structuredClone(value);
   const moduleIds = () => MODULES.map(item => item.id);
@@ -54,8 +88,13 @@
     DATA_KEYS.forEach(key => { if (!Array.isArray(state[key])) state[key] = []; });
     if (!state.moduleConfig || !Array.isArray(state.moduleConfig.enabled)) {
       const established = Boolean(state.profile || state.tasks?.length || state.jobApplications?.length || (state.subjects?.length && state.subjects[0]?.id !== 'sample-subject'));
-      state.moduleConfig = {preset:established?'custom':'school',enabled:[...(established?EXISTING_DEFAULTS:PRESETS.school.modules)]};
+      state.moduleConfig = {version:MODULE_CONFIG_VERSION,preset:established?'custom':'school',enabled:[...(established?EXISTING_DEFAULTS:PRESETS.school.modules)]};
       persist = true;
+    }
+    if(Number(state.moduleConfig.version||0)<MODULE_CONFIG_VERSION){
+      state.moduleConfig.enabled=[...new Set([...state.moduleConfig.enabled,...UTILITY_DEFAULTS])];
+      state.moduleConfig.version=MODULE_CONFIG_VERSION;
+      persist=true;
     }
     state.moduleConfig.enabled = [...new Set(state.moduleConfig.enabled.filter(id => moduleIds().includes(id)))];
     if (!state.moduleConfig.enabled.length) state.moduleConfig.enabled = ['tasks','calendar'];
@@ -81,7 +120,7 @@
     const target=state.workspaces.find(item=>item.id===id),targetData=clone(target?.data||{});
     baseSwitchWorkspace(id);
     DATA_KEYS.forEach(key=>{state[key]=Array.isArray(targetData[key])?targetData[key]:[]});
-    state.moduleConfig=targetData.moduleConfig?clone(targetData.moduleConfig):{preset:'custom',enabled:[...EXISTING_DEFAULTS]};
+    state.moduleConfig=targetData.moduleConfig?clone(targetData.moduleConfig):{version:MODULE_CONFIG_VERSION,preset:'custom',enabled:[...EXISTING_DEFAULTS]};
     moduleStateReady = false;
     ensureTrackerState(true);
     render();
@@ -89,7 +128,7 @@
 
   const baseSaveWorkspace = window.saveWorkspace;
   window.saveWorkspace = id => {
-    const inheritedConfig=clone(state.moduleConfig||{preset:'custom',enabled:[...EXISTING_DEFAULTS]});
+    const inheritedConfig=clone(state.moduleConfig||{version:MODULE_CONFIG_VERSION,preset:'custom',enabled:[...EXISTING_DEFAULTS]});
     baseSaveWorkspace(id);
     if(!id){DATA_KEYS.forEach(key=>{state[key]=[]});state.moduleConfig=inheritedConfig;const active=state.workspaces.find(item=>item.id===state.activeWorkspace);if(active)active.data=workspaceData()}
     moduleStateReady = false;
@@ -102,19 +141,22 @@
     baseDeleteWorkspace(id);
     const active=state.workspaces.find(item=>item.id===state.activeWorkspace),activeData=clone(active?.data||{});
     DATA_KEYS.forEach(key=>{state[key]=Array.isArray(activeData[key])?activeData[key]:[]});
-    state.moduleConfig=activeData.moduleConfig?clone(activeData.moduleConfig):{preset:'custom',enabled:[...EXISTING_DEFAULTS]};
+    state.moduleConfig=activeData.moduleConfig?clone(activeData.moduleConfig):{version:MODULE_CONFIG_VERSION,preset:'custom',enabled:[...EXISTING_DEFAULTS]};
     ensureTrackerState(true);render();
   };
 
   function trackerNavMarkup() {
     ensureTrackerState();
     const enabled = MODULES.filter(item => state.moduleConfig.enabled.includes(item.id) && item.id !== 'timer');
-    return `<button data-view="dashboard"><span>⌂</span>Dashboard</button>${enabled.map(item=>`<button data-view="${item.id}"><span>${item.icon}</span>${item.label}</button>`).join('')}<button data-view="groups"><span>◎</span>Groups</button><div class="nav-divider"></div><button data-view="settings"><span>⚙</span>Settings</button><button data-view="help"><span>?</span>Manual & FAQ</button>`;
+    const main=enabled.filter(item=>!item.utility),utilities=enabled.filter(item=>item.utility);
+    const entry=(id,label,icon)=>`<div class="nav-entry" data-nav-entry="${id}"><button class="nav-main" data-view="${id}"><span>${icon}</span><span class="nav-label">${label}</span></button><button class="nav-help" type="button" aria-label="Open ${label} manual" title="${label} help" onclick="openSectionHelp('${id}',event)">?</button></div>`;
+    return `${entry('dashboard','Dashboard','⌂')}${main.map(item=>entry(item.id,item.label,item.icon)).join('')}${utilities.length?'<div class="nav-divider"></div>':''}${utilities.map(item=>entry(item.id,item.label,item.icon)).join('')}`;
   }
 
   function updateTrackerNavigation() {
     nav.innerHTML = trackerNavMarkup();
-    nav.querySelectorAll('button').forEach(button => button.classList.toggle('active',button.dataset.view===viewName));
+    nav.querySelectorAll('button[data-view]').forEach(button => button.classList.toggle('active',button.dataset.view===viewName));
+    nav.querySelectorAll('.nav-entry').forEach(entry=>entry.classList.toggle('active',entry.dataset.navEntry===viewName));
     sideTimer?.classList.toggle('hidden',!trackerModuleEnabled('timer'));
     analogClock?.classList.toggle('hidden',!trackerModuleEnabled('calendar'));
     quickAdd?.classList.toggle('hidden',!trackerModuleEnabled('tasks'));
@@ -154,10 +196,13 @@
 
   function itemProgress(def,item) {
     if(def.array==='examPlans'||def.array==='goals')return Math.max(0,Math.min(100,Number(item.progress||0)));
-    if(def.array==='mockTests')return Math.max(0,Math.min(100,Math.round(Number(item.score||0)/Math.max(1,Number(item.total||100))*100)));
+    if(def.array==='projects')return Math.max(0,Math.min(100,Number(item.progress||0)));
+    if(def.array==='mockTests'||def.array==='practiceItems')return Math.max(0,Math.min(100,Math.round(Number(item.score||0)/Math.max(1,Number(item.total||100))*100)));
     if(def.array==='certifications')return {Planning:10,Learning:45,Revision:75,Booked:90,Completed:100}[item.status]||0;
     if(def.array==='interviewPrep')return {Preparing:25,Scheduled:55,Completed:75,Passed:100,Closed:100}[item.status]||0;
     if(def.array==='revisionItems')return {Low:25,Medium:60,High:100}[item.confidence]||0;
+    if(def.array==='assignments')return {'Not started':0,'In progress':45,Submitted:85,Graded:100}[item.status]||0;
+    if(def.array==='resources')return {Saved:15,'In use':55,Completed:100}[item.status]||0;
     if(def.array==='habits')return (item.completedDates||[]).includes(today())?100:0;
     return 0;
   }
@@ -167,7 +212,7 @@
   function trackerEntityView(kind) {
     const def=ENTITY_DEFS[kind],items=state[def.array]||[],completed=items.filter(item=>itemProgress(def,item)>=100).length;
     return head(def.title,def.subtitle,`<button class="btn primary" onclick="trackerItemModal('${kind}')">+ Add ${escapeHtml(def.singular)}</button>`)+
-      `<div class="grid stats entity-stats">${trackerStat('Total',items.length,'▣')}${trackerStat('Complete today',completed,'✓')}${trackerStat('Upcoming',items.filter(item=>(item.examDate||item.date||item.nextReview||item.targetDate)>=today()).length,'◷')}${trackerStat('Workspace',state.workspaces.find(x=>x.id===state.activeWorkspace)?.name||'Current','◇')}</div><section class="card entity-workbench"><div class="card-title"><h3>${escapeHtml(def.title)}</h3><span>${items.length} record${items.length===1?'':'s'}</span></div><div class="entity-list">${items.length?items.map(item=>`<article class="entity-row"><button class="entity-main" onclick="trackerItemModal('${kind}','${item.id}')"><span class="entity-icon">${MODULES.find(x=>x.id===kind)?.icon||'◇'}</span><span><strong>${escapeHtml(entityTitle(def,item))}</strong><small>${escapeHtml(def.meta(item)||'No details yet')}</small><i><b style="width:${itemProgress(def,item)}%"></b></i></span></button>${kind==='habits'?`<button class="habit-check ${(item.completedDates||[]).includes(today())?'done':''}" onclick="trackerToggleHabit('${item.id}')">${(item.completedDates||[]).includes(today())?'✓ Done today':'Mark today'}</button>`:''}<button class="mini-btn" title="Delete" onclick="trackerDeleteItem('${kind}','${item.id}')">×</button></article>`).join(''):`<div class="empty"><h3>Add your first ${escapeHtml(def.singular)}</h3><p>This section is enabled for this workspace but has no records yet.</p><button class="btn primary" onclick="trackerItemModal('${kind}')">Create one</button></div>`}</div></section>`;
+      `<div class="grid stats entity-stats">${trackerStat('Total',items.length,'▣')}${trackerStat('Complete today',completed,'✓')}${trackerStat('Upcoming',items.filter(item=>(item.examDate||item.date||item.nextReview||item.targetDate||item.dueDate)>=today()).length,'◷')}${trackerStat('Workspace',state.workspaces.find(x=>x.id===state.activeWorkspace)?.name||'Current','◇')}</div><section class="card entity-workbench"><div class="card-title"><h3>${escapeHtml(def.title)}</h3><span>${items.length} record${items.length===1?'':'s'}</span></div><div class="entity-list">${items.length?items.map(item=>`<article class="entity-row"><button class="entity-main" onclick="trackerItemModal('${kind}','${item.id}')"><span class="entity-icon">${MODULES.find(x=>x.id===kind)?.icon||'◇'}</span><span><strong>${escapeHtml(entityTitle(def,item))}</strong><small>${escapeHtml(def.meta(item)||'No details yet')}</small><i><b style="width:${itemProgress(def,item)}%"></b></i></span></button>${kind==='habits'?`<button class="habit-check ${(item.completedDates||[]).includes(today())?'done':''}" onclick="trackerToggleHabit('${item.id}')">${(item.completedDates||[]).includes(today())?'✓ Done today':'Mark today'}</button>`:''}<button class="mini-btn" title="Delete" onclick="trackerDeleteItem('${kind}','${item.id}')">×</button></article>`).join(''):`<div class="empty"><h3>Add your first ${escapeHtml(def.singular)}</h3><p>This section is enabled for this workspace but has no records yet.</p><button class="btn primary" onclick="trackerItemModal('${kind}')">Create one</button></div>`}</div></section>`;
   }
 
   function fieldMarkup(field,item) {
@@ -204,19 +249,20 @@
 
   function trackerModuleSettingsCard() {
     ensureTrackerState();
-    return `<section class="card tracker-module-settings"><div class="card-title"><h3>Navigation & modules</h3><span>Per workspace</span></div><p class="task-meta">Choose a ready-made Nestlyra Focus style or build your own. Hidden modules stop appearing in navigation, search, dashboard summaries, reminders and settings, while their saved data remains protected.</p><div class="preset-grid">${Object.entries(PRESETS).map(([key,preset])=>`<button type="button" class="preset-card ${state.moduleConfig.preset===key?'active':''}" onclick="applyTrackerPreset('${key}')"><strong>${preset.label}</strong><small>${preset.description}</small></button>`).join('')}</div><div class="module-toggle-list">${MODULES.map(item=>`<div class="setting-row"><span><strong>${item.icon} ${item.label}</strong><small>${item.description}</small></span><button type="button" class="toggle ${trackerModuleEnabled(item.id)?'on':''}" aria-label="Toggle ${item.label}" onclick="toggleTrackerModule('${item.id}')"></button></div>`).join('')}</div><p class="settings-note">Dashboard, Settings, Messages and the Manual remain available for safety and support. These choices apply only to <strong>${escapeHtml(state.workspaces.find(x=>x.id===state.activeWorkspace)?.name||'this workspace')}</strong>.</p></section>`;
+    const toggles=items=>`<div class="module-toggle-list">${items.map(item=>`<div class="setting-row"><span><strong>${item.icon} ${item.label}</strong><small>${item.description}</small></span><button type="button" class="toggle ${trackerModuleEnabled(item.id)?'on':''}" aria-label="Toggle ${item.label}" onclick="toggleTrackerModule('${item.id}')"></button></div>`).join('')}</div>`;
+    return `<section class="card tracker-module-settings"><div class="card-title"><h3>Navigation & modules</h3><span>Per workspace</span></div><p class="task-meta">Choose a ready-made Nestlyra Focus style or build your own. Hidden modules stop appearing in navigation, search, dashboard summaries, reminders and settings, while their saved data remains protected.</p><div class="preset-grid">${Object.entries(PRESETS).map(([key,preset])=>`<button type="button" class="preset-card ${state.moduleConfig.preset===key?'active':''}" onclick="applyTrackerPreset('${key}')"><strong>${preset.label}</strong><small>${preset.description}</small></button>`).join('')}</div><div class="module-setting-group"><h4>Tracker sections</h4>${toggles(MODULES.filter(item=>!item.utility))}</div><div class="module-setting-group"><h4>Access & support</h4>${toggles(MODULES.filter(item=>item.utility))}</div><p class="settings-note"><strong>Settings</strong> and <strong>Manual & FAQ</strong> are enabled by default. If hidden, open Settings from the profile avatar and open a section manual from its sidebar ? button. These choices apply only to <strong>${escapeHtml(state.workspaces.find(x=>x.id===state.activeWorkspace)?.name||'this workspace')}</strong>.</p></section>`;
   }
 
   window.applyTrackerPreset=key=>{
     const preset=PRESETS[key];if(!preset)return;
-    state.moduleConfig={preset:key,enabled:[...preset.modules]};save();sessionStorage.setItem('studyTracker.settings.category','modules');viewName='settings';render();toast(`${preset.label} workspace applied`);
+    state.moduleConfig={version:MODULE_CONFIG_VERSION,preset:key,enabled:[...preset.modules]};save();sessionStorage.setItem('studyTracker.settings.category','modules');viewName='settings';render();toast(`${preset.label} workspace applied`);
   };
 
   window.toggleTrackerModule=id=>{
     ensureTrackerState();
     const enabled=new Set(state.moduleConfig.enabled);enabled.has(id)?enabled.delete(id):enabled.add(id);
-    state.moduleConfig={preset:'custom',enabled:[...enabled]};save();
-    if(viewName===id)viewName='dashboard';
+    state.moduleConfig={version:MODULE_CONFIG_VERSION,preset:'custom',enabled:[...enabled]};save();
+    if(viewName===id&&!['settings','help'].includes(id))viewName='dashboard';
     sessionStorage.setItem('studyTracker.settings.category','modules');render();
   };
 
@@ -260,14 +306,20 @@
     if(trackerModuleEnabled('exams'))(state.examPlans||[]).forEach(item=>item.examDate&&items.push({id:item.id,date:item.examDate,time:item.time||'',title:item.name,meta:item.category,kind:'exams',label:'Exam'}));
     if(trackerModuleEnabled('certifications'))(state.certifications||[]).forEach(item=>item.examDate&&items.push({id:item.id,date:item.examDate,time:item.time||'',title:item.name,meta:item.provider,kind:'exams',label:'Exam'}));
     if(trackerModuleEnabled('mocks'))(state.mockTests||[]).forEach(item=>item.date&&items.push({id:item.id,date:item.date,time:item.time||'',title:item.name,meta:'Mock test',kind:'exams',label:'Exam'}));
+    if(trackerModuleEnabled('assignments'))(state.assignments||[]).forEach(item=>item.dueDate&&item.status!=='Graded'&&items.push({id:item.id,date:item.dueDate,time:'',title:item.title,meta:item.subject,kind:'assignments',label:'Assignment'}));
+    if(trackerModuleEnabled('practice'))(state.practiceItems||[]).forEach(item=>item.date&&items.push({id:item.id,date:item.date,time:'',title:item.title,meta:item.category,kind:'practice',label:'Practice'}));
+    if(trackerModuleEnabled('projects'))(state.projects||[]).forEach(item=>item.targetDate&&item.status!=='Completed'&&items.push({id:item.id,date:item.targetDate,time:'',title:item.title,meta:item.area,kind:'projects',label:'Project'}));
     return items.filter(item=>calendarFilters.has(item.kind));
   }
 
   function calendarFilterMarkup() {
-    const filters=[['tasks','Tasks'],['study','Study'],['exams','Exams'],['events','Events'],['jobs','Job follow-ups']]
+    const filters=[['tasks','Tasks'],['study','Study'],['exams','Exams'],['assignments','Assignments'],['practice','Practice'],['projects','Projects'],['events','Events'],['jobs','Job follow-ups']]
       .filter(([kind])=>kind!=='tasks'||trackerModuleEnabled('tasks'))
       .filter(([kind])=>kind!=='study'||trackerModuleEnabled('subjects'))
       .filter(([kind])=>kind!=='exams'||trackerModuleEnabled('exams')||trackerModuleEnabled('certifications')||trackerModuleEnabled('mocks'))
+      .filter(([kind])=>kind!=='assignments'||trackerModuleEnabled('assignments'))
+      .filter(([kind])=>kind!=='practice'||trackerModuleEnabled('practice'))
+      .filter(([kind])=>kind!=='projects'||trackerModuleEnabled('projects'))
       .filter(([kind])=>kind!=='jobs'||trackerModuleEnabled('jobs'));
     return `<div class="calendar-filters" aria-label="Calendar filters">${filters.map(([kind,label])=>`<button type="button" class="calendar-filter ${kind} ${calendarFilters.has(kind)?'active':''}" aria-pressed="${calendarFilters.has(kind)}" onclick="toggleCalendarFilter('${kind}')"><i></i>${label}</button>`).join('')}</div>`;
   }
@@ -332,7 +384,7 @@
   window.moveCalendar=direction=>{if(calendarMode==='month')calDate.setMonth(calDate.getMonth()+direction);else calDate.setDate(calDate.getDate()+direction*(calendarMode==='week'?7:1));render()};
   window.toggleCalendarFilter=kind=>{calendarFilters.has(kind)?calendarFilters.delete(kind):calendarFilters.add(kind);render()};
   window.calendarSelectDay=date=>{calDate=new Date(`${date}T12:00:00`);calendarMode='day';render();setTimeout(scrollCalendarToWorkingHours,0)};
-  window.calendarOpenItem=(kind,id,date)=>{if(kind==='tasks')return taskModal(id);if(kind==='events')return eventModal(id,date);if(kind==='jobs')return jobDetails(id);if(kind==='study'){const topic=allTopics().find(item=>item.id===id);if(topic){selectedSubject=topic.subjectId;viewName='subject';return render()}}if(kind==='exams'){viewName=trackerModuleEnabled('exams')?'exams':trackerModuleEnabled('certifications')?'certifications':'mocks';return render()}calendarDay(date)};
+  window.calendarOpenItem=(kind,id,date)=>{if(kind==='tasks')return taskModal(id);if(kind==='events')return eventModal(id,date);if(kind==='jobs')return jobDetails(id);if(['assignments','practice','projects'].includes(kind))return trackerItemModal(kind,id);if(kind==='study'){const topic=allTopics().find(item=>item.id===id);if(topic){selectedSubject=topic.subjectId;viewName='subject';return render()}}if(kind==='exams'){viewName=trackerModuleEnabled('exams')?'exams':trackerModuleEnabled('certifications')?'certifications':'mocks';return render()}calendarDay(date)};
   function scrollCalendarToWorkingHours(){const scroller=document.querySelector('.calendar-timeline-scroll');if(!scroller)return;const now=isoDate(calDate)===today()?Math.max(0,new Date().getHours()-2):7;scroller.scrollTop=now*56}
   const baseCalendarDay=window.calendarDay;
   window.calendarDay=date=>{
@@ -344,7 +396,7 @@
   render=()=>{
     ensureTrackerState();
     const optionalView=MODULES.some(item=>item.id===viewName);
-    if(optionalView&&!trackerModuleEnabled(viewName))viewName='dashboard';
+    if(optionalView&&!trackerModuleEnabled(viewName)&&!['settings','help'].includes(viewName))viewName='dashboard';
     const custom=ENTITY_DEFS[viewName];
     updateTrackerNavigation();
     if(viewName==='groups'&&typeof groupsView==='function'){sideStreak.textContent=`${streak()} days`;view.innerHTML=groupsView()}else if(custom){sideStreak.textContent=`${streak()} days`;view.innerHTML=trackerEntityView(viewName)}else baseRender();
@@ -477,6 +529,25 @@
 
   document.addEventListener('DOMContentLoaded',()=>{
     ensureTrackerState();
+    if(typeof MANUAL_ALIASES!=='undefined')Object.assign(MANUAL_ALIASES,{
+      certifications:'certification certificate provider exam date booked learning revision',
+      exams:'exam planner school university competitive entrance syllabus progress',
+      mocks:'mock test attempt score result improvement practice',
+      revision:'revision mistake weak area confidence review remember',
+      assignments:'assignment homework submission grade due priority subject',
+      resources:'resource library book course video article tool website link',
+      practice:'practice lab problem set past paper quiz exercise score',
+      projects:'project planner portfolio milestone blocked target progress',
+      tasks:'task todo priority overdue today future complete edit',
+      calendar:'calendar calander day week month date event filter schedule',
+      notes:'notes notebook methodology reference editor',
+      habits:'habit routine daily weekly check in streak',
+      goals:'goal milestone success criteria target progress',
+      interviews:'interview company role round recruiter technical preparation',
+      timer:'study timer focus pomodoro session minutes activity',
+      settings:'settings profile appearance theme voice modules workspace notification',
+      modules:'navigation preset school child certification competitive job seeker daily productivity custom hide show'
+    });
     const baseSettings=settings;
     settings=()=>baseSettings().replace(/<\/div>$/,trackerModuleSettingsCard()+'</div>');
     if(sessionStorage.getItem('studyTracker.openParentLogin')){
