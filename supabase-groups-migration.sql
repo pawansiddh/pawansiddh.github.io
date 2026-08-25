@@ -241,9 +241,10 @@ end $$;
 
 create or replace function public.group_redeem_invite(p_code text)
 returns table(group_id uuid,group_name text,member_role text) language plpgsql security definer set search_path=public,auth,extensions as $$
-declare normalized text:=upper(trim(coalesce(p_code,'')));chosen public.group_invites;name_value text;
+declare compact text:=upper(regexp_replace(coalesce(p_code,''),'[^A-Z0-9]','','g'));normalized text;chosen public.group_invites;name_value text;
 begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
+ normalized:=case when compact ~ '^NEST[A-Z0-9]{6}$' then 'NEST-'||substring(compact from 5) else upper(trim(coalesce(p_code,''))) end;
  if normalized !~ '^NEST-[A-Z0-9]{6}$' then raise exception 'Invalid or expired group code'; end if;
  select invite.* into chosen from public.group_invites invite join public.groups g on g.id=invite.group_id where invite.code_hash=encode(extensions.digest(normalized,'sha256'),'hex') and invite.used_at is null and invite.expires_at>now() and g.deleted_at is null for update of invite;
  if chosen.id is null then raise exception 'Invalid or expired group code'; end if;
