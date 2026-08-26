@@ -51,7 +51,7 @@ assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login shoul
 assert.match(document.querySelector('.auth-account-note').textContent,/One secure PAVENRO account/);
 assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
 assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
-assert.ok(document.querySelector('img[src$="pavenro-lockup.svg"]'),'Login must use the integrated PAVENRO emblem-and-name lockup');
+assert.ok(document.querySelector('img[src$="pavenro-wordmark-primary.png"]'),'Login must use the integrated PAVENRO letterform wordmark');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();

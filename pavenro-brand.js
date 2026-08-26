@@ -6,7 +6,7 @@
   const sourceFor=image=>{
     const source=image.getAttribute('src')||'';
     if(/nestlyra-mark-gold/i.test(source)) return 'pavenro-mark.svg';
-    if(/nestlyra-(?:wordmark-gold|brand-gold|logo)/i.test(source)) return 'pavenro-lockup.svg';
+    if(/nestlyra-(?:wordmark-gold|brand-gold|logo)/i.test(source)) return 'pavenro-wordmark-primary.png';
     return '';
   };
   const process=node=>{
