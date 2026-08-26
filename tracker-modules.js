@@ -70,7 +70,7 @@
   ];
   window.trackerManualSections=()=>MODULE_HELP_SECTIONS.map(section=>[...section]);
   window.trackerManualDirectory=()=>[{id:'dashboard',label:'Dashboard'},...MODULES.map(item=>({id:HELP_TARGETS[item.id]||item.id,label:item.label}))];
-  window.openSectionHelp=(section,event)=>{event?.stopPropagation?.();viewName='help';render();setTimeout(()=>scrollManual(HELP_TARGETS[section]||section),80)};
+  window.openSectionHelp=(section,event)=>{event?.stopPropagation?.();setView('help');setTimeout(()=>scrollManual(HELP_TARGETS[section]||section),80)};
 
   let moduleStateReady = false;
   let parentObserverTab = 'overview';

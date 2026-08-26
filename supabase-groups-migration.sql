@@ -241,6 +241,7 @@ end $$;
 
 create or replace function public.group_redeem_invite(p_code text)
 returns table(group_id uuid,group_name text,member_role text) language plpgsql security definer set search_path=public,auth,extensions as $$
+#variable_conflict use_column
 declare compact text:=upper(regexp_replace(coalesce(p_code,''),'[^A-Z0-9]','','g'));normalized text;chosen public.group_invites;name_value text;
 begin
  if auth.uid() is null then raise exception 'Authentication required'; end if;
@@ -253,7 +254,7 @@ begin
  insert into public.group_members(group_id,user_id,role) values(chosen.group_id,auth.uid(),chosen.invited_role);
  update public.group_invites set used_at=now(),used_by=auth.uid() where id=chosen.id;
  select name into name_value from public.groups where id=chosen.group_id;
- return query select chosen.group_id,name_value,chosen.invited_role;
+ return query select chosen.group_id as group_id,name_value as group_name,chosen.invited_role as member_role;
 end $$;
 
 create or replace function public.group_change_member_role(p_group_id uuid,p_user_id uuid,p_role text)

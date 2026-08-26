@@ -1,0 +1,27 @@
+/* Nestlyra Focus v43 — responsive regression repairs */
+html,body{max-width:100%;overflow-x:clip}.main,.view,.page-head,.page-head>div:first-child{min-width:0}.sidebar-scrim{display:none}
+
+/* Certification cards keep identity, progress and actions in separate rows. */
+.cert-stage-line{gap:10px;padding:10px 4px 18px}.cert-stage-line span{grid-template-columns:auto minmax(0,1fr) auto;min-width:0;gap:7px;font-size:10px;font-weight:650}.cert-stage-line span:after{right:-12px}.cert-stage-line b{width:22px;height:22px;font-size:9px}.cert-cards{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));align-content:start}.cert-cards article{grid-template-columns:72px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;overflow:hidden}.cert-cards article>div:nth-child(2){min-width:0}.cert-cards h3{font-size:18px;line-height:1.18;overflow-wrap:anywhere}.cert-cards p,.cert-cards span,.cert-cards small{font-size:10px;line-height:1.4}.cert-cards footer{grid-column:2;min-width:0;justify-content:flex-start;flex-wrap:wrap}.cert-cards footer .mini-btn{max-width:100%;white-space:normal}
+
+/* Long course, module and topic names must never collide with controls. */
+.subject-card,.subject-card h3,.subject-card p,.module-head h3,.subtopic-row>span{min-width:0;overflow-wrap:anywhere}.subject-card h3{line-height:1.25}.module-head{gap:12px}.module-head h3{flex:1}.subtopic-row>span{line-height:1.35}
+
+/* Header actions stay inside narrow Job Tracker and module screens. */
+.page-actions,.job-head-actions{display:flex;max-width:100%;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.page-actions .btn,.job-head-actions .btn{min-width:0;white-space:normal}.job-card,.job-toolbar,.job-table,.job-row{max-width:100%}
+
+@media(max-width:1100px) and (min-width:761px){
+  .cert-stage-line{grid-template-columns:repeat(5,minmax(110px,1fr));overflow-x:auto}.cert-path{overflow:hidden}.cert-cards article{min-height:150px}
+  .page-head{align-items:flex-start}.job-head-actions{flex:0 1 360px}
+}
+
+@media(max-width:760px){
+  .app{width:100%;max-width:100%;overflow-x:clip}.sidebar{left:0;top:0;z-index:40;width:min(84vw,300px);max-width:300px}.sidebar-scrim{position:fixed;z-index:35;inset:0;width:100%;height:100%;border:0;background:rgba(8,13,27,.48);backdrop-filter:blur(2px)}.app.nav-open .sidebar-scrim{display:block}.app.nav-open{overflow:hidden}#menuBtn[aria-expanded="true"]{background:var(--accent);color:#fff}
+  .view{width:100%;max-width:100%;padding-inline:14px}.page-head{width:100%;gap:12px}.page-head>div:first-child{width:100%}.page-head h1{font-size:clamp(23px,7vw,30px);overflow-wrap:anywhere}.page-actions,.job-head-actions{display:grid;width:100%;grid-template-columns:repeat(2,minmax(0,1fr));justify-content:stretch}.page-actions .btn,.job-head-actions .btn{width:100%;padding-inline:10px}
+  .subject-grid{grid-template-columns:minmax(0,1fr)}.subject-card{width:100%}.module-head{align-items:flex-start;flex-wrap:wrap}.module-head .btn{flex:0 0 auto;width:auto}.subtopic-row{grid-template-columns:32px minmax(0,1fr) 32px;gap:8px}.subtopic-row>.check{grid-column:1;grid-row:1}.subtopic-row>span{grid-column:2;grid-row:1}.subtopic-row>select{grid-column:2/4;grid-row:2;width:100%}.subtopic-row>input{grid-column:2/4;grid-row:3;width:100%}.subtopic-row>.kebab{grid-column:3;grid-row:1;align-self:start}
+  .cert-cards{grid-template-columns:minmax(0,1fr);overflow:visible}.cert-cards article{grid-template-columns:60px minmax(0,1fr);gap:10px;padding:12px}.cert-cards .v42-ring{width:56px;height:56px}.cert-cards footer{grid-column:1/-1}.cert-cards h3{font-size:17px}.cert-stage-line{display:none}
+  .job-toolbar{width:100%;padding:12px}.job-search{width:100%}.job-row{grid-template-columns:minmax(0,1fr) 22px;padding:13px 12px;gap:8px}.job-role{min-width:0}.job-role>i{width:34px;height:34px}.job-role b,.job-role small{max-width:calc(100vw - 130px)}
+  dialog{max-width:calc(100vw - 20px)}#modalBody{padding:22px 16px}.modal-actions{flex-wrap:wrap}.modal-actions .btn{min-width:0}
+}
+
+@media(max-width:420px){.page-actions,.job-head-actions{grid-template-columns:1fr}.job-stats{grid-template-columns:1fr}.topbar{padding-inline:10px}.search-wrap{margin-inline:7px}.top-actions{gap:6px}.icon-btn,.avatar{width:36px;height:36px}.subtopic-row{padding-block:12px}}

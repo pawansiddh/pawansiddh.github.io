@@ -4,6 +4,7 @@ import {JSDOM, VirtualConsole} from 'jsdom';
 
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const trackerCss=fs.readFileSync(new URL('./tracker-update.css',import.meta.url),'utf8');
+const responsiveCss=fs.readFileSync(new URL('./nestlyra-v43.css',import.meta.url),'utf8');
 const browserErrors=[];
 const virtualConsole=new VirtualConsole();
 virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas/i.test(error.message)){browserErrors.push(error.message);console.error(error.detail?.stack||error.stack||error.message)}});
@@ -16,8 +17,9 @@ window.confirm=()=>true;
 window.alert=()=>{};
 window.Chart=class{destroy(){}};
 window.XLSX={utils:{book_new:()=>({}),book_append_sheet(){},json_to_sheet:()=>({})},writeFile(){}};
+const spoken=[];
 window.SpeechSynthesisUtterance=class{constructor(text){this.text=text}};
-window.speechSynthesis={cancel(){},speak(){},getVoices:()=>[]};
+window.speechSynthesis={cancel(){},speak(utterance){spoken.push(utterance)},getVoices:()=>[]};
 window.AudioContext=class{constructor(){this.currentTime=0;this.destination={}}createOscillator(){return{frequency:{value:0},connect(){},start(){},stop(){}}}createGain(){return{gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};
 window.BroadcastChannel=class{postMessage(){}close(){}};
 Object.defineProperty(window.navigator,'serviceWorker',{value:{register:async()=>({})}});
@@ -83,6 +85,16 @@ assert.equal(document.querySelectorAll('#nav .nav-entry').length,document.queryS
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.task-row/,'Light themes must normalize task rows');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,'Light themes must normalize note cards');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');
+assert.match(responsiveCss,/\.cert-cards footer\{grid-column:2/,'Certification actions must have a dedicated non-overlapping row');
+assert.match(responsiveCss,/\.subtopic-row>select\{grid-column:2\/4;grid-row:2/,'Mobile topic controls must have explicit rows');
+assert.match(responsiveCss,/\.job-head-actions\{display:grid;width:100%/,'Mobile Job Tracker actions must stay inside the viewport');
+
+document.querySelector('#menuBtn').click();
+assert.equal(document.querySelector('#app').classList.contains('nav-open'),true,'Mobile navigation should expose an outside-tap scrim');
+document.querySelector('#sidebarScrim').click();
+assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Tapping outside the mobile navigation should close it');
+window.setView('calendar');await wait();
+assert.equal(Object.keys(window.localStorage).some(key=>key.startsWith('studyTracker.lastView.v1')&&window.localStorage.getItem(key)==='calendar'),true,'The last opened section must survive a login round trip');
 
 clickText('#nav button','Assignments');await wait();
 assert.ok(document.querySelector('.assignment-kanban'),'Assignments should use its own kanban architecture');
@@ -112,7 +124,21 @@ for(const name of ['certifications','exams','mocks','revision','assignments','re
 for(const [name,selector] of Object.entries({certifications:'.cert-path',exams:'.exam-command',mocks:'.mock-lab',revision:'.revision-board',assignments:'.assignment-kanban',resources:'.resource-shelves',practice:'.practice-studio',projects:'.project-roadmaps',habits:'.habit-grid',goals:'.goal-horizon',interviews:'.interview-pipeline'})){
   window.setView(name);await wait();
   assert.ok(document.querySelector(selector),`${name} must render its own architecture (${selector})`);
+  window.trackerItemModal(name);
+  const identity=document.querySelector('[id^="v37Field_"]');
+  assert.ok(identity,`${name} should open an editable data form`);
+  identity.value=`Responsive ${name} record`;
+  window.trackerSaveItemV37(name);await wait();
+  assert.match(document.querySelector(selector).textContent,new RegExp(`Responsive ${name}`,'i'),`${name} should save and render a real record`);
 }
+
+window.speechSynthesis.getVoices=()=>[
+  {name:'Mobile English Female',lang:'en-US',voiceURI:'female'},
+  {name:'Mobile English Daniel',lang:'en-GB',voiceURI:'male'}
+];
+window.setFamilyVoice('voice','deep-male');await wait(30);
+assert.equal(spoken.at(-1)?.voice?.voiceURI,'male','A mobile male selection must use an available male voice');
+assert.ok(spoken.at(-1)?.pitch<1,'Deep Male must remain audibly distinct when mobile voices use generic labels');
 
 clickText('#nav button','Subjects');await wait();
 const sampleId=document.querySelector('.subject-card').getAttribute('onclick').match(/'([^']+)'/)[1];

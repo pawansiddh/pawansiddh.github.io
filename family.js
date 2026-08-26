@@ -66,10 +66,14 @@ function trackFamilyView(name){activityTick();if(name!==trackedView){const day=a
 function formatDuration(ms=0){const mins=Math.round(ms/60000);return mins<60?`${mins}m`:`${Math.floor(mins/60)}h ${mins%60}m`}
 
 function voiceProfiles(){return [['calm-female','Calm Female'],['clear-female','Clear Female'],['calm-male','Calm Male'],['deep-male','Deep Male'],['system','System Default']]}
-function chooseVoice(profile){const voices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)),female=voices.filter(v=>/female|zira|samantha|victoria|aria|jenny|google uk english female/i.test(v.name)),male=voices.filter(v=>/male|david|mark|daniel|george|guy|google uk english male/i.test(v.name));if(profile==='calm-female')return female[0]||voices[0];if(profile==='clear-female')return female[1]||female[0]||voices[1]||voices[0];if(profile==='calm-male')return male[0]||voices[0];if(profile==='deep-male')return male[1]||male[0]||voices[1]||voices[0];return voices[0]||speechSynthesis.getVoices()[0]}
-window.familySpeak=text=>{if(!('speechSynthesis'in window))return toast('Voice is not supported on this browser');speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(String(text||''));utterance.voice=chooseVoice(familyData.settings.voice);utterance.rate=Number(familyData.settings.voiceRate)||1;utterance.pitch=Number(familyData.settings.voicePitch)||1;speechSynthesis.speak(utterance)};
+let availableVoices=[],voiceLoadPromise=null,voiceSpeakGeneration=0;
+function refreshVoices(){availableVoices=window.speechSynthesis?.getVoices?.()||[];return availableVoices}
+function loadVoices(){const current=refreshVoices();if(current.length)return Promise.resolve(current);if(voiceLoadPromise)return voiceLoadPromise;voiceLoadPromise=new Promise(resolve=>{let finished=false;const done=()=>{if(finished)return;finished=true;clearTimeout(timer);window.speechSynthesis?.removeEventListener?.('voiceschanged',done);resolve(refreshVoices())},timer=setTimeout(done,900);window.speechSynthesis?.addEventListener?.('voiceschanged',done,{once:true})});return voiceLoadPromise}
+function chooseVoice(profile,voices=availableVoices){const english=voices.filter(v=>/^en(?:-|_)/i.test(v.lang)||/^english/i.test(v.name)),pool=english.length?english:voices,female=pool.filter(v=>/female|zira|samantha|victoria|aria|jenny|susan|karen|moira|tessa|veena/i.test(v.name)),male=pool.filter(v=>/male|david|mark|daniel|george|guy|aaron|alex|arthur|bruce|fred|ralph|reed|ryan|liam|brian|matthew|james|oliver|thomas/i.test(v.name));if(profile==='calm-female')return female[0]||pool[0];if(profile==='clear-female')return female[1]||female[0]||pool[1]||pool[0];if(profile==='calm-male')return male[0]||pool[0];if(profile==='deep-male')return male[1]||male[0]||pool[0];return pool[0]}
+function voiceTuning(profile){return {pitch:profile==='deep-male'?.68:profile==='calm-male'?.82:profile==='clear-female'?1.08:1,rate:profile==='deep-male'?.88:profile==='clear-female'?1.06:1}}
+window.familySpeak=async text=>{if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window))return toast('Voice is not supported on this browser');const generation=++voiceSpeakGeneration;window.speechSynthesis.cancel();const voices=await loadVoices();if(generation!==voiceSpeakGeneration)return;const profile=familyData.settings.voice,tuning=voiceTuning(profile),utterance=new SpeechSynthesisUtterance(String(text||''));utterance.voice=chooseVoice(profile,voices)||null;utterance.lang=utterance.voice?.lang||document.documentElement.lang||'en-US';utterance.rate=Math.max(.5,Math.min(2,(Number(familyData.settings.voiceRate)||1)*tuning.rate));utterance.pitch=Math.max(.5,Math.min(2,(Number(familyData.settings.voicePitch)||1)*tuning.pitch));window.speechSynthesis.speak(utterance)};
 window.familySpeakBriefing=()=>{const el=document.querySelector('.briefing');if(el)familySpeak((el.innerText||el.textContent||'').replace(/Job Tracker\s+Open calendar\s+Start my day/g,''))};
-window.familyStopVoice=()=>{clearTimeout(briefingVoiceTimer);briefingVoiceTimer=null;speechSynthesis?.cancel()};
+window.familyStopVoice=()=>{voiceSpeakGeneration++;clearTimeout(briefingVoiceTimer);briefingVoiceTimer=null;window.speechSynthesis?.cancel()};
 window.familyCancelBriefing=()=>{clearTimeout(briefingPopupTimer);briefingPopupTimer=null;familyStopVoice()};
 window.setFamilyVoice=(key,value)=>{familyData.settings[key]=key==='autoBriefing'?Boolean(value):value;saveFamily();if(key==='voice')familySpeak(`Hello. You selected ${voiceProfiles().find(x=>x[0]===value)?.[1]||'this voice'}.`)};
 window.setFamilySetting=(key,value)=>{familyData.settings[key]=value;saveFamily();if(key==='briefingFrequency'&&value==='off')familyCancelBriefing()};
@@ -109,7 +113,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const baseSettings=settings;
   settings=()=>baseSettings().replace(/<\/div>$/,familySettingsCards()+'</div>');
   const baseSetView=window.setView;
-  window.setView=name=>{trackFamilyView(name);return baseSetView(name)};
+  window.setView=(name,options)=>{trackFamilyView(name);return baseSetView(name,options)};
   document.querySelector('#modal')?.addEventListener('close',familyStopVoice);
-  speechSynthesis?.getVoices();
+  refreshVoices();window.speechSynthesis?.addEventListener?.('voiceschanged',refreshVoices);
 });

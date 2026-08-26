@@ -8,6 +8,7 @@ returns table(group_id uuid,group_name text,member_role text)
 language plpgsql
 security definer
 set search_path=public,auth,extensions as $$
+#variable_conflict use_column
 declare
   compact text:=upper(regexp_replace(coalesce(p_code,''),'[^A-Z0-9]','','g'));
   normalized text;
@@ -44,7 +45,10 @@ begin
   select target_group.name into name_value
   from public.groups target_group
   where target_group.id=chosen.group_id;
-  return query select chosen.group_id,name_value,chosen.invited_role;
+  return query
+  select chosen.group_id as group_id,
+         name_value as group_name,
+         chosen.invited_role as member_role;
 end $$;
 
 revoke all on function public.group_redeem_invite(text) from public,anon;

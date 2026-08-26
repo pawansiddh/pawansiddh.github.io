@@ -186,7 +186,7 @@ window.groupPublishProgress=async(force=false)=>{
 
 function groupMessageMarkup(message){const own=message.sender_id===groupState.user?.id,person=groupState.participants.get(message.sender_id);return `<article class="family-message ${own?'own':''}"><div class="family-message-meta"><strong>${own?'You':escapeHtml(person?.display_name||'Group member')}</strong><span>${new Date(message.created_at).toLocaleString()}${message.edited_at?' · edited':''}</span></div><p>${escapeHtml(message.body).replace(/\n/g,'<br>')}</p>${own?`<div class="family-message-actions"><button onclick="groupMessageEdit('${message.id}')">Edit</button><button onclick="groupMessageDelete('${message.id}')">Delete</button></div>`:''}</article>`}
 window.groupMessagingView=()=>{setTimeout(()=>groupMessagingBoot());return head('Group messages','Private text conversations inside every group you joined',`<button class="btn ghost" onclick="setView('groups')">Manage groups</button>`)+`<div id="groupMessagingRoot" class="family-chat-root"><div class="empty">Opening group conversations…</div></div>`};
-window.groupOpenMessages=id=>{groupState.messageGroupId=id;viewName='messages';render()};
+window.groupOpenMessages=id=>{groupState.messageGroupId=id;setView('messages')};
 window.groupMessagingBoot=async()=>{
   const root=document.querySelector('#groupMessagingRoot');if(!root)return;
   const user=await groupCurrentUser();if(!user){root.innerHTML='<div class="family-chat-empty"><span>☁</span><h3>Cloud account required</h3><p>Sign in with email or Google to use group messaging.</p></div>';return}
