@@ -72,6 +72,18 @@ assert.equal(document.querySelector('#nestlyraWalkthrough'),null,'Skip/finish mu
 assert.equal(document.body.classList.contains('walkthrough-open'),false,'Walkthrough must not leave the page frozen');
 assert.equal(document.querySelector('#modal').open,false,'The daily briefing must not reopen behind or immediately after onboarding');
 
+Object.defineProperty(window,'innerWidth',{value:390,writable:true,configurable:true});
+window.startNestlyraWalkthrough();await wait(280);
+window.nextWalkthrough();await wait(280);
+assert.equal(document.querySelector('#app').classList.contains('nav-open'),true,'Mobile walkthrough must open the navigation before highlighting it');
+window.nextWalkthrough();await wait(280);
+assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must close navigation before highlighting dashboard content');
+window.finishNestlyraWalkthrough();await wait(40);
+assert.equal(document.querySelector('#nestlyraWalkthrough'),null,'Mobile walkthrough finish must remove every overlay');
+assert.equal(document.body.classList.contains('walkthrough-open'),false,'Mobile walkthrough must restore page interaction');
+assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must never leave the drawer open');
+window.innerWidth=1366;
+
 assert.equal(document.querySelector('.sidebar>.brand img')?.alt,'Nestlyra');
 assert.match(document.querySelector('.sidebar>.brand').textContent,/Focus/);
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
@@ -111,6 +123,15 @@ window.openSectionHelp('assignments');await wait(120);
 assert.ok(document.querySelector('#manual-assignments[open]'),'A section ? button should open its exact manual entry');
 
 window.setView('settings');await wait();
+window.subjectModal();document.querySelector('#fName').value='Networking fundamentals';document.querySelector('#fIcon').value='NF';window.saveSubject('');await wait();
+window.setView('settings');await wait();
+window.exportJSON();await wait();
+const exportOptions=[...document.querySelectorAll('[data-export-subject]')];
+assert.equal(exportOptions.length,2,'Subject export must show a checkbox for each subject');
+const selectedPayload=window.buildSubjectExport([exportOptions[1].value]);
+assert.equal(JSON.parse(selectedPayload.data).subjects.length,1,'Subject export must include only the selected subject');
+assert.match(selectedPayload.filename,/networking-fundamentals/,'Single-subject export should use a recognizable filename');
+document.querySelector('#modalClose').click();
 window.toggleTrackerModule('settings');window.toggleTrackerModule('help');await wait();
 assert.equal(document.querySelector('[data-nav-entry="settings"]'),null,'Users may hide Settings from navigation');
 assert.equal(document.querySelector('[data-nav-entry="help"]'),null,'Users may hide Manual & FAQ from navigation');
