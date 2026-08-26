@@ -5,6 +5,8 @@ import {JSDOM, VirtualConsole} from 'jsdom';
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const trackerCss=fs.readFileSync(new URL('./tracker-update.css',import.meta.url),'utf8');
 const responsiveCss=fs.readFileSync(new URL('./nestlyra-v43.css',import.meta.url),'utf8');
+assert.match(responsiveCss,/\.subject-export-actions \.mini-btn\{width:auto;height:34px/,'Export selection controls must remain readable instead of collapsing into square buttons');
+assert.match(responsiveCss,/@media\(max-width:520px\).*\.subject-export-actions \.mini-btn\{flex:1\}/s,'Export controls must remain usable on mobile');
 const browserErrors=[];
 const virtualConsole=new VirtualConsole();
 virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas/i.test(error.message)){browserErrors.push(error.message);console.error(error.detail?.stack||error.stack||error.message)}});
