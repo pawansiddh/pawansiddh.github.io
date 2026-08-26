@@ -1,7 +1,7 @@
 /* Nestlyra Focus local activity, briefing voice, and legacy Family compatibility.
    Parent/Learner is no longer an account role. Cloud collaboration is handled by groups.js. */
 const FAMILY_KEY='studyTracker.family.v1';
-let familyData=loadFamily(),activityTimer=null,lastActivityAt=Date.now(),lastActivityTick=Date.now(),trackedView='dashboard',cloudFamilyUser=null,cloudActivitySyncAt=0,briefingVoiceTimer=null;
+let familyData=loadFamily(),activityTimer=null,lastActivityAt=Date.now(),lastActivityTick=Date.now(),trackedView='dashboard',cloudFamilyUser=null,cloudActivitySyncAt=0,briefingVoiceTimer=null,briefingPopupTimer=null;
 
 function loadFamily(){
   const defaults={admin:null,invites:[],links:[],activity:{},settings:{voice:'calm-female',voiceRate:1,voicePitch:1,autoBriefing:true,briefingFrequency:'every-login',briefingDelay:.3,briefingGreeting:'',briefingToday:true,briefingUpcoming:true,briefingJobs:true,messageSound:true,messageNotifications:true,messagePreview:true}};
@@ -70,8 +70,9 @@ function chooseVoice(profile){const voices=speechSynthesis.getVoices().filter(v=
 window.familySpeak=text=>{if(!('speechSynthesis'in window))return toast('Voice is not supported on this browser');speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(String(text||''));utterance.voice=chooseVoice(familyData.settings.voice);utterance.rate=Number(familyData.settings.voiceRate)||1;utterance.pitch=Number(familyData.settings.voicePitch)||1;speechSynthesis.speak(utterance)};
 window.familySpeakBriefing=()=>{const el=document.querySelector('.briefing');if(el)familySpeak((el.innerText||el.textContent||'').replace(/Job Tracker\s+Open calendar\s+Start my day/g,''))};
 window.familyStopVoice=()=>{clearTimeout(briefingVoiceTimer);briefingVoiceTimer=null;speechSynthesis?.cancel()};
+window.familyCancelBriefing=()=>{clearTimeout(briefingPopupTimer);briefingPopupTimer=null;familyStopVoice()};
 window.setFamilyVoice=(key,value)=>{familyData.settings[key]=key==='autoBriefing'?Boolean(value):value;saveFamily();if(key==='voice')familySpeak(`Hello. You selected ${voiceProfiles().find(x=>x[0]===value)?.[1]||'this voice'}.`)};
-window.setFamilySetting=(key,value)=>{familyData.settings[key]=value;saveFamily()};
+window.setFamilySetting=(key,value)=>{familyData.settings[key]=value;saveFamily();if(key==='briefingFrequency'&&value==='off')familyCancelBriefing()};
 
 function familySettingsCards(){
   const voice=familyData.settings.voice,s=familyData.settings,day=activityDay();
@@ -83,7 +84,16 @@ function familyBriefingStorageKey(){return `studyTracker.briefing.${cloudFamilyU
 function familyShouldShowBriefing(){const frequency=familyData.settings.briefingFrequency||'every-login';if(frequency==='off')return false;if(frequency==='daily'&&localStorage.getItem(familyBriefingStorageKey())===today())return false;return true}
 function familyConfigureBriefing(){const briefing=document.querySelector('.briefing');if(!briefing)return;const s=familyData.settings,name=(state.profile?.name||'User').split(' ')[0],custom=(s.briefingGreeting||'').trim();if(custom)briefing.querySelector('h2').textContent=custom.replaceAll('{name}',name);const stats=briefing.querySelectorAll('.briefing-stats>div'),sections=[...briefing.querySelectorAll('section')];if(!s.briefingToday){stats[1]?.remove();sections.find(x=>x.querySelector('h3')?.textContent==="Today's plan")?.remove()}if(!s.briefingUpcoming){stats[2]?.remove();sections.find(x=>x.querySelector('h3')?.textContent==='Coming up')?.remove()}if(!s.briefingJobs){stats[3]?.remove();briefing.querySelector('.job-brief')?.remove();briefing.querySelector('[onclick*="jobs"]')?.remove()}if((s.briefingFrequency||'every-login')==='daily')localStorage.setItem(familyBriefingStorageKey(),today());const actions=briefing.querySelector('.modal-actions');if(actions&&!actions.querySelector('.briefing-snooze'))actions.insertAdjacentHTML('afterbegin','<button type="button" class="btn ghost briefing-snooze" onclick="familyBriefingSnoozeToday()">Do not show again today</button>')}
 function familyOnBriefing(){familyStopVoice();briefingVoiceTimer=setTimeout(()=>{briefingVoiceTimer=null;const dialog=document.querySelector('#modal'),actions=document.querySelector('.briefing .modal-actions');if(!dialog?.open||!actions)return;const button=document.createElement('button');button.type='button';button.className='btn ghost';button.textContent='🔊 Read aloud';button.onclick=familySpeakBriefing;actions.prepend(button);if(familyData.settings.autoBriefing&&dialog.open)familySpeakBriefing()},80)}
-window.familyScheduleBriefing=()=>{if(window.nestlyraOnboardingActive||!familyShouldShowBriefing())return;setTimeout(()=>{if(window.nestlyraOnboardingActive)return;const dialog=document.querySelector('#modal');if(dialog?.open)return;welcomeBriefing();familyConfigureBriefing();familyOnBriefing()},Math.max(300,Number(familyData.settings.briefingDelay||.3)*1000))};
+window.familyScheduleBriefing=()=>{
+  familyCancelBriefing();
+  if(window.nestlyraOnboardingActive||!familyShouldShowBriefing())return;
+  briefingPopupTimer=setTimeout(()=>{
+    briefingPopupTimer=null;
+    if(window.nestlyraOnboardingActive||!familyShouldShowBriefing())return;
+    const dialog=document.querySelector('#modal');if(dialog?.open)return;
+    welcomeBriefing();familyConfigureBriefing();familyOnBriefing();
+  },Math.max(300,Number(familyData.settings.briefingDelay||.3)*1000));
+};
 window.familyPreviewBriefing=()=>{if(document.querySelector('#modal')?.open)closeModal();welcomeBriefing();familyConfigureBriefing();familyOnBriefing()};
 window.familyBriefingSnoozeToday=()=>{localStorage.setItem(familyBriefingStorageKey(),today());familyStopVoice();closeModal();toast('Daily briefing paused for today')};
 window.familyOnAppShown=async()=>{document.body.classList.remove('parent-mode','parent-observer-mode');try{cloudFamilyUser=await getCloudFamilyUser();if(cloudFamilyUser&&typeof groupEnsureProfile==='function')await groupEnsureProfile(cloudFamilyUser)}catch(error){console.warn('Group profile setup:',error.message)}startActivityTracking();syncCloudActivity(true);if(typeof groupRefreshBadge==='function')groupRefreshBadge()};
