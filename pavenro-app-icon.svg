@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">PAVENRO app icon</title>
+  <defs>
+    <linearGradient id="tile" x1="48" y1="40" x2="464" y2="478" gradientUnits="userSpaceOnUse"><stop stop-color="#061A42"/><stop offset="1" stop-color="#0A3575"/></linearGradient>
+    <linearGradient id="forward" x1="162" y1="352" x2="420" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#176EF2"/><stop offset=".55" stop-color="#0AA4F1"/><stop offset="1" stop-color="#32D7FF"/></linearGradient>
+  </defs>
+  <rect x="18" y="18" width="476" height="476" rx="118" fill="url(#tile)"/>
+  <path fill="#F7FBFF" fill-rule="evenodd" d="M112 394V112h153c85 0 135 41 135 109.5S350 331 265 331h-66v63h-87Zm87-204v66h64.5c33 0 49.5-11.5 49.5-33S296.5 190 263.5 190H199Z"/>
+  <path d="m190 229 81 102 114-183" fill="none" stroke="url(#forward)" stroke-width="39" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill="#32D7FF" d="m379 112 39 84-90-21 51-63Z"/>
+</svg>

@@ -255,7 +255,7 @@
   document.addEventListener('DOMContentLoaded',()=>{
     setupAnimatedLogin();
     sessionStorage.removeItem('nestlyra.driveToken');
-    document.querySelectorAll('.product-credit img,.parent-product-credit img').forEach(img=>{img.src='nestlyra-wordmark-gold.svg';img.alt='Nestlyra'});
+    document.querySelectorAll('.product-credit img,.parent-product-credit img').forEach(img=>{img.src='pavenro-lockup.svg';img.alt='PAVENRO'});
     if(state.settings?.loginImage){delete state.settings.loginImage;delete state.settings.loginImagePosition;delete state.settings.loginImageShade;try{localStorage.removeItem('studyTracker.appearance.v1')}catch{}save()}
     updateAvatar();
   });

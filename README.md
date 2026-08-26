@@ -1,10 +1,10 @@
-# Nestlyra Focus
+# PAVENRO Focus
 
-A responsive, private-first learning, exam, planning and career workspace designed and developed by Nestlyra.
+A responsive, private-first learning, exam, planning and career workspace designed and developed by PAVENRO.
 
 ## Features
 
-- One neutral Nestlyra account for personal use and every group role, including Google sign-in
+- One neutral PAVENRO account for personal use and every group role, including Google sign-in
 - A five-module starter course for first-time users
 - Customizable navigation presets for children, certification, exams, job seeking and daily planning
 - Subjects, modules, topics, tasks, habits, goals, exams, mock tests and revision queues
@@ -18,7 +18,7 @@ A responsive, private-first learning, exam, planning and career workspace design
 - Text-only Group messaging with unread badges and retention controls
 - Optional record-level co-edit for shared tasks, goals, plans and short notes
 - Due/overdue states, configurable briefing voice, sounds and notifications
-- Nestlyra light default plus user-selectable themes and typography
+- PAVENRO light default plus user-selectable themes and typography
 - Subject-only JSON import/export and Excel export
 - Free browser extension for review-first job capture
 - Installable PWA shell
@@ -29,4 +29,4 @@ Run `supabase-groups-migration.sql` once before enabling Groups in production. T
 
 ## Deployment
 
-The preferred Nestlyra beta is Cloudflare Pages. The existing GitHub Pages site remains the legacy production URL until migration is explicitly approved.
+The preferred PAVENRO Focus beta is Cloudflare Pages. The existing GitHub Pages site remains the legacy production URL until the custom PAVENRO domain rollout.
