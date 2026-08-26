@@ -36,4 +36,4 @@ window.viewJobDescription=id=>{const a=jobList().find(x=>x.id===id);modal(`<h2>S
 window.addEventListener('message',e=>{if(e.source!==window||e.data?.type!=='STUDY_TRACKER_JOB_CAPTURE')return;const captured=e.data.payload;if(!captured||typeof captured!=='object')return;setView('jobs');jobModal('',captured);toast('Job captured — review before saving')});
 
 const baseJobTracker=jobTracker;
-jobTracker=()=>baseJobTracker().replace('<div class="job-head-actions">','<div class="job-head-actions"><a class="btn ghost extension-download" href="nestlyra-focus-job-capture.zip" download>◈ Browser extension</a>');
+jobTracker=()=>baseJobTracker().replace('<div class="job-head-actions">','<div class="job-head-actions"><a class="btn ghost extension-download" href="pavenro-focus-job-capture.zip" download>◈ Browser extension</a>');

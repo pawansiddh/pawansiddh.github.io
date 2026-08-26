@@ -29,7 +29,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -44,18 +44,18 @@ const clickText=(selector,text)=>{
 };
 await wait(40);
 
-assert.equal(document.title,'Nestlyra Focus');
+assert.equal(document.title,'PAVENRO Focus');
 assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login should use one neutral account flow');
-assert.match(document.querySelector('.auth-account-note').textContent,/One secure Nestlyra account/);
+assert.match(document.querySelector('.auth-account-note').textContent,/One secure PAVENRO account/);
 assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
 assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
-assert.ok(document.querySelector('img[src="nestlyra-wordmark-gold.svg"]'),'Login must use the integrated emblem-and-name wordmark, not the old brand rectangle');
+assert.ok(document.querySelector('img[src$="pavenro-lockup.svg"]'),'Login must use the integrated PAVENRO emblem-and-name lockup');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
 await wait(90);
 assert.equal(document.querySelector('#app').classList.contains('hidden'),false,`Learner workspace should open: ${document.querySelector('#toast').textContent||'no message'}`);
-assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users should receive the Nestlyra theme');
+assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users should receive the PAVENRO default theme');
 document.querySelector('#modalClose').click();
 assert.ok(document.querySelector('#v42OverallDonut'),'Dashboard should render a circular overall-readiness graph');
 assert.ok(document.querySelector('#v42ModuleBars'),'Dashboard should render a role-aware module bar graph');
@@ -84,7 +84,7 @@ assert.equal(document.body.classList.contains('walkthrough-open'),false,'Mobile 
 assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must never leave the drawer open');
 window.innerWidth=1366;
 
-assert.equal(document.querySelector('.sidebar>.brand img')?.alt,'Nestlyra');
+assert.equal(document.querySelector('.sidebar>.brand img')?.alt,'PAVENRO');
 assert.match(document.querySelector('.sidebar>.brand').textContent,/Focus/);
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
@@ -180,10 +180,10 @@ assert.ok(document.querySelector('.nest-calendar.day'),'Day view should render')
 assert.equal(document.querySelectorAll('.calendar-time-axis span').length,24);
 
 window.eventModal('',new Date().toISOString().slice(0,10));
-document.querySelector('#fEventTitle').value='Nestlyra test event';
+document.querySelector('#fEventTitle').value='PAVENRO test event';
 document.querySelector('#fEventTime').value='10:30';
 window.saveEvent('');await wait();
-assert.match(document.querySelector('.timeline-event')?.textContent||'',/Nestlyra test event/);
+assert.match(document.querySelector('.timeline-event')?.textContent||'',/PAVENRO test event/);
 
 window.setTheme('dark');assert.equal(document.body.classList.contains('theme-nestlyra'),false);
 window.setTheme('nestlyra');assert.equal(document.body.classList.contains('theme-nestlyra'),true);
@@ -194,5 +194,5 @@ assert.match(document.querySelector('#groupsRoot').textContent,/Cloud account re
 window.setView('help');await wait();
 assert.match(document.querySelector('#view').textContent,/Groups, roles and invitations/,'Manual should explain the account-neutral Groups model');
 assert.deepEqual(browserErrors,[],browserErrors.join('\n'));
-console.log('Nestlyra regression passed: unified accounts, Groups, brand, consistent themes, configurable navigation, contextual manuals, functional modules and Calendar.');
+console.log('PAVENRO Focus regression passed: unified accounts, Groups, brand, consistent themes, configurable navigation, contextual manuals, functional modules and Calendar.');
 dom.window.close();
