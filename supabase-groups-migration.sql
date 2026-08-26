@@ -248,7 +248,7 @@ begin
  if normalized !~ '^NEST-[A-Z0-9]{6}$' then raise exception 'Invalid or expired group code'; end if;
  select invite.* into chosen from public.group_invites invite join public.groups g on g.id=invite.group_id where invite.code_hash=encode(extensions.digest(normalized,'sha256'),'hex') and invite.used_at is null and invite.expires_at>now() and g.deleted_at is null for update of invite;
  if chosen.id is null then raise exception 'Invalid or expired group code'; end if;
- if exists(select 1 from public.group_members where group_id=chosen.group_id and user_id=auth.uid()) then raise exception 'You already belong to this group'; end if;
+ if exists(select 1 from public.group_members membership where membership.group_id=chosen.group_id and membership.user_id=auth.uid()) then raise exception 'You already belong to this group'; end if;
  perform public.group_ensure_profile('');
  insert into public.group_members(group_id,user_id,role) values(chosen.group_id,auth.uid(),chosen.invited_role);
  update public.group_invites set used_at=now(),used_by=auth.uid() where id=chosen.id;

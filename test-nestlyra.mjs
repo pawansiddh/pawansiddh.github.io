@@ -27,7 +27,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -47,7 +47,7 @@ assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login shoul
 assert.match(document.querySelector('.auth-account-note').textContent,/One secure Nestlyra account/);
 assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
 assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
-assert.ok(document.querySelector('img[src="nestlyra-mark-gold.svg"]'),'Login must use the extracted Nestlyra emblem, not the full brand rectangle');
+assert.ok(document.querySelector('img[src="nestlyra-wordmark-gold.svg"]'),'Login must use the integrated emblem-and-name wordmark, not the old brand rectangle');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
@@ -55,10 +55,23 @@ await wait(90);
 assert.equal(document.querySelector('#app').classList.contains('hidden'),false,`Learner workspace should open: ${document.querySelector('#toast').textContent||'no message'}`);
 assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users should receive the Nestlyra theme');
 document.querySelector('#modalClose').click();
-assert.ok(document.querySelector('#v37ModuleChart'),'Dashboard should render an adaptive module-readiness graph');
-assert.ok(document.querySelector('#v37FocusChart'),'Dashboard should render a seven-day focus graph');
+assert.ok(document.querySelector('#v42OverallDonut'),'Dashboard should render a circular overall-readiness graph');
+assert.ok(document.querySelector('#v42ModuleBars'),'Dashboard should render a role-aware module bar graph');
+assert.ok(document.querySelector('#v42FocusLine'),'Dashboard should render a seven-day focus line graph');
+await wait(520);
+assert.ok(document.querySelector('#nestlyraWalkthrough'),'A first-time account should receive the guided walkthrough');
+assert.equal(document.querySelectorAll('.walk-shade').length,4,'Walkthrough must use four click-safe shade panels instead of a blocking blur layer');
+window.nextWalkthrough();await wait();
+assert.match(document.querySelector('#nestlyraWalkthrough').textContent,/2 \/ 5/);
+window.previousWalkthrough();await wait();
+assert.match(document.querySelector('#nestlyraWalkthrough').textContent,/1 \/ 5/);
+window.finishNestlyraWalkthrough();await wait(350);
+assert.equal(document.querySelector('#nestlyraWalkthrough'),null,'Skip/finish must fully remove the walkthrough');
+assert.equal(document.body.classList.contains('walkthrough-open'),false,'Walkthrough must not leave the page frozen');
+assert.equal(document.querySelector('#modal').open,false,'The daily briefing must not reopen behind or immediately after onboarding');
 
-assert.match(document.querySelector('.sidebar>.brand').textContent,/Nestlyra\s*Focus/);
+assert.equal(document.querySelector('.sidebar>.brand img')?.alt,'Nestlyra');
+assert.match(document.querySelector('.sidebar>.brand').textContent,/Focus/);
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
@@ -72,13 +85,14 @@ assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');
 
 clickText('#nav button','Assignments');await wait();
+assert.ok(document.querySelector('.assignment-kanban'),'Assignments should use its own kanban architecture');
 window.trackerItemModal('assignments');
 document.querySelector('#v37Field_title').value='Science project write-up';
 document.querySelector('#v37Field_subject').value='Science';
 document.querySelector('#v37Field_dueDate').value=new Date().toISOString().slice(0,10);
 document.querySelector('#v37Field_status').value='In progress';
 window.trackerSaveItemV37('assignments');await wait();
-assert.match(document.querySelector('.entity-row')?.textContent||'',/Science project write-up/,'New customizable modules must store real records');
+assert.match(document.querySelector('.assignment-kanban')?.textContent||'',/Science project write-up/,'New customizable modules must store real records');
 
 assert.match(document.querySelector('[data-nav-entry="assignments"] .nav-help').getAttribute('onclick'),/openSectionHelp\('assignments'/);
 window.openSectionHelp('assignments');await wait(120);
@@ -93,6 +107,12 @@ assert.match(document.querySelector('#view').textContent,/Navigation & modules/,
 window.openSectionHelp('tasks');await wait(120);
 assert.ok(document.querySelector('#manual-tasks[open]'),'Context help must keep Manual accessible when hidden');
 window.toggleTrackerModule('settings');window.toggleTrackerModule('help');await wait();
+
+for(const name of ['certifications','exams','mocks','revision','assignments','resources','practice','projects','habits','goals','interviews'])if(!window.trackerModuleEnabled(name))window.toggleTrackerModule(name);
+for(const [name,selector] of Object.entries({certifications:'.cert-path',exams:'.exam-command',mocks:'.mock-lab',revision:'.revision-board',assignments:'.assignment-kanban',resources:'.resource-shelves',practice:'.practice-studio',projects:'.project-roadmaps',habits:'.habit-grid',goals:'.goal-horizon',interviews:'.interview-pipeline'})){
+  window.setView(name);await wait();
+  assert.ok(document.querySelector(selector),`${name} must render its own architecture (${selector})`);
+}
 
 clickText('#nav button','Subjects');await wait();
 const sampleId=document.querySelector('.subject-card').getAttribute('onclick').match(/'([^']+)'/)[1];
