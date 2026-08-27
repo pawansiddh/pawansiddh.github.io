@@ -14,5 +14,6 @@
     const load=(src,key)=>{if(window[key])return;window[key]=true;const s=document.createElement('script');s.src=src;s.async=false;s.onerror=e=>console.error('PAVENRO Finance fallback failed',src,e);document.head.appendChild(s)};
     load('v6-direct-ui.js?v=finance-rail-layout-20260827e','__PAVENRO_DIRECT_UI_BRIDGE__');
     load('patch6-loader.js?v=finance-v6-bridge-20260827d','__PAVENRO_V6_BRIDGE__');
+    load('rail-fix-v8.js?v=finance-rail-v8-20260827','__PAVENRO_RAIL_V8_BRIDGE__');
   }
 })();
