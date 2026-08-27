@@ -10,4 +10,15 @@
     document.documentElement.appendChild(script);
     script.remove();
   }catch(e){console.error('PAVENRO Finance patch failed',e);}
+  finally{
+    if(!window.__PAVENRO_V6_BRIDGE__){
+      window.__PAVENRO_V6_BRIDGE__=true;
+      const s=document.createElement('script');
+      s.src='patch6-loader.js?v=finance-v6-bridge-20260827b';
+      s.async=false;
+      s.onload=()=>console.info('PAVENRO Finance v6 bridge loaded');
+      s.onerror=e=>console.error('PAVENRO Finance v6 bridge failed',e);
+      document.head.appendChild(s);
+    }
+  }
 })();
