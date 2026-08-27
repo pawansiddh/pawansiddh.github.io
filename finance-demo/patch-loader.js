@@ -21,10 +21,10 @@
     await loadScript('patch-v5.js?v=finance-v5-20260827a');
     await runPacked('patch6',4,'finance-v6-20260827','finance-patch-v6');
     await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827');
-    await loadStyle('finance-baseline-v3.css?v=finance-help-clean-r3a-20260827');
+    await loadStyle('finance-baseline-v3.css?v=finance-search-hidden-r3b-20260827');
   }catch(e){
     console.error('PAVENRO Finance final audited bootstrap failed',e);
     try{await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827-fallback')}catch(_){ }
-    try{await loadStyle('finance-baseline-v3.css?v=finance-help-clean-r3a-20260827-fallback')}catch(_){ }
+    try{await loadStyle('finance-baseline-v3.css?v=finance-search-hidden-r3b-20260827-fallback')}catch(_){ }
   }
 })();
