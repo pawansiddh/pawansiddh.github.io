@@ -13,13 +13,18 @@
   const loadScript=src=>new Promise((resolve,reject)=>{
     const s=document.createElement('script');s.src=src;s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(`Failed to load ${src}`));document.head.appendChild(s);
   });
+  const loadStyle=href=>new Promise((resolve,reject)=>{
+    const l=document.createElement('link');l.rel='stylesheet';l.href=href;l.onload=resolve;l.onerror=()=>reject(new Error(`Failed to load ${href}`));document.head.appendChild(l);
+  });
   try{
     await runPacked('patch',4,'finance-patch-v4-20260827','finance-patch-v4');
     await loadScript('patch-v5.js?v=finance-v5-20260827a');
     await runPacked('patch6',4,'finance-v6-20260827','finance-patch-v6');
     await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827');
+    await loadStyle('finance-baseline-v3.css?v=finance-help-clean-r3a-20260827');
   }catch(e){
     console.error('PAVENRO Finance final audited bootstrap failed',e);
     try{await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827-fallback')}catch(_){ }
+    try{await loadStyle('finance-baseline-v3.css?v=finance-help-clean-r3a-20260827-fallback')}catch(_){ }
   }
 })();
