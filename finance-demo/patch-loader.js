@@ -12,7 +12,7 @@
   }catch(e){console.error('PAVENRO Finance patch failed',e);}
   finally{
     const load=(src,key)=>{if(window[key])return;window[key]=true;const s=document.createElement('script');s.src=src;s.async=false;s.onerror=e=>console.error('PAVENRO Finance fallback failed',src,e);document.head.appendChild(s)};
-    load('v6-direct-ui.js?v=finance-direct-ui-20260827c','__PAVENRO_DIRECT_UI_BRIDGE__');
-    load('patch6-loader.js?v=finance-v6-bridge-20260827c','__PAVENRO_V6_BRIDGE__');
+    load('v6-direct-ui.js?v=finance-direct-ui-20260827d','__PAVENRO_DIRECT_UI_BRIDGE__');
+    load('patch6-loader.js?v=finance-v6-bridge-20260827d','__PAVENRO_V6_BRIDGE__');
   }
 })();
