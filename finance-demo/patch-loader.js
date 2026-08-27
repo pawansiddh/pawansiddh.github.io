@@ -18,14 +18,13 @@
     s.onerror=()=>reject(new Error(`Failed to load ${src}`));
     document.head.appendChild(s);
   });
-
   try{
     await runPacked('patch',4,'finance-patch-v4-20260827','finance-patch-v4');
     await loadScript('patch-v5.js?v=finance-v5-20260827a');
     await runPacked('patch6',4,'finance-v6-20260827','finance-patch-v6');
-    await loadScript('finance-baseline.js?v=finance-baseline-r1-20260827');
+    await loadScript('finance-baseline-v2.js?v=finance-baseline-r2-20260827');
   }catch(e){
     console.error('PAVENRO Finance canonical bootstrap failed',e);
-    try{await loadScript('finance-baseline.js?v=finance-baseline-r1-20260827-fallback')}catch(_){ }
+    try{await loadScript('finance-baseline-v2.js?v=finance-baseline-r2-20260827-fallback')}catch(_){ }
   }
 })();
