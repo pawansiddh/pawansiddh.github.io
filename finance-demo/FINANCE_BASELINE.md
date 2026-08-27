@@ -96,6 +96,6 @@ Live order is strictly:
 1. Base Finance patch (v4 feature/core fixes)
 2. v5 feature patch (dashboard, donuts, translations, edit rules)
 3. v6 feature patch (forms, receipts, Debt/Net Worth/Investments, spacing/sidebar feature fixes)
-4. `finance-baseline.js` LAST
+4. `finance-baseline-v2.js` LAST
 
-`finance-baseline.js` is the sole authoritative presentation controller. Do not add a second sidebar/rail/search/top-title controller. Any future UI change should modify `finance-baseline.js` rather than add another competing UI patch.
+`finance-baseline-v2.js` is the sole authoritative presentation controller. Do not add another sidebar/rail/search/top-title controller and do not create a new UI patch layer for routine fixes. Future UI corrections must modify the canonical baseline controller itself.
