@@ -71,3 +71,41 @@ body.pv-rail #pvSide button[title*="help" i],
 body.pv-rail #pvSide button[aria-label*="help" i] {
   display: none !important;
 }
+
+/* Search final state: never occupy the top bar by default. */
+.topbar > .searchbox,
+.topbar > .search,
+.topbar > .global-search,
+.topbar .searchbox,
+.topbar .global-search,
+.topbar .search {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Floating search is hidden until the sidebar Search icon explicitly opens it. */
+#pvSearch {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#pvSearch.open {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Once moved into the floating search container, restore the actual search field. */
+#pvSearch.open .searchbox,
+#pvSearch.open .search,
+#pvSearch.open .global-search {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
