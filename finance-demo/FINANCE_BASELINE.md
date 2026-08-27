@@ -1,6 +1,6 @@
 # PAVENRO Finance Canonical Baseline
 
-This file is the permanent acceptance contract for `/finance-demo/`.
+This file is the permanent acceptance contract for `/finance-demo/`. `FINANCE_FINAL_AUDIT.md` records the full latest-decision history; when an older requirement conflicts with that audit, the later audited decision wins.
 
 ## Repository boundary
 - Finance work may change files under `finance-demo/` only.
@@ -13,62 +13,60 @@ This file is the permanent acceptance contract for `/finance-demo/`.
 - Brand must remain visible on every appearance theme.
 
 ## Sidebar
-- Expanded width: full brand, Search, section icons + labels, subtle help `?`.
+- Expanded: full brand, Search, section icons + labels, subtle help `?`.
 - No 3-dot menu beside brand.
-- Collapse control uses panel-layout icon, not `<`.
+- Collapse uses the panel-layout icon, not `<`.
 - Collapsed state is a narrow icon rail.
-- Rail shows mini P mark, expand control, Search, section icons only.
+- Rail shows mini P, expand control, Search and section icons only.
 - Rail never shows section labels or help controls.
 - Help `?` has no outer circle/border.
-- Bottom user/profile card is not shown in the sidebar.
+- Bottom user/profile card is removed.
 - Sidebar/rail preference persists locally.
+- `+ More sections` remains the quiet entry to Navigation & Modules.
 
-## Search
+## Search / top bar
 - Search must NOT permanently occupy the top bar.
-- Search opens only when invoked from the sidebar Search control.
-- Search closes when clicking outside.
-
-## Top bar
-- Shows current Finance section title.
-- Shows currency mark matching selected currency.
-- Retains month, currency selector, New Transaction, bell notifications, and avatar/settings controls supplied by the feature layer.
+- Search opens only when invoked from the sidebar Search control and closes when clicking outside.
+- Top bar shows the current Finance section title and currency mark matching selected currency.
+- Top bar retains month, currency selector, New Transaction, bell notifications and avatar/settings controls supplied by the feature layer.
 - No duplicate large section heading below it.
 
 ## Layout and viewport
 - App shell is locked to the viewport.
 - Browser page itself does not vertically scroll.
 - Long tables/lists/detail panels scroll internally.
-- Dashboard lower row and Quick Actions remain visible.
+- Dashboard lower row and all four Quick Actions remain visible.
 - Text descenders (g, p, y, j) and secondary KPI text must never clip.
-- Card borders are visually quiet; hover may add a very subtle emphasis.
+- Card borders are visually quiet; hover may add only a subtle emphasis.
+
+## Global spacing rule
+- Adjacent data must never visually concatenate.
+- Invalid examples that must not return: `Rent30 Aug 2026`, `$179.70Upcoming`, `To SBI SavingsAugust 2026`, `$10,000Completed`.
+- Name/date, amount/status, account/status, source/date and equivalent pairs require visible spacing or stacked presentation throughout the application.
 
 ## Finance sections
-Core: Dashboard, Accounts, Transactions, Bills, Budget, Income, Funds & Goals, Documents, Calendar.
+Final core set: Dashboard, Accounts, Transactions, Bills, Budget, Income, Funds & Goals, Documents, Calendar.
 Optional: Subscriptions, Debt, Net Worth, Investments, Reports, Notes, Tax Records, Paydays.
-Navigation & Modules controls visibility of optional/utility sections.
+Navigation & Modules controls optional/utility visibility. Calendar is core because it was explicitly added after the original 8-section specification.
 
-## Editing
+## Editing / categories
 - Every record/container has one Edit action.
 - No duplicate Edit / Edit Limit / Edit Goal / Edit Account buttons inside the same detail container.
 - Table rows may each have one Edit action.
-
-## Categories
-- Category selection is dropdown-first.
-- Existing categories are reusable.
-- `Other` / `Add custom category` permits custom user-defined categories.
-- Users should not retype standard category names for every record.
+- Category selection is dropdown-first with reusable categories.
+- `Other` / `Add custom category` permits reusable custom user categories.
 
 ## Graphs
 - Donut charts stay donut charts.
-- Center values must fit inside the hole without overlap.
-- Center label and amount are separated and centered.
-- Legends must not collide with the donut.
+- Center values fit inside the hole without overlap.
+- Center label and amount are separate and centered.
+- Legends do not collide with the donut.
 - Line/bar charts retain legends and hover details from the feature layer.
 
 ## Data/features that must remain functional
 - Full seeded demo data across all sections.
 - Accounts and transfers.
-- Transactions and receipt attachment workflow.
+- Transactions and real local receipt attachment workflow.
 - Bills and recurring fields.
 - Budget calculations.
 - Income sources/paydays.
@@ -89,13 +87,13 @@ Navigation & Modules controls visibility of optional/utility sections.
 - Supported language UI continues from the feature translation layer.
 - Arabic is intentionally unsupported and must not appear in the selector.
 - A previously saved Arabic preference falls back to English/LTR.
-- Hindi, Chinese, Japanese, Russian, German, French, Portuguese and other retained languages must fit without overlapping controls.
+- Retained languages must fit without overlapping controls.
 
 ## Runtime architecture
 Live order is strictly:
 1. Base Finance patch (v4 feature/core fixes)
-2. v5 feature patch (dashboard, donuts, translations, edit rules)
-3. v6 feature patch (forms, receipts, Debt/Net Worth/Investments, spacing/sidebar feature fixes)
-4. `finance-baseline-v2.js` LAST
+2. v5 feature patch
+3. v6 feature patch
+4. `finance-baseline-v3.js` LAST
 
-`finance-baseline-v2.js` is the sole authoritative presentation controller. Do not add another sidebar/rail/search/top-title controller and do not create a new UI patch layer for routine fixes. Future UI corrections must modify the canonical baseline controller itself.
+`finance-baseline-v3.js` is the sole authoritative presentation controller. Do not add another sidebar/rail/search/top-title/layout patch. Future visual corrections must modify this final baseline directly.
