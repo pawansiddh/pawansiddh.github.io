@@ -22,7 +22,6 @@
   },80)));
 
   try{
-    // Exact proven pre-Phase-1 order. Do not insert experimental controllers here.
     await runPacked('patch',4,'finance-patch-v4-20260827','finance-patch-v4');
     await loadScript('patch-v5.js?v=finance-v5-20260827a');
     await runPacked('patch6',4,'finance-v6-20260827','finance-patch-v6');
@@ -43,9 +42,8 @@
     try{await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828-fallback')}catch(_){ }
     try{await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828-fallback')}catch(_){ }
   }finally{
-    // Phase 1 is intentionally outside the critical core bootstrap.
     document.addEventListener('pavenro:ready',()=>{
-      setTimeout(()=>loadScript('finance-phase1-r2.js?v=finance-phase1-r2-20260828a').catch(err=>console.error('PAVENRO Phase 1 R2 failed to load',err)),140);
+      setTimeout(()=>loadScript('finance-phase1-r3.js?v=finance-phase1-r3-20260828a').catch(err=>console.error('PAVENRO Phase 1 R3 failed to load',err)),140);
     },{once:true});
     reveal();
   }
