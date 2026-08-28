@@ -24,13 +24,13 @@
     await loadStyle('finance-baseline-v3.css?v=finance-actions-help-r3e-20260828');
     await loadScript('finance-search-controller-r3.js?v=finance-accounts-topbar-r3d-20260828');
     await loadStyle('finance-account-r3f.css?v=finance-account-r3f-20260828');
-    await loadScript('finance-ui-r3g.js?v=finance-ui-r3g-20260828');
+    await loadScript('finance-ui-r3g.js?v=finance-ui-r3g2-20260828');
   }catch(e){
     console.error('PAVENRO Finance final audited bootstrap failed',e);
     try{await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827-fallback')}catch(_){ }
     try{await loadStyle('finance-baseline-v3.css?v=finance-actions-help-r3e-20260828-fallback')}catch(_){ }
     try{await loadScript('finance-search-controller-r3.js?v=finance-accounts-topbar-r3d-20260828-fallback')}catch(_){ }
     try{await loadStyle('finance-account-r3f.css?v=finance-account-r3f-20260828-fallback')}catch(_){ }
-    try{await loadScript('finance-ui-r3g.js?v=finance-ui-r3g-20260828-fallback')}catch(_){ }
+    try{await loadScript('finance-ui-r3g.js?v=finance-ui-r3g2-20260828-fallback')}catch(_){ }
   }
 })();
