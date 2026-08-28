@@ -1,5 +1,5 @@
 from pathlib import Path
-import base64, gzip, re, mimetypes, sys
+import base64, gzip, re, mimetypes, sys, json
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTDIR = ROOT / 'offline-build'
@@ -35,8 +35,8 @@ def delayed_scripts(items, delay=140):
     payload = []
     for label, code in items:
         b64 = base64.b64encode(code.encode('utf-8')).decode('ascii')
-        payload.append((label, b64))
-    js = "(()=>{const P=" + repr(payload).replace("'", '"') + f";setTimeout(()=>{{for(const [n,b] of P){{const s=document.createElement('script');s.textContent=atob(b)+'\\n//# sourceURL=pavenro-offline-'+n+'.js';document.documentElement.appendChild(s);s.remove();}}document.documentElement.classList.remove('pv-offline-booting');}}, {delay});}})();"
+        payload.append([label, b64])
+    js = "(()=>{const P=" + json.dumps(payload, separators=(',', ':')) + f";setTimeout(()=>{{for(const [n,b] of P){{const s=document.createElement('script');s.textContent=atob(b)+'\\n//# sourceURL=pavenro-offline-'+n+'.js';document.documentElement.appendChild(s);s.remove();}}document.documentElement.classList.remove('pv-offline-booting');}}, {delay});}})();"
     return script_tag(js, 'phase-loader')
 
 
