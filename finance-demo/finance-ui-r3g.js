@@ -22,9 +22,11 @@
       gap:8px!important;grid-auto-flow:row!important;grid-auto-rows:minmax(0,1fr)!important;grid-column:1/-1!important;
       flex:1 1 100%!important;align-self:stretch!important;overflow:hidden!important;box-sizing:border-box!important
     }
-    .pv-account-row-r3g[data-pv-cols="4"]{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) minmax(0,1.25fr) minmax(0,1.8fr)!important}
-    .pv-account-row-r3g[data-pv-cols="3"]{grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr) minmax(0,1.75fr)!important}
-    .pv-account-row-r3g[data-pv-cols="2"]{grid-template-columns:minmax(0,1fr) minmax(0,1.65fr)!important}
+    /* Keep Distribution + Recent Transfers unchanged. Snapshot grows only to the RIGHT,
+       taking width from the selected-account detail card. Total track weight stays 5.05. */
+    .pv-account-row-r3g[data-pv-cols="4"]{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) minmax(0,1.50fr) minmax(0,1.55fr)!important}
+    .pv-account-row-r3g[data-pv-cols="3"]{grid-template-columns:minmax(0,.9fr) minmax(0,1.30fr) minmax(0,1.50fr)!important}
+    .pv-account-row-r3g[data-pv-cols="2"]{grid-template-columns:minmax(0,1.20fr) minmax(0,1.45fr)!important}
     .pv-account-row-r3g>.pv-account-row-item-r3g{
       width:auto!important;max-width:100%!important;min-width:0!important;min-height:0!important;grid-column:auto!important;grid-row:auto!important;
       flex:none!important;overflow:hidden!important;box-sizing:border-box!important
@@ -35,14 +37,35 @@
     .pv-account-row-r3g table{width:100%!important;max-width:100%!important;min-width:0!important;table-layout:fixed!important}
     .pv-account-row-r3g th,.pv-account-row-r3g td{min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 
-    .topbar button.pv-new-income{
+    /* Account Snapshot must never need a horizontal scrollbar. */
+    .pv-account-snapshot,
+    .pv-account-snapshot .card-body,
+    .pv-account-snapshot .card-body.scroll,
+    .pv-account-snapshot .table-wrap{
+      width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important
+    }
+    .pv-account-snapshot .card-body,
+    .pv-account-snapshot .card-body.scroll,
+    .pv-account-snapshot .table-wrap{overflow-y:auto!important}
+    .pv-account-snapshot table{width:100%!important;max-width:100%!important;min-width:0!important;table-layout:fixed!important}
+    .pv-account-snapshot th,.pv-account-snapshot td{min-width:0!important;max-width:none!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+    .pv-account-snapshot .card-body::-webkit-scrollbar:horizontal,
+    .pv-account-snapshot .table-wrap::-webkit-scrollbar:horizontal{height:0!important;display:none!important}
+
+    /* Keep the real New Transaction control as the functional source, but hide it.
+       The visible New Income button proxies that proven handler and then selects Income. */
+    .topbar button.pv-income-source{display:none!important}
+    .topbar button.pv-new-income-proxy{
       width:138px!important;min-width:138px!important;max-width:138px!important;height:38px!important;min-height:38px!important;padding:0 12px!important;
       display:inline-flex!important;align-items:center!important;justify-content:center!important;background:#1f6845!important;color:#fff!important;
       border:1px solid #1f6845!important;border-radius:9px!important;font-weight:700!important;white-space:nowrap!important;box-shadow:none!important
     }
-    .topbar button.pv-new-income:hover{background:#19583a!important;border-color:#19583a!important}
+    .topbar button.pv-new-income-proxy:hover{background:#19583a!important;border-color:#19583a!important}
 
-    @media(max-width:1180px){.pv-account-row-r3g[data-pv-cols="4"]{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.65fr)!important}}
+    @media(max-width:1180px){
+      /* Same principle on narrower screens: left two tracks remain unchanged; Snapshot borrows from detail. */
+      .pv-account-row-r3g[data-pv-cols="4"]{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.4fr)!important}
+    }
   `;
   document.head.appendChild(style);
 
@@ -80,6 +103,9 @@
     const cards=[dist,recent,snap,detail].filter(Boolean);
     if(cards.length<3)return;
 
+    if(dist&&!dist.classList.contains('pv-account-distribution'))dist.classList.add('pv-account-distribution');
+    if(snap&&!snap.classList.contains('pv-account-snapshot'))snap.classList.add('pv-account-snapshot');
+    if(detail&&!detail.classList.contains('pv-selected-account'))detail.classList.add('pv-selected-account');
     A('.pv-accounts-three').forEach(x=>x.classList.remove('pv-accounts-three'));
 
     const page=cards[0].closest('.page,.workspace,.content');
@@ -89,7 +115,6 @@
       if(setGridRoot(root,items))return;
     }
 
-    /* Fallback for split wrappers: put only the four Accounts cards in one full-width row. */
     if(!page)return;
     let holder=q('#pvAccountRowR3g',page);
     if(!holder){
@@ -105,31 +130,72 @@
     const roots=A('[role="dialog"],.modal,.dialog,.drawer,.sheet').filter(x=>{const s=getComputedStyle(x);return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'});
     return roots.at(-1)||document;
   }
+
   function setIncomeMode(){
     const root=visibleRoot();
-    const income=A('button,[role="tab"],[data-type],[data-kind],[data-mode]',root).find(b=>/^(income|add income|new income)$/i.test(txt(b))||/income/i.test((b.dataset.type||'')+' '+(b.dataset.kind||'')+' '+(b.dataset.mode||'')));
+    const candidates=A('button,[role="tab"],[data-type],[data-kind],[data-mode]',root);
+    const income=candidates.find(b=>/^(income|add income|new income)$/i.test(txt(b))||/income/i.test((b.dataset.type||'')+' '+(b.dataset.kind||'')+' '+(b.dataset.mode||'')));
     if(income){income.click();return true}
+
     const sel=A('select',root).find(s=>A('option',s).some(o=>/income/i.test((o.value||'')+' '+txt(o))));
-    if(sel){const op=A('option',sel).find(o=>/income/i.test((o.value||'')+' '+txt(o)));if(op){sel.value=op.value;sel.dispatchEvent(new Event('change',{bubbles:true}));return true}}
-    const radio=A('input[type="radio"]',root).find(r=>/income/i.test((r.value||'')+' '+(r.id||'')));
+    if(sel){
+      const op=A('option',sel).find(o=>/income/i.test((o.value||'')+' '+txt(o)));
+      if(op){sel.value=op.value;sel.dispatchEvent(new Event('change',{bubbles:true}));return true}
+    }
+
+    const radio=A('input[type="radio"]',root).find(r=>/income/i.test((r.value||'')+' '+(r.id||'')+' '+(r.name||'')));
     if(radio){radio.click();radio.dispatchEvent(new Event('change',{bubbles:true}));return true}
-    const label=A('label',root).find(l=>/^income$/i.test(txt(l)));if(label){label.click();return true}
+
+    const label=A('label',root).find(l=>/^income$/i.test(txt(l)));
+    if(label){label.click();return true}
     return false;
+  }
+
+  function directIncomeTrigger(){
+    const b=A('button,[data-action],[data-act]').find(x=>!x.closest('.topbar')&&/^(add income|new income)$/i.test(txt(x)));
+    if(b){b.click();return true}
+    return false;
+  }
+
+  function openIncomeForm(){
+    const top=q('.topbar');if(!top)return;
+    const source=q('.pv-income-source',top);
+    if(source)source.click();
+    [20,60,120,200,320,500].forEach((ms,i)=>setTimeout(()=>{
+      const ok=setIncomeMode();
+      if(!ok&&i===5){
+        const r=visibleRoot();
+        if(r===document)directIncomeTrigger();
+      }
+    },ms));
   }
 
   function fixTopIncome(){
     const top=q('.topbar');if(!top)return;
-    const buttons=A('button',top);
-    const b=buttons.find(x=>x.classList.contains('pv-new-transaction'))||buttons.find(x=>/new\s+(transaction|income)/i.test(txt(x)));
-    if(!b)return;
-    if(!b.classList.contains('pv-top-action'))b.classList.add('pv-top-action');
-    if(!b.classList.contains('pv-new-income'))b.classList.add('pv-new-income');
-    if(txt(b)!=='+ New income')b.textContent='+ New income';
-    if(b.getAttribute('aria-label')!=='New income')b.setAttribute('aria-label','New income');
-    if(b.title!=='New income')b.title='New income';
-    if(b.dataset.pvIncomeR3g!=='1'){
-      b.dataset.pvIncomeR3g='1';
-      b.addEventListener('click',()=>{[20,70,140,240,380].forEach(ms=>setTimeout(setIncomeMode,ms))});
+    let source=q('.pv-income-source',top);
+    if(!source){
+      const buttons=A('button',top);
+      source=buttons.find(x=>x.classList.contains('pv-new-transaction'))||buttons.find(x=>/new\s+transaction/i.test(txt(x)));
+      if(!source)return;
+      source.classList.add('pv-income-source');
+      source.dataset.pvIncomeSource='1';
+      source.setAttribute('aria-hidden','true');
+      source.tabIndex=-1;
+    }
+
+    let income=q('.pv-new-income-proxy',top);
+    if(!income){
+      income=document.createElement('button');
+      income.type='button';
+      income.className='pv-top-action pv-new-income-proxy';
+      income.textContent='+ New income';
+      income.setAttribute('aria-label','New income');
+      income.title='New income';
+      source.parentElement.insertBefore(income,source);
+    }
+    if(income.dataset.pvIncomeBound!=='1'){
+      income.dataset.pvIncomeBound='1';
+      income.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openIncomeForm()});
     }
   }
 
