@@ -26,6 +26,7 @@
     await loadStyle('finance-sidebar-clean-r1.css?v=finance-sidebar-clean-r1-20260828');
     await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b');
     await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828');
+    await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828');
   }catch(e){
     console.error('PAVENRO Finance final audited bootstrap failed',e);
     try{await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827-fallback')}catch(_){ }
@@ -34,5 +35,6 @@
     try{await loadStyle('finance-sidebar-clean-r1.css?v=finance-sidebar-clean-r1-20260828-fallback')}catch(_){ }
     try{await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b-fallback')}catch(_){ }
     try{await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828-fallback')}catch(_){ }
+    try{await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828-fallback')}catch(_){ }
   }
 })();
