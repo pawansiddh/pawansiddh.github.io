@@ -45,6 +45,7 @@
     document.addEventListener('pavenro:ready',()=>{
       setTimeout(async()=>{
         const phase1=[
+          ['finance-state-bridge-r1.js?v=finance-state-bridge-r1-20260828','Finance live state bridge'],
           ['finance-phase1-r3.js?v=finance-phase1-r3-20260828a','Phase 1 base'],
           ['finance-phase1-core2-r1.js?v=finance-phase1-core2-r1-20260828','Phase 1 Income/Goals/Documents'],
           ['finance-phase1-planning-r1.js?v=finance-phase1-planning-r1-20260828','Phase 1 Calendar/Subscriptions/NetWorth/Investments'],
