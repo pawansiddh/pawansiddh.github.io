@@ -18,11 +18,11 @@
   });
   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{
     document.documentElement.classList.remove('pv-demo2-booting');
-    document.getElementById('pvDemo2Splash')?.remove();
     document.dispatchEvent(new CustomEvent('pavenro:ready'));
   },80)));
+
   try{
-    // Keep the exact proven pre-consolidation execution order.
+    // Exact proven pre-Phase-1 order. Do not insert experimental controllers here.
     await runPacked('patch',4,'finance-patch-v4-20260827','finance-patch-v4');
     await loadScript('patch-v5.js?v=finance-v5-20260827a');
     await runPacked('patch6',4,'finance-v6-20260827','finance-patch-v6');
@@ -33,10 +33,8 @@
     await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b');
     await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828');
     await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828');
-    await loadScript('finance-phase1-r1.js?v=finance-phase1-r1-20260828');
   }catch(e){
-    console.error('PAVENRO Finance demo2 staged bootstrap failed',e);
-    // Preserve the original fallback behavior in this isolated test copy.
+    console.error('PAVENRO Finance demo2 core bootstrap failed',e);
     try{await loadScript('finance-baseline-v3.js?v=finance-final-audit-r3-20260827-fallback')}catch(_){ }
     try{await loadStyle('finance-baseline-v3.css?v=finance-search-hidden-r3b-20260827-fallback')}catch(_){ }
     try{await loadScript('finance-search-controller-r3.js?v=finance-search-hard-r3c-categories-icons-r1-20260828-fallback')}catch(_){ }
@@ -44,8 +42,11 @@
     try{await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b-fallback')}catch(_){ }
     try{await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828-fallback')}catch(_){ }
     try{await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828-fallback')}catch(_){ }
-    try{await loadScript('finance-phase1-r1.js?v=finance-phase1-r1-20260828-fallback')}catch(_){ }
   }finally{
+    // Phase 1 is intentionally outside the critical core bootstrap.
+    document.addEventListener('pavenro:ready',()=>{
+      setTimeout(()=>loadScript('finance-phase1-r2.js?v=finance-phase1-r2-20260828a').catch(err=>console.error('PAVENRO Phase 1 R2 failed to load',err)),140);
+    },{once:true});
     reveal();
   }
 })();
