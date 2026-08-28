@@ -43,7 +43,15 @@
     try{await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828-fallback')}catch(_){ }
   }finally{
     document.addEventListener('pavenro:ready',()=>{
-      setTimeout(()=>loadScript('finance-phase1-r3.js?v=finance-phase1-r3-20260828a').catch(err=>console.error('PAVENRO Phase 1 R3 failed to load',err)),140);
+      setTimeout(async()=>{
+        const phase1=[
+          ['finance-phase1-r3.js?v=finance-phase1-r3-20260828a','Phase 1 base'],
+          ['finance-phase1-core2-r1.js?v=finance-phase1-core2-r1-20260828','Phase 1 Income/Goals/Documents'],
+          ['finance-phase1-planning-r1.js?v=finance-phase1-planning-r1-20260828','Phase 1 Calendar/Subscriptions/NetWorth/Investments'],
+          ['finance-phase1-records-r1.js?v=finance-phase1-records-r1-20260828','Phase 1 Reports/Notes/Tax/Paydays']
+        ];
+        for(const [src,label] of phase1){try{await loadScript(src)}catch(err){console.error(`PAVENRO ${label} failed to load`,err)}}
+      },140);
     },{once:true});
     reveal();
   }
