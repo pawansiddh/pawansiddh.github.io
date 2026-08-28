@@ -1,0 +1,111 @@
+/* PAVENRO Finance canonical R3 companion styles.
+   This is part of the R3 baseline, not an additional patch layer. */
+
+/* Help controls: final approved state = plain subtle ? with NO circle/border. */
+#pvSide .help-btn,
+#pvSide button.help-btn,
+#pvSide .nav-row > button:last-child:not(.nav-btn),
+#pvSide button[title*="help" i],
+#pvSide button[aria-label*="help" i],
+.sidebar .help-btn,
+.sidebar button.help-btn,
+.sidebar button[title*="help" i],
+.sidebar button[aria-label*="help" i] {
+  width: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: inherit !important;
+  font-size: 10.5px !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  opacity: .28 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
+#pvSide .nav-row > button:last-child:not(.nav-btn)::before,
+#pvSide .nav-row > button:last-child:not(.nav-btn)::after,
+#pvSide .help-btn::before,
+#pvSide .help-btn::after,
+.sidebar .help-btn::before,
+.sidebar .help-btn::after,
+.sidebar button[title*="help" i]::before,
+.sidebar button[title*="help" i]::after,
+.sidebar button[aria-label*="help" i]::before,
+.sidebar button[aria-label*="help" i]::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+#pvSide .nav-row:hover > button:last-child:not(.nav-btn),
+#pvSide .nav-row:hover .help-btn,
+#pvSide .nav-btn.active + button,
+#pvSide .nav-btn.active ~ .help-btn {
+  opacity: .58 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* In icon rail mode help controls disappear completely. */
+body.pv-rail #pvSide .nav-row > button:last-child:not(.nav-btn),
+body.pv-rail #pvSide .help-btn,
+body.pv-rail #pvSide button[title*="help" i],
+body.pv-rail #pvSide button[aria-label*="help" i] {
+  display: none !important;
+}
+
+/* Search final state: never occupy the top bar by default. */
+.topbar > .searchbox,
+.topbar > .search,
+.topbar > .global-search,
+.topbar .searchbox,
+.topbar .global-search,
+.topbar .search {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Floating search is hidden until the sidebar Search icon explicitly opens it. */
+#pvSearch {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#pvSearch.open {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Once moved into the floating search container, restore the actual search field. */
+#pvSearch.open .searchbox,
+#pvSearch.open .search,
+#pvSearch.open .global-search {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
