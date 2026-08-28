@@ -52,7 +52,7 @@
           ['finance-phase1-records-r1.js?v=finance-phase1-records-r1-20260828','Phase 1 Reports/Notes/Tax/Paydays'],
           ['finance-phase1-status-fix-r1.js?v=finance-phase1-status-fix-r1-20260828','Phase 1 status persistence fix'],
           ['finance-interaction-audit-r1.js?v=finance-interaction-audit-r1-20260828','Phase 1 interaction audit'],
-          ['finance-daily-briefing-r1.js?v=finance-daily-briefing-r1-20260828','Daily briefing and voice settings']
+          ['finance-daily-briefing-r2.js?v=finance-daily-briefing-r2-20260828a','Daily briefing and voice settings R2']
         ];
         for(const [src,label] of phase1){try{await loadScript(src)}catch(err){console.error(`PAVENRO ${label} failed to load`,err)}}
       },140);
