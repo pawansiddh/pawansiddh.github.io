@@ -33,6 +33,7 @@
     await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b');
     await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828');
     await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828');
+    await loadScript('finance-phase1-r1.js?v=finance-phase1-r1-20260828');
   }catch(e){
     console.error('PAVENRO Finance demo2 staged bootstrap failed',e);
     // Preserve the original fallback behavior in this isolated test copy.
@@ -43,6 +44,7 @@
     try{await loadScript('finance-debt-lab-r1.js?v=finance-debt-control-r1-20260828b-fallback')}catch(_){ }
     try{await loadScript('finance-theme-studio-r1.js?v=finance-theme-studio-r1-20260828-fallback')}catch(_){ }
     try{await loadScript('finance-bell-contrast-r1.js?v=finance-bell-contrast-r1-20260828-fallback')}catch(_){ }
+    try{await loadScript('finance-phase1-r1.js?v=finance-phase1-r1-20260828-fallback')}catch(_){ }
   }finally{
     reveal();
   }
