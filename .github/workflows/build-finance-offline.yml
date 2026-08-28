@@ -1,0 +1,38 @@
+name: Build PAVENRO Finance Lifetime Offline
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'finance-demo2/**'
+      - '.github/workflows/build-finance-offline.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build exact standalone HTML
+        run: python3 finance-demo2/tools/build-offline.py
+
+      - name: Verify standalone artifact
+        run: |
+          test -s finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          echo "Size: $(wc -c < finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html) bytes"
+          ! grep -q 'src="patch-loader.js' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          ! grep -q 'data/0.txt' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          grep -q 'finance-debt-lab' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          grep -q 'PAVENRO_LIFETIME_OFFLINE' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+
+      - name: Upload Lifetime HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: PAVENRO-Finance-Lifetime-Offline-EXACT
+          path: finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          if-no-files-found: error
+          retention-days: 7
