@@ -22,12 +22,14 @@ jobs:
 
       - name: Verify standalone artifact
         run: |
-          test -s finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
-          echo "Size: $(wc -c < finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html) bytes"
-          ! grep -q 'src="patch-loader.js' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
-          ! grep -q 'data/0.txt' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
-          grep -q 'finance-debt-lab' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
-          grep -q 'PAVENRO_LIFETIME_OFFLINE' finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          FILE=finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          test -s "$FILE"
+          echo "Size: $(wc -c < "$FILE") bytes"
+          ! grep -q 'src="patch-loader.js' "$FILE"
+          ! grep -q 'data/0.txt' "$FILE"
+          grep -q 'pavenro-offline-debt-lab-r1.js' "$FILE"
+          grep -q 'name="pavenro-edition"' "$FILE"
+          grep -q 'Lifetime Offline Edition' "$FILE"
 
       - name: Upload Lifetime HTML
         uses: actions/upload-artifact@v4
