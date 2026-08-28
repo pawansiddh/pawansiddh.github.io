@@ -1,16 +1,17 @@
 /* PAVENRO Finance canonical R3 companion styles.
    This is part of the R3 baseline, not an additional patch layer. */
 
-/* Help controls: final approved state = plain subtle ? with NO circle/border. */
+/* Contextual help controls only: plain subtle ? with NO circle/border.
+   Utility navigation such as Help & Support must never be treated as a help bubble. */
 #pvSide .help-btn,
 #pvSide button.help-btn,
-#pvSide .nav-row > button:last-child:not(.nav-btn),
-#pvSide button[title*="help" i],
-#pvSide button[aria-label*="help" i],
+#pvSide .nav-row > button:last-child:not(.nav-btn):not(.utility-btn):not(.more-btn),
+#pvSide button:not(.nav-btn):not(.utility-btn):not(.more-btn)[title*="help" i],
+#pvSide button:not(.nav-btn):not(.utility-btn):not(.more-btn)[aria-label*="help" i],
 .sidebar .help-btn,
 .sidebar button.help-btn,
-.sidebar button[title*="help" i],
-.sidebar button[aria-label*="help" i] {
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[title*="help" i],
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[aria-label*="help" i] {
   width: 18px !important;
   min-width: 18px !important;
   max-width: 18px !important;
@@ -36,16 +37,16 @@
   -webkit-appearance: none !important;
 }
 
-#pvSide .nav-row > button:last-child:not(.nav-btn)::before,
-#pvSide .nav-row > button:last-child:not(.nav-btn)::after,
+#pvSide .nav-row > button:last-child:not(.nav-btn):not(.utility-btn):not(.more-btn)::before,
+#pvSide .nav-row > button:last-child:not(.nav-btn):not(.utility-btn):not(.more-btn)::after,
 #pvSide .help-btn::before,
 #pvSide .help-btn::after,
 .sidebar .help-btn::before,
 .sidebar .help-btn::after,
-.sidebar button[title*="help" i]::before,
-.sidebar button[title*="help" i]::after,
-.sidebar button[aria-label*="help" i]::before,
-.sidebar button[aria-label*="help" i]::after {
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[title*="help" i]::before,
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[title*="help" i]::after,
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[aria-label*="help" i]::before,
+.sidebar button:not(.nav-btn):not(.utility-btn):not(.more-btn)[aria-label*="help" i]::after {
   content: none !important;
   display: none !important;
   border: 0 !important;
@@ -53,9 +54,9 @@
   background: none !important;
 }
 
-#pvSide .nav-row:hover > button:last-child:not(.nav-btn),
+#pvSide .nav-row:hover > button:last-child:not(.nav-btn):not(.utility-btn):not(.more-btn),
 #pvSide .nav-row:hover .help-btn,
-#pvSide .nav-btn.active + button,
+#pvSide .nav-btn.active + .help-btn,
 #pvSide .nav-btn.active ~ .help-btn {
   opacity: .58 !important;
   border: 0 !important;
@@ -64,11 +65,33 @@
   box-shadow: none !important;
 }
 
-/* In icon rail mode help controls disappear completely. */
-body.pv-rail #pvSide .nav-row > button:last-child:not(.nav-btn),
+/* Expanded Help & Support is a normal utility navigation row with its full label. */
+body:not(.pv-rail) #pvSide .utility-btn {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 35px !important;
+  min-height: 35px !important;
+  padding: 0 9px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+}
+body:not(.pv-rail) #pvSide .utility-btn .pv-nl {
+  display: inline-block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* In icon rail mode contextual help controls disappear; utility Help & Support remains its icon only. */
+body.pv-rail #pvSide .nav-row > button:last-child:not(.nav-btn):not(.utility-btn):not(.more-btn),
 body.pv-rail #pvSide .help-btn,
-body.pv-rail #pvSide button[title*="help" i],
-body.pv-rail #pvSide button[aria-label*="help" i] {
+body.pv-rail #pvSide button:not(.nav-btn):not(.utility-btn):not(.more-btn)[title*="help" i],
+body.pv-rail #pvSide button:not(.nav-btn):not(.utility-btn):not(.more-btn)[aria-label*="help" i] {
   display: none !important;
 }
 
@@ -108,4 +131,13 @@ body.pv-rail #pvSide button[aria-label*="help" i] {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+/* Latest topbar decision: Expense and Transaction remain equal, but are slightly wider than the month selector so both labels breathe. */
+.topbar button.pv-top-action {
+  width: 138px !important;
+  min-width: 138px !important;
+  max-width: 138px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
 }
