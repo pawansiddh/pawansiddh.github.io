@@ -19,27 +19,36 @@ def read(name):
     return p.read_text(encoding='utf-8')
 
 
+def safe_script(code):
+    return code.replace('</script>', '<\\/script>')
+
+
 def script_tag(code, label):
-    # Preserve separate classic script scopes exactly like external <script> files.
-    code = code.replace('</script>', '<\\/script>')
-    return f'\n<script data-pavenro-bundled="{label}">\n{code}\n//# sourceURL=pavenro-offline-{label}.js\n</script>\n'
+    return f'\n<script data-pavenro-bundled="{label}">\n{safe_script(code)}\n//# sourceURL=pavenro-offline-{label}.js\n</script>\n'
 
 
 def style_tag(css, label):
-    css = css.replace('</style>', '<\\/style>')
-    return f'\n<style data-pavenro-bundled="{label}">\n{css}\n</style>\n'
+    return f'\n<style data-pavenro-bundled="{label}">\n{css.replace("</style>", "<\\/style>")}\n</style>\n'
 
 
-# 1) The actual web application's original HTML payload.
+def delayed_scripts(items, delay=140):
+    payload = []
+    for label, code in items:
+        b64 = base64.b64encode(code.encode('utf-8')).decode('ascii')
+        payload.append((label, b64))
+    js = "(()=>{const P=" + repr(payload).replace("'", '"') + f";setTimeout(()=>{{for(const [n,b] of P){{const s=document.createElement('script');s.textContent=atob(b)+'\\n//# sourceURL=pavenro-offline-'+n+'.js';document.documentElement.appendChild(s);s.remove();}}document.documentElement.classList.remove('pv-offline-booting');}}, {delay});}})();"
+    return script_tag(js, 'phase-loader')
+
+
+# ---------------------------------------------------------------------------
+# BASE: decode the exact HTML payload used by finance-demo2.
+# ---------------------------------------------------------------------------
 html = unpack_parts('data', 10)
-
-# Remove the online patch loader if it somehow exists in the packed HTML.
 html = re.sub(r'<script[^>]+src=["\'][^"\']*patch-loader\.js[^"\']*["\'][^>]*>\s*</script>', '', html, flags=re.I)
-
-# File:// does not support service workers. They are not required for local persistence.
+# file:// cannot register service workers; they are unrelated to Finance data persistence.
 html = re.sub(r'navigator\.serviceWorker\.register\([^;]+;?', 'Promise.resolve()', html)
 
-# 2) Inline any local image/font/media references already present in the base HTML.
+# Inline local image/media references already present in the packed page.
 def inline_asset(m):
     attr, quote, value = m.group(1), m.group(2), m.group(3)
     if value.startswith(('data:', 'http:', 'https:', '#', 'blob:', 'javascript:', 'mailto:')):
@@ -49,12 +58,11 @@ def inline_asset(m):
     if not p.exists() or not p.is_file():
         return m.group(0)
     mime = mimetypes.guess_type(p.name)[0] or 'application/octet-stream'
-    encoded = base64.b64encode(p.read_bytes()).decode('ascii')
-    return f'{attr}={quote}data:{mime};base64,{encoded}{quote}'
+    return f'{attr}={quote}data:{mime};base64,{base64.b64encode(p.read_bytes()).decode("ascii")}{quote}'
 
 html = re.sub(r'\b(src|poster)=(["\'])([^"\']+)\2', inline_asset, html, flags=re.I)
 
-# Inline local stylesheet <link> tags from the packed page.
+# Inline local stylesheets referenced by the base HTML itself.
 def inline_link(m):
     tag = m.group(0)
     hm = re.search(r'href=["\']([^"\']+)["\']', tag, flags=re.I)
@@ -64,13 +72,11 @@ def inline_link(m):
     if href.startswith(('http:', 'https:', 'data:')):
         return tag
     p = ROOT / href.split('?', 1)[0]
-    if p.exists() and p.suffix.lower() == '.css':
-        return style_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}')
-    return tag
+    return style_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}') if p.exists() and p.suffix.lower() == '.css' else tag
 
 html = re.sub(r'<link\b[^>]*rel=["\'][^"\']*stylesheet[^"\']*["\'][^>]*>', inline_link, html, flags=re.I)
 
-# Inline local external scripts from the packed page itself, except the online loader.
+# Inline local scripts referenced by the base HTML itself.
 def inline_script(m):
     tag, src = m.group(0), m.group(1)
     if src.startswith(('http:', 'https:', 'data:')):
@@ -79,26 +85,32 @@ def inline_script(m):
     if clean.endswith('patch-loader.js'):
         return ''
     p = ROOT / clean
-    if p.exists() and p.suffix.lower() == '.js':
-        return script_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}')
-    return tag
+    return script_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}') if p.exists() and p.suffix.lower() == '.js' else tag
 
 html = re.sub(r'<script\b[^>]*src=["\']([^"\']+)["\'][^>]*>\s*</script>', inline_script, html, flags=re.I)
 
-# 3) Exact current Demo2 runtime order from patch-loader.js.
-core_scripts = [
-    ('patch-v4', unpack_parts('patch', 4)),
-    ('patch-v5', read('patch-v5.js')),
-    ('patch-v6', unpack_parts('patch6', 4)),
-    ('baseline-v3', read('finance-baseline-v3.js')),
-    ('search-r3', read('finance-search-controller-r3.js')),
-    ('debt-lab-r1', read('finance-debt-lab-r1.js')),
-    ('theme-studio-r1', read('finance-theme-studio-r1.js')),
-    ('bell-contrast-r1', read('finance-bell-contrast-r1.js')),
-]
-core_styles = [
-    ('baseline-v3-css', read('finance-baseline-v3.css')),
-    ('sidebar-clean-r1', read('finance-sidebar-clean-r1.css')),
+# ---------------------------------------------------------------------------
+# CURRENT WEB RUNTIME PARITY
+# finance-demo2's patch6 payload is malformed. The live patch-loader therefore:
+# patch-v4 -> patch-v5 -> patch6 throws -> fallback baseline/search/sidebar/debt/theme/bell.
+# We intentionally mirror that visible live state instead of inventing a repaired patch6.
+# ---------------------------------------------------------------------------
+try:
+    unpack_parts('patch6', 4)
+    print('NOTE: patch6 decoded; repository behavior changed since bundler was written.')
+except Exception as e:
+    print('Mirroring live fallback: skipping malformed patch6:', e)
+
+runtime = [
+    ('script', 'patch-v4', unpack_parts('patch', 4)),
+    ('script', 'patch-v5', read('patch-v5.js')),
+    ('script', 'baseline-v3', read('finance-baseline-v3.js')),
+    ('style', 'baseline-v3-css', read('finance-baseline-v3.css')),
+    ('script', 'search-r3', read('finance-search-controller-r3.js')),
+    ('style', 'sidebar-clean-r1', read('finance-sidebar-clean-r1.css')),
+    ('script', 'debt-lab-r1', read('finance-debt-lab-r1.js')),
+    ('script', 'theme-studio-r1', read('finance-theme-studio-r1.js')),
+    ('script', 'bell-contrast-r1', read('finance-bell-contrast-r1.js')),
 ]
 phase_scripts = [
     ('state-bridge-r1', read('finance-state-bridge-r1.js')),
@@ -110,89 +122,61 @@ phase_scripts = [
     ('interaction-audit-r1', read('finance-interaction-audit-r1.js')),
 ]
 
-# A tiny offline-only safety layer. It does not alter the normal visual layout.
+# Offline-only safety. No normal Finance screen is redesigned.
 offline_safety = r'''
 (()=>{
   window.__PAVENRO_LIFETIME_OFFLINE__=true;
   document.documentElement.dataset.pavenroEdition='lifetime-offline';
-  // Prevent old code from implying that a backend is available.
-  window.addEventListener('online',()=>document.documentElement.dataset.network=navigator.onLine?'online':'offline');
-  window.addEventListener('offline',()=>document.documentElement.dataset.network='offline');
   document.documentElement.dataset.network=navigator.onLine?'online':'offline';
-
-  // Full local backup: captures every Pavenro/Finance localStorage namespace.
+  addEventListener('online',()=>document.documentElement.dataset.network='online');
+  addEventListener('offline',()=>document.documentElement.dataset.network='offline');
   window.PavenroOfflineBackup={
     export(){
-      const data={edition:'PAVENRO Finance Lifetime Offline',version:1,created:new Date().toISOString(),localStorage:{}};
-      for(let i=0;i<localStorage.length;i++){
-        const k=localStorage.key(i); if(!k)continue;
-        if(/pavenro|finance|pv-fin/i.test(k)) data.localStorage[k]=localStorage.getItem(k);
-      }
-      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');
-      a.href=u;a.download='PAVENRO-Finance-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
+      const d={edition:'PAVENRO Finance Lifetime Offline',version:1,created:new Date().toISOString(),localStorage:{}};
+      for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&/pavenro|finance|pv-fin/i.test(k))d.localStorage[k]=localStorage.getItem(k)}
+      const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='PAVENRO-Finance-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)
     },
-    async import(file){
-      const data=JSON.parse(await file.text());
-      if(!data||!data.localStorage)throw new Error('This is not a PAVENRO Finance backup.');
-      Object.entries(data.localStorage).forEach(([k,v])=>localStorage.setItem(k,String(v)));
-      location.reload();
-    }
+    async import(file){const d=JSON.parse(await file.text());if(!d?.localStorage)throw Error('This is not a PAVENRO Finance backup.');Object.entries(d.localStorage).forEach(([k,v])=>localStorage.setItem(k,String(v)));location.reload()}
   };
-
-  // Add Backup / Restore only inside Settings/Data & Backup if that view is rendered.
   function mountBackup(){
-    const active=(document.querySelector('#pvTop .pv-title,.topbar .pv-title,.workspace h1')?.textContent||'').toLowerCase();
-    if(!active.includes('settings'))return;
-    if(document.querySelector('#pvOfflineBackupBox'))return;
-    const cards=[...document.querySelectorAll('.card,.settings-card,.settings-pane')];
-    const host=cards.find(c=>/data\s*&\s*backup|backup|data/i.test(c.textContent||''))||cards[cards.length-1];
-    if(!host)return;
-    const box=document.createElement('div');box.id='pvOfflineBackupBox';box.style.cssText='margin-top:10px;padding:10px;border:1px solid var(--pvx-border,var(--border,#d8e3da));border-radius:10px;background:var(--pvx-panel2,var(--panel2,#eef3ee));font:11px Inter,system-ui';
-    box.innerHTML='<b>Lifetime Offline Backup</b><div style="margin-top:4px;opacity:.7">Export a backup before changing browser or computer.</div><div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap"><button type="button" data-pv-export>Export Backup</button><button type="button" data-pv-import>Restore Backup</button><input hidden type="file" accept="application/json,.json" data-pv-file></div>';
-    host.appendChild(box);
-    const f=box.querySelector('[data-pv-file]');
-    box.querySelector('[data-pv-export]').onclick=()=>window.PavenroOfflineBackup.export();
-    box.querySelector('[data-pv-import]').onclick=()=>f.click();
-    f.onchange=()=>f.files?.[0]&&window.PavenroOfflineBackup.import(f.files[0]).catch(e=>alert(e.message));
+    const title=(document.querySelector('#pvTop .pv-title,.topbar .pv-title,.workspace h1')?.textContent||'').toLowerCase();if(!title.includes('settings')||document.querySelector('#pvOfflineBackupBox'))return;
+    const cards=[...document.querySelectorAll('.card,.settings-card,.settings-pane')],host=cards.find(c=>/data\s*&\s*backup|backup/i.test(c.textContent||''))||cards[cards.length-1];if(!host)return;
+    const x=document.createElement('div');x.id='pvOfflineBackupBox';x.style.cssText='margin-top:10px;padding:10px;border:1px solid var(--pvx-border,var(--border,#d8e3da));border-radius:10px;background:var(--pvx-panel2,var(--panel2,#eef3ee));font:11px Inter,system-ui';x.innerHTML='<b>Lifetime Offline Backup</b><div style="margin-top:4px;opacity:.7">Export a backup before changing browser or computer.</div><div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap"><button type="button" data-pv-export>Export Backup</button><button type="button" data-pv-import>Restore Backup</button><input hidden type="file" accept="application/json,.json" data-pv-file></div>';host.appendChild(x);const f=x.querySelector('[data-pv-file]');x.querySelector('[data-pv-export]').onclick=()=>PavenroOfflineBackup.export();x.querySelector('[data-pv-import]').onclick=()=>f.click();f.onchange=()=>f.files?.[0]&&PavenroOfflineBackup.import(f.files[0]).catch(e=>alert(e.message))
   }
-  document.addEventListener('click',()=>setTimeout(mountBackup,180),true);
-  setInterval(mountBackup,1200);
-  setTimeout(mountBackup,500);
+  document.addEventListener('click',()=>setTimeout(mountBackup,180),true);setInterval(mountBackup,1200);setTimeout(mountBackup,500)
 })();
 '''
+phase_scripts.append(('offline-safety', offline_safety))
 
-# Inject CSS at the end of head, preserving the same cascade order used online.
-css_bundle = ''.join(style_tag(css, label) for label, css in core_styles)
-if '</head>' in html.lower():
-    pos = html.lower().rfind('</head>')
-    html = html[:pos] + css_bundle + html[pos:]
-else:
-    html = css_bundle + html
-
-# Inject runtime scripts at body end, in the exact current online order.
-js_bundle = ''.join(script_tag(code, label) for label, code in core_scripts)
-# Online patch-loader emits pavenro:ready after core UI has settled. Keep that contract.
-js_bundle += script_tag("document.dispatchEvent(new CustomEvent('pavenro:ready'));", 'ready-event')
-js_bundle += ''.join(script_tag(code, label) for label, code in phase_scripts)
-js_bundle += script_tag(offline_safety, 'offline-safety')
-
-if '</body>' in html.lower():
-    pos = html.lower().rfind('</body>')
-    html = html[:pos] + js_bundle + html[pos:]
-else:
-    html += js_bundle
-
-# Offline/Etsy metadata only; no visible redesign.
+# CSS-only boot mask: never participates in app layout measurements.
+boot = '''<style id="pvOfflineBootMask">html.pv-offline-booting body{opacity:0!important;pointer-events:none!important}html.pv-offline-booting::before{content:"Loading PAVENRO Finance...\\A Lifetime Offline Edition";white-space:pre;position:fixed;inset:0;z-index:2147483646;display:grid;place-items:center;text-align:center;background:#f5f6f1;color:#17301f;font:600 15px/1.8 Inter,system-ui}html.pv-offline-booting::after{content:"";position:fixed;left:50%;top:calc(50% - 48px);z-index:2147483647;width:36px;height:36px;margin:-18px 0 0 -18px;border:4px solid #dce8df;border-top-color:#28623f;border-radius:50%;animation:pvOfflineSpin .8s linear infinite}@keyframes pvOfflineSpin{to{transform:rotate(360deg)}}</style><script>document.documentElement.classList.add('pv-offline-booting')</script>'''
 meta = '<meta name="pavenro-edition" content="Finance Lifetime Offline"><meta name="robots" content="noindex,nofollow">'
 if '<head>' in html.lower():
-    pos = html.lower().find('<head>') + len('<head>')
-    html = html[:pos] + meta + html[pos:]
+    p = html.lower().find('<head>') + len('<head>')
+    html = html[:p] + meta + boot + html[p:]
 
-# Quality gates: runtime must have no fetch-based patch loader/dependencies.
-for forbidden in ['patch-loader.js', 'data/0.txt', "fetch(`patch", "fetch('patch", 'fetch("patch']:
+# Exact runtime ordering matters for card sizes, text positions, themes and feature overrides.
+bundle = ''
+for kind, label, code in runtime:
+    bundle += script_tag(code, label) if kind == 'script' else style_tag(code, label)
+bundle += script_tag("document.dispatchEvent(new CustomEvent('pavenro:ready'));", 'ready-event')
+bundle += delayed_scripts(phase_scripts, 140)
+
+if '</body>' in html.lower():
+    p = html.lower().rfind('</body>')
+    html = html[:p] + bundle + html[p:]
+else:
+    html += bundle
+
+# QA: no network loader is needed at runtime.
+for forbidden in ['src="patch-loader.js', "src='patch-loader.js", 'data/0.txt']:
     if forbidden in html:
-        print('WARNING: residual reference:', forbidden, file=sys.stderr)
+        raise RuntimeError('Residual online dependency: '+forbidden)
+external_resources = re.findall(r'<(?:script|link|img)\b[^>]*(?:src|href)=["\']https?://[^"\']+', html, flags=re.I)
+if external_resources:
+    print('WARNING: external resource tags remain:', len(external_resources), file=sys.stderr)
 
 OUT.write_text(html, encoding='utf-8')
 print(f'Built {OUT} ({OUT.stat().st_size:,} bytes)')
-print('Bundled scripts:', len(core_scripts)+len(phase_scripts)+2)
+print('Runtime layers:', [x[1] for x in runtime])
+print('Delayed feature layers:', [x[0] for x in phase_scripts])
