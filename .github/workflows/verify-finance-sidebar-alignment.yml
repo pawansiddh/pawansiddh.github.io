@@ -1,0 +1,50 @@
+name: Verify PAWANRO Sidebar Alignment
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'finance-demo2/finance-sidebar-owner-r1.js'
+      - 'finance-demo2/finance-baseline-v3.js'
+      - 'finance-demo2/finance-sidebar-clean-r1.css'
+      - 'finance-demo2/index.html'
+      - 'finance-demo2/patch-loader-fast-r1.js'
+      - '.github/workflows/verify-finance-sidebar-alignment.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pixel-check expanded and collapsed sidebar header
+        run: |
+          set -e
+          BROWSER="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER"
+          cat > sidebar-alignment-test.html <<'EOF'
+          <!doctype html><html data-result="running"><body><iframe id="app" src="/finance-demo2/?align-test=1" style="width:1365px;height:768px;border:0"></iframe><pre id="out">running</pre><script>
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const waitFor=async(fn,ms=20000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw Error('timeout')};
+          (async()=>{const root=document.documentElement,frame=document.getElementById('app'),out=document.getElementById('out');try{
+            const w=await waitFor(()=>frame.contentWindow?.document?.documentElement?.dataset?.pvRuntimeHealth==='ok'?frame.contentWindow:null,25000),d=w.document;
+            await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x?.complete&&x.naturalWidth>0},5000);
+            const measure=()=>{const top=d.querySelector('.topbar')?.getBoundingClientRect(),brand=d.querySelector('.sidebar .brand')?.getBoundingClientRect(),nav=d.querySelector('#pvSide')?.getBoundingClientRect(),side=d.querySelector('.sidebar')?.getBoundingClientRect();if(!top||!brand||!nav||!side)throw Error('layout element missing');return{topBottom:top.bottom,brandBottom:brand.bottom,navTop:nav.top,topHeight:top.height,brandHeight:brand.height,sideWidth:side.width,brandWidth:brand.width,diffBrand:Math.abs(top.bottom-brand.bottom),diffNav:Math.abs(top.bottom-nav.top)}};
+            let expanded=measure();if(expanded.diffBrand>1||expanded.diffNav>1)throw Error('expanded header misaligned '+JSON.stringify(expanded));
+            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(180);
+            const mini=await waitFor(()=>{const x=d.querySelector('.sidebar .pv-brand-mini img');return x?.complete&&x.naturalWidth>0&&getComputedStyle(x.parentElement).display!=='none'?x:null},3000);
+            let collapsed=measure();if(collapsed.diffBrand>1||collapsed.diffNav>1)throw Error('collapsed header misaligned '+JSON.stringify(collapsed));if(collapsed.brandWidth>collapsed.sideWidth+1)throw Error('collapsed brand overflow '+JSON.stringify(collapsed));
+            root.dataset.result='pass';out.textContent=JSON.stringify({expanded,collapsed,miniWidth:mini.naturalWidth},null,2);
+          }catch(e){root.dataset.result='fail';out.textContent=String(e.stack||e)}})();
+          </script></body></html>
+          EOF
+          python3 -m http.server 8765 >/tmp/pawanro-align-http.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=28000 --dump-dom http://127.0.0.1:8765/sidebar-alignment-test.html >/tmp/pawanro-align.html
+          cat /tmp/pawanro-align.html
+          grep -q 'data-result="pass"' /tmp/pawanro-align.html
+          ! grep -q 'data-result="fail"' /tmp/pawanro-align.html
