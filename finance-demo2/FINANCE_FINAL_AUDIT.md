@@ -1,3 +1,7 @@
+# HISTORICAL PRE-DEMO2 AUDIT — SUPERSEDED FOR DEMO 2
+
+> **Demo 2 authority:** Use [`FINANCE_DEMO2_FINAL_STATE.md`](./FINANCE_DEMO2_FINAL_STATE.md) for the current `/finance-demo2/` state. This document is retained only to explain the stable Finance state from which Demo 2 was created. Later Demo 2 decisions—Phase 1 R3, remaining Phase 1 controllers, Daily Briefing R2, Calendar Studio, Co-edit, offline-first sync, Phase 2, final branding and UI controls—supersede conflicting statements below. The historical v6/`patch6` runtime requirement must not be restored in Demo 2.
+
 # PAVENRO Finance — Final Audit / Latest Decision Wins
 
 This document records the final intended state after reviewing the original Finance reference screenshots, the Finance master build prompt, and every later user correction. When two requirements conflict, the later decision in this file wins.
