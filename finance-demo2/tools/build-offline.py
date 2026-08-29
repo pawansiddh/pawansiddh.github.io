@@ -31,55 +31,29 @@ def unwrap_runtime(code):
         return code
 
 
-def prepare_source(name, code):
-    # Keep the standalone customer build on the same final ownership/performance rules as Demo 2 web.
-    if name == 'phase1-core2-r1':
-        code = code.replace(
-            "setInterval(mount,900);setTimeout(mount,250);",
-            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(mount,90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setInterval(mount,5000);setTimeout(mount,160);"
-        )
-    elif name == 'phase1-planning-r1':
-        code = code.replace(
-            "function mount(force=false){const v=view();if(v==='calendar')action('cal','+ Add event',()=>form('calendar'));else if(v==='subscriptions')action('sub','+ Add subscription',()=>form('subscriptions'));else if(v==='net worth')action('asset','+ New asset',()=>form('assets'));else if(v==='investments')action('inv','+ New investment',()=>form('investments'));else return clear();draw(v)}",
-            "function mount(force=false){const v=view();if(v==='calendar'){clear();return}if(v==='subscriptions')action('sub','+ Add subscription',()=>form('subscriptions'));else if(v==='net worth')action('asset','+ New asset',()=>form('assets'));else if(v==='investments')action('inv','+ New investment',()=>form('investments'));else return clear();draw(v)}"
-        )
-        code = code.replace(
-            "setInterval(mount,900);setTimeout(()=>mount(true),300);",
-            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(()=>mount(true),90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(()=>mount(true),90));setInterval(mount,5000);setTimeout(()=>mount(true),180);"
-        )
-    elif name == 'phase1-records-r1':
-        code = code.replace(
-            "setInterval(mount,900);setTimeout(()=>mount(true),320);",
-            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(()=>mount(true),90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(()=>mount(true),90));setInterval(mount,5000);setTimeout(()=>mount(true),190);"
-        )
-    elif name == 'phase1-status-fix-r1':
-        code = code.replace("setInterval(mount,900);", "window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setInterval(mount,3000);")
-    elif name == 'interaction-audit-r1':
-        code = code.replace(
-            "function intercept(e){const b=e.target.closest('button');if(!b)return false;const txt=N(b.textContent),v=view(),title=detailTitle()||'Selected record';",
-            "function intercept(e){const b=e.target.closest('button');if(!b)return false;if(b.matches('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action')||b.closest('.pv-p1-modal,.pv-c2-modal,.pv-pl-modal,.pv-r-modal,.pv-pl-panel,.pv-r-panel'))return false;const txt=N(b.textContent),v=view(),title=detailTitle()||'Selected record';"
-        )
-        code = code.replace("setTimeout(inject,300);setInterval(inject,1200);", "setTimeout(inject,220);setInterval(inject,5000);")
-    elif name == 'daily-briefing-r2':
-        code = code.replace("setInterval(()=>{mountTopbar();mountSettings()},1200);", "setInterval(()=>{mountTopbar();mountSettings()},5000);")
-    elif name == 'phase2-r1':
-        code = code.replace(
-            "setTimeout(mount,250);setInterval(mount,700);document.addEventListener('change',()=>setTimeout(mount,50),true);",
-            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(mount,90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setTimeout(mount,210);setInterval(mount,3000);document.addEventListener('change',()=>setTimeout(mount,50),true);"
-        )
-    elif name == 'brand-sidebar-r1':
-        code = code.replace("setInterval(install,1400);", "setInterval(install,5000);")
-    elif name == 'ui-controls-r1':
-        code = code.replace(
-            "function recordAudit(action,section=currentSection(),extra={}){",
-            "function recordAudit(action,section=currentSection(),extra={}){if(window.__PV_COEDIT_AUDIT_ACTIVE__)return;"
-        )
-        code = code.replace(
-            "if(b.id==='pvAuditBtn'){e.preventDefault();e.stopImmediatePropagation();openAudit();return}",
-            "if(b.id==='pvAuditBtn'&&!window.__PV_COEDIT_AUDIT_ACTIVE__){e.preventDefault();e.stopImmediatePropagation();openAudit();return}"
-        )
-        code = code.replace("ensureAuditSeed();setTimeout(mount,450);setInterval(mount,900);", "ensureAuditSeed();setTimeout(mount,300);setInterval(mount,3000);")
-    return code
+def runtime_policy(label, code):
+    """Apply the same scoped runtime policy used by Demo2 web, without rewriting controller source strings."""
+    slow = label in {
+        'phase1-status-fix-r1', 'interaction-audit-r1', 'daily-briefing-r2',
+        'phase2-r1', 'brand-sidebar-r1', 'ui-controls-r1'
+    }
+    block_observer = label in {'debt-lab-r1', 'theme-studio-r1'}
+    fallback = label == 'interaction-audit-r1'
+    if not (slow or block_observer or fallback):
+        return code
+
+    setup = []
+    restore = []
+    if block_observer:
+        setup.append("const __pvMO=window.MutationObserver;if(__pvMO)window.MutationObserver=class extends __pvMO{observe(t,o){if((t===document.body||t===document.documentElement)&&o?.subtree)return;return super.observe(t,o)}};")
+        restore.append("if(__pvMO)window.MutationObserver=__pvMO;")
+    if slow:
+        setup.append("const __pvSI=window.setInterval;window.setInterval=(fn,ms,...a)=>__pvSI(fn,Math.max(Number(ms)||0,5000),...a);")
+        restore.append("window.setInterval=__pvSI;")
+    if fallback:
+        setup.append("const __pvAdd=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(type,listener,options){if(this===document&&type==='click'&&listener?.name==='intercept'){const wrapped=function(e){const b=e.target?.closest?.('button');if(b&&(b.matches('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action')||b.closest('.pv-p1-modal,.pv-c2-modal,.pv-pl-modal,.pv-r-modal,.pv-pl-panel,.pv-r-panel')))return;return listener.call(this,e)};return __pvAdd.call(this,type,wrapped,options)}return __pvAdd.call(this,type,listener,options)};")
+        restore.append("EventTarget.prototype.addEventListener=__pvAdd;")
+    return "(()=>{" + ''.join(setup) + "try{\n" + code + "\n}finally{" + ''.join(restore) + "}})();"
 
 
 def safe_script(code):
@@ -97,6 +71,7 @@ def style_tag(css, label):
 def delayed_scripts(items, delay=120):
     payload = []
     for label, code in items:
+        code = runtime_policy(label, code)
         b64 = base64.b64encode(code.encode('utf-8')).decode('ascii')
         payload.append([label, b64])
     js = "(()=>{const P=" + json.dumps(payload, separators=(',', ':')) + f";setTimeout(()=>{{for(const [n,b] of P){{const s=document.createElement('script');s.textContent=atob(b)+'\\n//# sourceURL=pavenro-offline-'+n+'.js';document.documentElement.appendChild(s);s.remove();}}document.documentElement.classList.remove('pv-offline-booting');}}, {delay});}})();"
@@ -177,20 +152,20 @@ runtime = [
 ]
 
 phase_scripts = [
-    ('state-bridge-r1', prepare_source('state-bridge-r1', read('finance-state-bridge-r1.js'))),
-    ('phase1-r3', prepare_source('phase1-r3', read('finance-phase1-r3.js'))),
-    ('phase1-core2-r1', prepare_source('phase1-core2-r1', read('finance-phase1-core2-r1.js'))),
-    ('phase1-planning-r1', prepare_source('phase1-planning-r1', read('finance-phase1-planning-r1.js'))),
-    ('phase1-records-r1', prepare_source('phase1-records-r1', read('finance-phase1-records-r1.js'))),
-    ('phase1-status-fix-r1', prepare_source('phase1-status-fix-r1', read('finance-phase1-status-fix-r1.js'))),
-    ('interaction-audit-r1', prepare_source('interaction-audit-r1', read('finance-interaction-audit-r1.js'))),
-    ('daily-briefing-r2', prepare_source('daily-briefing-r2', read('finance-daily-briefing-r2.js'))),
+    ('state-bridge-r1', read('finance-state-bridge-r1.js')),
+    ('phase1-r3', read('finance-phase1-r3.js')),
+    ('phase1-core2-r1', read('finance-phase1-core2-r1.js')),
+    ('phase1-planning-r1', read('finance-phase1-planning-r1.js')),
+    ('phase1-records-r1', read('finance-phase1-records-r1.js')),
+    ('phase1-status-fix-r1', read('finance-phase1-status-fix-r1.js')),
+    ('interaction-audit-r1', read('finance-interaction-audit-r1.js')),
+    ('daily-briefing-r2', read('finance-daily-briefing-r2.js')),
     ('calendar-studio-r1', unwrap_runtime(read('finance-calendar-studio-r1.js'))),
     ('coedit-audit-r1', unwrap_runtime(read('finance-coedit-audit-r1.js'))),
     ('coedit-owner-marker', "window.__PV_COEDIT_AUDIT_ACTIVE__=!!document.getElementById('pvAuditBtn');"),
-    ('phase2-r1', prepare_source('phase2-r1', read('finance-phase2-r1.js'))),
-    ('brand-sidebar-r1', prepare_source('brand-sidebar-r1', read('finance-brand-sidebar-r1.js'))),
-    ('ui-controls-r1', prepare_source('ui-controls-r1', read('finance-ui-controls-r1.js'))),
+    ('phase2-r1', read('finance-phase2-r1.js')),
+    ('brand-sidebar-r1', read('finance-brand-sidebar-r1.js')),
+    ('ui-controls-r1', read('finance-ui-controls-r1.js')),
 ]
 
 # Offline-only safety. No normal Finance screen is redesigned.
@@ -203,7 +178,7 @@ offline_safety = r'''
   addEventListener('offline',()=>document.documentElement.dataset.network='offline');
   window.PavenroOfflineBackup={
     export(){
-      const d={edition:'PAVENRO Finance Lifetime Offline',version:2,created:new Date().toISOString(),localStorage:{}};
+      const d={edition:'PAVENRO Finance Lifetime Offline',version:3,created:new Date().toISOString(),localStorage:{}};
       for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&/pavenro|finance|pv-fin/i.test(k))d.localStorage[k]=localStorage.getItem(k)}
       const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='PAVENRO-Finance-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)
     },
@@ -227,7 +202,10 @@ if '<head>' in html.lower():
 
 bundle = ''
 for kind, label, code in runtime:
-    bundle += script_tag(code, label) if kind == 'script' else style_tag(code, label)
+    if kind == 'script':
+        bundle += script_tag(runtime_policy(label, code), label)
+    else:
+        bundle += style_tag(code, label)
 bundle += script_tag("document.dispatchEvent(new CustomEvent('pavenro:ready'));", 'ready-event')
 bundle += delayed_scripts(phase_scripts, 120)
 
