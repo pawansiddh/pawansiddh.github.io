@@ -37,7 +37,7 @@
     let product=q('.pv-brand-finance',b);
     if(!product){
       product=document.createElement('span');product.className='pv-brand-finance';product.setAttribute('aria-hidden','true');
-      product.innerHTML='<span class="pv-brand-bar">|</span><span class="pv-brand-product">FINANCE</span>';
+      product.innerHTML='<span class="pv-brand-bar">|</span> <span class="pv-brand-product">FINANCE</span>';
       if(word?.nextSibling)b.insertBefore(product,word.nextSibling);else if(word)b.appendChild(product);else b.prepend(product);
     }
     if(mini&&mini!==b.lastElementChild)b.appendChild(mini);
