@@ -62,6 +62,9 @@ jobs:
             const side=d.querySelector('.sidebar,#pvSide');if(!side)throw new Error('Sidebar missing');
             const wordmark=await waitFor(()=>d.getElementById('pvPawanroWordmark'),3000);
             if((wordmark.alt||'').toUpperCase()!=='PAWANRO')throw new Error('PAWANRO wordmark not active');
+            const product=await waitFor(()=>d.querySelector('.sidebar .brand .pv-brand-finance'),2000);
+            if((product.textContent||'').replace(/\s+/g,' ').trim().toUpperCase()!=='| FINANCE')throw new Error('Expanded header is not PAWANRO | FINANCE');
+            if(getComputedStyle(product).display==='none')throw new Error('FINANCE product label missing in expanded sidebar');
             const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');
             if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
             const visibleSideText=[...side.querySelectorAll('*')].filter(x=>getComputedStyle(x).display!=='none'&&getComputedStyle(x).visibility!=='hidden').map(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toUpperCase());
@@ -73,8 +76,10 @@ jobs:
             d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(80);
             const mini=d.querySelector('.sidebar .pv-pawanro-mini');if(!mini||getComputedStyle(mini).display==='none')throw new Error('Collapsed PAWANRO icon is not visible');
             if(getComputedStyle(wordmark).display!=='none')throw new Error('Expanded wordmark remains visible in collapsed sidebar');
+            if(getComputedStyle(product).display!=='none')throw new Error('| FINANCE remains visible in collapsed sidebar');
             if(help&&help.querySelector('.pv-util-label')&&getComputedStyle(help.querySelector('.pv-util-label')).display!=='none')throw new Error('Help label remains visible in collapsed sidebar');
             d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(60);
+            if(getComputedStyle(wordmark).display==='none'||getComputedStyle(product).display==='none')throw new Error('PAWANRO | FINANCE did not restore after expanding sidebar');
             const year=d.getElementById('pvPeriodYear');
             if(!year)throw new Error('Finance year selector missing');
             const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);
@@ -99,7 +104,7 @@ jobs:
               if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
             }
             if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
-            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,shell:h.dataset.pvSidebarShell,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,auditOpened:true,sidebarClean:true,policies:r.policies,tested},null,2);
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,shell:h.dataset.pvSidebarShell,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,product:(product.textContent||'').replace(/\s+/g,' ').trim(),auditOpened:true,sidebarClean:true,policies:r.policies,tested},null,2);
           }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)+'\n\n'+diag(frame)}})();
           </script></body></html>
           EOF
