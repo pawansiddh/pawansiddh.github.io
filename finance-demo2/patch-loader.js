@@ -56,7 +56,8 @@
           ['finance-calendar-studio-r1.js?v=finance-calendar-studio-r1-20260828a','Finance Calendar Studio R1'],
           ['finance-coedit-audit-r1.js?v=finance-coedit-audit-r1-20260829a','Finance Coedit Audit R1'],
           ['finance-offline-sync-r1.js?v=finance-offline-sync-r1-20260829a','Finance Offline-first Sync R1'],
-          ['finance-phase2-r1.js?v=finance-phase2-r1-20260829a','Finance Phase 2 R1']
+          ['finance-phase2-r1.js?v=finance-phase2-r1-20260829a','Finance Phase 2 R1'],
+          ['finance-brand-sidebar-r1.js?v=finance-brand-sidebar-r1-20260829a','PAVENRO sidebar brand R1']
         ];
         for(const [src,label] of phase1){try{await loadScript(src)}catch(err){console.error(`PAVENRO ${label} failed to load`,err)}}
       },140);
