@@ -78,14 +78,12 @@
   function bind(sel,type){
     if(sel.dataset.pvStatusFix==='1')return;
     sel.dataset.pvStatusFix='1';
-    // The existing row has a click handler that re-renders the page. Keep select interaction local.
     ['pointerdown','mousedown','mouseup','click'].forEach(ev=>sel.addEventListener(ev,e=>e.stopPropagation()));
     sel.addEventListener('keydown',e=>e.stopPropagation());
     sel.addEventListener('change',e=>{
       e.stopPropagation();
       const name=rowName(sel,type),val=sel.value;
       persistChoice(type,name,val);
-      // Keep the committed choice visible even if another controller refreshes nearby text.
       setTimeout(()=>{if(document.contains(sel))sel.value=val},0);
     });
   }
@@ -104,6 +102,7 @@
     const nav=e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]');
     if(nav)setTimeout(mount,180);
   });
+  window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));
   setTimeout(mount,220);
-  setInterval(mount,900);
+  setInterval(mount,3000);
 })();
