@@ -59,26 +59,28 @@ jobs:
             if(h.classList.contains('pv-demo2-booting'))throw new Error('Boot mask remained active');
             if(!d.querySelector('.topbar'))throw new Error('Topbar missing');
             const side=d.querySelector('.sidebar,#pvSide');if(!side)throw new Error('Sidebar missing');
-            const wordmark=await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x&&x.complete&&x.naturalWidth>0?x:null},3000);
+            let wordmark=await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x&&x.complete&&x.naturalWidth>0?x:null},3000);
             if((wordmark.alt||'').toUpperCase()!=='PAWANRO')throw new Error('PAWANRO wordmark not active');
-            const product=await waitFor(()=>d.querySelector('.sidebar .brand .pv-brand-finance'),2000);
+            let product=await waitFor(()=>d.querySelector('.sidebar .brand .pv-brand-finance'),2000);
             if((product.textContent||'').replace(/\s+/g,' ').trim().toUpperCase()!=='| FINANCE')throw new Error('Expanded header is not PAWANRO | FINANCE');
             if(getComputedStyle(product).display==='none')throw new Error('FINANCE product label missing in expanded sidebar');
-            const brand=d.querySelector('.sidebar .brand');if(!brand)throw new Error('Sidebar brand container missing');
-            const sr=side.getBoundingClientRect(),br=brand.getBoundingClientRect();if(br.left<sr.left-1||br.right>sr.right+1)throw new Error(`Brand overflows sidebar: brand ${br.left}-${br.right}, sidebar ${sr.left}-${sr.right}`);
+            let brand=d.querySelector('.sidebar .brand');if(!brand)throw new Error('Sidebar brand container missing');
+            let sr=side.getBoundingClientRect(),br=brand.getBoundingClientRect();if(br.left<sr.left-1||br.right>sr.right+1)throw new Error(`Brand overflows sidebar: brand ${br.left}-${br.right}, sidebar ${sr.left}-${sr.right}`);
             if(getComputedStyle(brand,'::before').display!=='none'||getComputedStyle(brand,'::after').display!=='none')throw new Error('Brand decorative line is still visible');
             const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
             const visibleSideText=[...side.querySelectorAll('*')].filter(x=>getComputedStyle(x).display!=='none'&&getComputedStyle(x).visibility!=='hidden').map(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toUpperCase());
             if(visibleSideText.includes('PAWANRO FINANCE')||visibleSideText.includes('PAVENRO FINANCE'))throw new Error('Duplicate PAWANRO FINANCE section label is visible');
             const help=[...side.querySelectorAll('button')].find(x=>/help\s*&?\s*support/i.test(`${x.dataset.v||''} ${x.title||''} ${x.getAttribute('aria-label')||''} ${x.textContent||''}`));
             if(help&&!/help\s*&?\s*support/i.test(help.textContent||''))throw new Error('Help & Support label missing in expanded sidebar');
-            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(100);
+            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(120);
             const mini=d.querySelector('.sidebar .pv-brand-mini img');if(!mini||getComputedStyle(mini.parentElement).display==='none'||!mini.complete||mini.naturalWidth<1)throw new Error('Collapsed PAWANRO P-leaf icon is not visible');
-            if(getComputedStyle(wordmark).display!=='none')throw new Error('Expanded wordmark remains visible in collapsed sidebar');
-            if(getComputedStyle(product).display!=='none')throw new Error('| FINANCE remains visible in collapsed sidebar');
-            const sr2=side.getBoundingClientRect(),br2=brand.getBoundingClientRect();if(br2.left<sr2.left-1||br2.right>sr2.right+1)throw new Error('Collapsed brand overflows sidebar');
-            d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(100);
-            if(getComputedStyle(wordmark).display==='none'||getComputedStyle(product).display==='none'||wordmark.naturalWidth<1)throw new Error('PAWANRO | FINANCE did not restore after expanding sidebar');
+            const collapsedWord=d.getElementById('pvPawanroWordmark'),collapsedProduct=d.querySelector('.sidebar .brand .pv-brand-finance');
+            if(collapsedWord&&getComputedStyle(collapsedWord).display!=='none')throw new Error('Expanded wordmark remains visible in collapsed sidebar');
+            if(collapsedProduct&&getComputedStyle(collapsedProduct).display!=='none')throw new Error('| FINANCE remains visible in collapsed sidebar');
+            brand=d.querySelector('.sidebar .brand');sr=side.getBoundingClientRect();br=brand.getBoundingClientRect();if(br.left<sr.left-1||br.right>sr.right+1)throw new Error('Collapsed brand overflows sidebar');
+            d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(120);
+            wordmark=await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x&&x.complete&&x.naturalWidth>0?x:null},2000);product=d.querySelector('.sidebar .brand .pv-brand-finance');
+            if(!product||getComputedStyle(wordmark).display==='none'||getComputedStyle(product).display==='none')throw new Error('PAWANRO | FINANCE did not restore after expanding sidebar');
             const year=d.getElementById('pvPeriodYear');if(!year)throw new Error('Finance year selector missing');
             const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);if(future.length)throw new Error('Future Finance years are selectable: '+future.join(','));
             const audit=d.getElementById('pvAuditBtn');if(!audit)throw new Error('Change history control missing');audit.click();await waitFor(()=>d.querySelector('.pv-ca-shade'),2500);d.querySelector('.pv-ca-close')?.click();await sleep(80);if(d.querySelector('.pv-ca-shade'))throw new Error('Change history panel did not close');
@@ -125,7 +127,10 @@ jobs:
           grep -q '"coedit-audit-r1"' "$FILE"
           grep -q '"phase2-r1"' "$FILE"
           grep -q '"ui-controls-r2"' "$FILE"
+          grep -q '"brand-assets-r1"' "$FILE"
           grep -q '"sidebar-owner-r1"' "$FILE"
+          grep -q '__PAWANRO_BRAND_WORD_B64__' "$FILE"
+          grep -q '__PAWANRO_BRAND_ICON_B64__' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
           grep -q 'PAWANRO Finance Lifetime Offline' "$FILE"
 
