@@ -9,7 +9,7 @@ const css=document.createElement('style');css.id='pv-sidebar-owner-r1-style';css
 .sidebar .brand::before,.sidebar .brand::after{display:none!important;content:none!important;border:0!important;width:0!important;height:0!important}
 .sidebar .brand>hr,.sidebar .brand>.divider,.sidebar .brand>.separator,.sidebar .brand>.pv-sep,.sidebar .brand>small,.sidebar .pv-brand-actions{display:none!important}
 .sidebar .pv-brand-word{display:block!important;width:124px!important;height:auto!important;max-width:124px!important;max-height:18px!important;object-fit:contain!important;object-position:left center!important;margin:0!important;padding:0!important;border:0!important;opacity:1!important;visibility:visible!important;filter:none!important;flex:0 0 124px!important}
-.sidebar .pv-brand-finance{display:inline-flex!important;align-items:center!important;margin:0 0 0 7px!important;padding:0!important;color:#fff!important;white-space:nowrap!important;line-height:1!important;flex:0 0 auto!important}
+.sidebar .pv-brand-finance{display:inline-flex!important;align-items:center!important;margin:0 0 0 7px!important;padding:0!important;color:#fff!important;white-space:pre!important;line-height:1!important;flex:0 0 auto!important}
 .sidebar .pv-brand-bar{font:500 13px/1 Inter,system-ui,sans-serif!important;opacity:.8!important;margin:0 5px 0 0!important}
 .sidebar .pv-brand-product{font:800 8.5px/1 Inter,system-ui,sans-serif!important;letter-spacing:.08em!important;margin:0!important;padding:0!important}
 .sidebar .pv-brand-mini{display:none!important;width:38px!important;height:38px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;flex:0 0 38px!important}
@@ -37,7 +37,7 @@ function build(s){
  const b=q('.brand,.sidebar-brand,.brand-row',s);if(!b||!WORD||!ICON)return false;
  b.classList.add('brand');b.removeAttribute('style');b.replaceChildren();
  const w=document.createElement('img');w.id='pvPawanroWordmark';w.className='pv-brand-word';w.alt='PAWANRO';w.src=WORD;
- const p=document.createElement('span');p.className='pv-brand-finance';p.innerHTML='<span class="pv-brand-bar">|</span><span class="pv-brand-product">FINANCE</span>';
+ const p=document.createElement('span');p.className='pv-brand-finance';p.innerHTML='<span class="pv-brand-bar">|</span> <span class="pv-brand-product">FINANCE</span>';
  const m=document.createElement('span');m.className='pv-brand-mini';m.setAttribute('aria-hidden','true');const i=document.createElement('img');i.alt='';i.src=ICON;m.appendChild(i);
  b.append(w,p,m);b.title='PAWANRO | FINANCE';b.setAttribute('aria-label','PAWANRO | FINANCE');return true;
 }
