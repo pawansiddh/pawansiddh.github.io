@@ -38,6 +38,56 @@ jobs:
           node --check finance-demo2/sw.js
           python3 -m py_compile finance-demo2/tools/build-offline.py
 
+      - name: Browser smoke-test Demo 2
+        run: |
+          set -e
+          BROWSER="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER"
+          cat > finance-demo2-smoke.html <<'EOF'
+          <!doctype html><html data-result="running"><body><iframe id="app" src="/finance-demo2/?ci-smoke=1" style="width:1200px;height:800px"></iframe><pre id="out">running</pre><script>
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const waitFor=async(fn,ms=12000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw new Error('Timed out waiting for Demo 2 runtime')};
+          (async()=>{const root=document.documentElement,out=document.getElementById('out');try{
+            const frame=document.getElementById('app');
+            const w=await waitFor(()=>frame.contentWindow&&frame.contentDocument?.documentElement?.dataset?.pvRuntimeHealth?frame.contentWindow:null,15000),d=w.document,h=d.documentElement;
+            await waitFor(()=>h.dataset.pvRuntimeHealth==='ok',8000);
+            const r=w.__PV_BOOT_REPORT__;
+            if(!r||!Number.isFinite(r.totalMs))throw new Error('Missing boot diagnostics');
+            if(r.totalMs>5000)throw new Error('Local consolidated boot exceeded 5 seconds: '+r.totalMs+'ms');
+            if(h.classList.contains('pv-demo2-booting'))throw new Error('Boot mask remained active');
+            if(!d.querySelector('.topbar'))throw new Error('Topbar missing');
+            if(!d.querySelector('#pvSide,.sidebar'))throw new Error('Sidebar missing');
+            if(!d.getElementById('pvAuditBtn'))throw new Error('Change history control missing');
+            if(d.querySelector('.pv-pl-panel[data-k="calendar"]'))throw new Error('Superseded planning Calendar is still mounted');
+            const navs=[...d.querySelectorAll('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]')];
+            const wanted=['Dashboard','Accounts','Transactions','Bills','Budget','Income','Funds & Goals','Documents','Calendar','Subscriptions','Debt','Net Worth','Investments','Reports','Notes','Tax Records','Paydays','Settings','Help & Support'];
+            const tested=[];
+            for(const name of wanted){const b=navs.find(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().includes(name.toLowerCase()));if(!b)continue;b.click();await sleep(420);tested.push(name);
+              const bad=[...d.querySelectorAll('tr')].find(tr=>tr.querySelectorAll('select[data-pv-role="bill-status"],select[data-pv-role="bill-detail-status"],select[data-pv-role="tx-status"]').length>1);if(bad)throw new Error('Duplicate status controls after '+name);
+              const actions=d.querySelectorAll('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action,.pv-ia-top');if(actions.length>2)throw new Error('Competing page actions after '+name+': '+actions.length);
+              if(name==='Calendar'){await sleep(450);const labels=[...d.querySelectorAll('button')].map(x=>(x.textContent||'').trim().toLowerCase());for(const x of ['month','week','day','year'])if(!labels.includes(x))throw new Error('Calendar '+x+' view missing')}
+              if(name==='Subscriptions'&&!d.querySelector('.pv-pl-action'))throw new Error('Subscription add action missing');
+              if(name==='Net Worth'&&!d.querySelector('.pv-pl-action'))throw new Error('Net Worth add asset action missing');
+              if(name==='Investments'&&!d.querySelector('.pv-pl-action'))throw new Error('Investment add action missing');
+              if(name==='Reports'&&!d.querySelector('.pv-r-action'))throw new Error('Report action missing');
+              if(name==='Notes'&&!d.querySelector('.pv-r-action'))throw new Error('Notes add action missing');
+              if(name==='Tax Records'&&!d.querySelector('.pv-r-action'))throw new Error('Tax add action missing');
+              if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
+            }
+            if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,transforms:r.transforms,tested},null,2);
+          }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)}})();
+          </script></body></html>
+          EOF
+          python3 -m http.server 8765 >/tmp/pavenro-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=20000 --dump-dom http://127.0.0.1:8765/finance-demo2-smoke.html > /tmp/pavenro-smoke-dom.html
+          cat /tmp/pavenro-smoke-dom.html
+          grep -q 'data-result="pass"' /tmp/pavenro-smoke-dom.html
+          ! grep -q 'data-result="fail"' /tmp/pavenro-smoke-dom.html
+
       - name: Build exact standalone HTML
         run: python3 finance-demo2/tools/build-offline.py
 
