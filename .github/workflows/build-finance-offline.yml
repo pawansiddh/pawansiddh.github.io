@@ -17,17 +17,49 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Syntax-check Finance runtime
+        run: |
+          set -e
+          node --check finance-demo2/patch-loader-fast-r1.js
+          node --check finance-demo2/finance-state-bridge-r1.js
+          node --check finance-demo2/finance-phase1-r3.js
+          node --check finance-demo2/finance-phase1-core2-r1.js
+          node --check finance-demo2/finance-phase1-planning-r1.js
+          node --check finance-demo2/finance-phase1-records-r1.js
+          node --check finance-demo2/finance-phase1-status-fix-r1.js
+          node --check finance-demo2/finance-interaction-audit-r1.js
+          node --check finance-demo2/finance-daily-briefing-r2.js
+          node --check finance-demo2/finance-calendar-studio-r1.js
+          node --check finance-demo2/finance-coedit-audit-r1.js
+          node --check finance-demo2/finance-offline-sync-r1.js
+          node --check finance-demo2/finance-phase2-r1.js
+          node --check finance-demo2/finance-brand-sidebar-r1.js
+          node --check finance-demo2/finance-ui-controls-r1.js
+          node --check finance-demo2/sw.js
+          python3 -m py_compile finance-demo2/tools/build-offline.py
+
       - name: Build exact standalone HTML
         run: python3 finance-demo2/tools/build-offline.py
 
       - name: Verify standalone artifact
         run: |
+          set -e
           FILE=finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
           test -s "$FILE"
           echo "Size: $(wc -c < "$FILE") bytes"
           ! grep -q 'src="patch-loader.js' "$FILE"
+          ! grep -q 'src="patch-loader-fast-r1.js' "$FILE"
           ! grep -q 'data/0.txt' "$FILE"
+          ! grep -q 'finance-phase1-r1.js' "$FILE"
+          ! grep -q 'finance-phase1-r2.js' "$FILE"
+          ! grep -q 'finance-daily-briefing-r1.js' "$FILE"
           grep -q 'pavenro-offline-debt-lab-r1.js' "$FILE"
+          grep -q 'pavenro-offline-daily-briefing-r2.js' "$FILE"
+          grep -q 'pavenro-offline-calendar-studio-r1.js' "$FILE"
+          grep -q 'pavenro-offline-coedit-audit-r1.js' "$FILE"
+          grep -q 'pavenro-offline-phase2-r1.js' "$FILE"
+          grep -q 'pavenro-offline-brand-sidebar-r1.js' "$FILE"
+          grep -q 'pavenro-offline-ui-controls-r1.js' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
           grep -q 'Lifetime Offline Edition' "$FILE"
 
