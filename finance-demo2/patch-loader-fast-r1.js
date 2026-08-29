@@ -1,6 +1,6 @@
 (async()=>{
   const T0=performance.now();
-  const report={version:'finance-demo2-consolidated-r1',startedAt:new Date().toISOString(),loaded:[],failed:[],skipped:['patch6 (known malformed and never part of effective Demo 2 runtime)'],timings:{}};
+  const report={version:'finance-demo2-consolidated-r1c',startedAt:new Date().toISOString(),loaded:[],failed:[],skipped:['patch6 (known malformed and never part of effective Demo 2 runtime)'],unpacked:[],timings:{}};
   window.__PV_BOOT_REPORT__=report;
   const onBootError=e=>report.failed.push({name:'runtime',stage:'window-error',error:String(e?.error||e?.message||'Unknown runtime error')});
   const onBootRejection=e=>report.failed.push({name:'runtime',stage:'unhandled-rejection',error:String(e?.reason||'Unhandled rejection')});
@@ -23,10 +23,28 @@
     if(!text)return false;
     try{const s=document.createElement('style');s.dataset.pvBundle=name;s.textContent=text;document.head.appendChild(s);report.loaded.push(name);return true}catch(error){report.failed.push({name,stage:'style',error:String(error)});return false}
   };
+  const gunzipBase64=async(name,packed)=>{
+    const t=performance.now();const bytes=Uint8Array.from(atob(packed),c=>c.charCodeAt(0));const ds=new DecompressionStream('gzip');const js=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();mark(`decode:${name}`,t);return js;
+  };
   const runPacked=async(name,parts)=>{
     if(parts.some(x=>!x))return false;
-    const t=performance.now();
-    try{const packed=parts.join('').trim();const bytes=Uint8Array.from(atob(packed),c=>c.charCodeAt(0));const ds=new DecompressionStream('gzip');const js=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();mark(`decode:${name}`,t);return exec(name,js)}catch(error){report.failed.push({name,stage:'decode',error:String(error)});console.error(`PAVENRO ${name} decode failed`,error);return false}
+    try{return exec(name,await gunzipBase64(name,parts.join('').trim()))}catch(error){report.failed.push({name,stage:'decode',error:String(error)});console.error(`PAVENRO ${name} decode failed`,error);return false}
+  };
+  const unwrapRuntime=async(name,text)=>{
+    if(!text||!text.includes("DecompressionStream('gzip')"))return text;
+    const m=text.match(/const\s+P=['"]([A-Za-z0-9+/=]+)['"]/);
+    if(!m)return text;
+    try{const js=await gunzipBase64(name,m[1]);report.unpacked.push(name);return js}catch(error){report.failed.push({name,stage:'unwrap',error:String(error)});console.error(`PAVENRO ${name} wrapper unpack failed`,error);return text}
+  };
+  const prepareSource=(name,text)=>{
+    if(name!=='ui-controls-r1'||!window.__PV_COEDIT_AUDIT_ACTIVE__)return text;
+    // Co-edit Audit is the authoritative history owner. UI Controls retains only a fallback history if Co-edit failed.
+    return text
+      .replace("function recordAudit(action,section=currentSection(),extra={}){", "function recordAudit(action,section=currentSection(),extra={}){if(window.__PV_COEDIT_AUDIT_ACTIVE__)return;")
+      .replace("if(b.id==='pvAuditBtn'){e.preventDefault();e.stopImmediatePropagation();openAudit();return}", "if(b.id==='pvAuditBtn'&&!window.__PV_COEDIT_AUDIT_ACTIVE__){e.preventDefault();e.stopImmediatePropagation();openAudit();return}");
+  };
+  const execAsset=async(name,text)=>{
+    let js=await unwrapRuntime(name,text);js=prepareSource(name,js);return exec(name,js);
   };
   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{
     document.documentElement.classList.remove('pv-demo2-booting');
@@ -43,11 +61,12 @@
         theme:!!window.__PAVENRO_THEME_STUDIO_R1__,
         brand:!!window.__PAVENRO_BRAND_SIDEBAR_R1__,
         uiControls:document.documentElement.dataset.pvUiControls==='r1',
+        coeditHistory:!!window.__PV_COEDIT_AUDIT_ACTIVE__,
         changeHistoryButton:!!document.getElementById('pvAuditBtn'),
         sidebar:!!document.querySelector('#pvSide,.sidebar'),
         topbar:!!document.querySelector('.topbar')
       };
-      report.health=h;report.healthy=Object.values(h).every(Boolean)&&!report.failed.some(x=>x.stage==='execute'||x.stage==='decode'||x.stage==='window-error'||x.stage==='unhandled-rejection');
+      report.health=h;report.healthy=Object.values(h).every(Boolean)&&!report.failed.some(x=>x.stage==='execute'||x.stage==='decode'||x.stage==='unwrap'||x.stage==='window-error'||x.stage==='unhandled-rejection');
       document.documentElement.dataset.pvRuntimeHealth=report.healthy?'ok':'check';
       if(!report.healthy)console.warn('PAVENRO runtime health check',report);
       window.dispatchEvent(new CustomEvent('pavenro:runtime-health',{detail:report}));
@@ -86,18 +105,25 @@
 
   try{
     await runPacked('finance-patch-v4',[A['patch4-0'],A['patch4-1'],A['patch4-2'],A['patch4-3']]);
-    exec('finance-patch-v5',A['patch-v5']);
+    await execAsset('finance-patch-v5',A['patch-v5']);
     // patch6 is intentionally NOT requested: it is malformed in the repository and the historical loader always fell through to the same baseline below.
-    exec('finance-baseline-v3',A['baseline-js']);
+    await execAsset('finance-baseline-v3',A['baseline-js']);
     style('finance-baseline-v3-css',A['baseline-css']);
-    exec('finance-search-r3c',A['search-r3c']);
+    await execAsset('finance-search-r3c',A['search-r3c']);
     style('finance-sidebar-clean-r1-css',A['sidebar-css']);
-    exec('finance-debt-lab-r1',A['debt-r1']);
-    exec('finance-theme-studio-r1',A['theme-r1']);
-    exec('finance-bell-contrast-r1',A['bell-r1']);
+    await execAsset('finance-debt-lab-r1',A['debt-r1']);
+    await execAsset('finance-theme-studio-r1',A['theme-r1']);
+    await execAsset('finance-bell-contrast-r1',A['bell-r1']);
 
     const finalOrder=['state-bridge','phase1-r3','phase1-core2','phase1-planning','phase1-records','phase1-status','interaction-audit','daily-briefing-r2','calendar-studio-r1','coedit-audit-r1','offline-sync-r1','phase2-r1','brand-sidebar-r1','ui-controls-r1'];
-    for(const name of finalOrder)exec(name,A[name]);
+    for(const name of finalOrder){
+      await execAsset(name,A[name]);
+      if(name==='coedit-audit-r1'){
+        // The rich Co-edit engine owns the shared history button when it initialized successfully.
+        window.__PV_COEDIT_AUDIT_ACTIVE__=!!document.getElementById('pvAuditBtn');
+        report.coeditOwner=window.__PV_COEDIT_AUDIT_ACTIVE__?'coedit-audit-r1':'ui-controls-fallback';
+      }
+    }
   }catch(error){report.failed.push({name:'bootstrap',stage:'bootstrap',error:String(error)});console.error('PAVENRO consolidated bootstrap failed',error)}finally{
     reveal();
   }
