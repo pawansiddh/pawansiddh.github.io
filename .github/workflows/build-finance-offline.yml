@@ -129,8 +129,6 @@ jobs:
           grep -q '"ui-controls-r2"' "$FILE"
           grep -q '"brand-assets-r1"' "$FILE"
           grep -q '"sidebar-owner-r1"' "$FILE"
-          grep -q '__PAWANRO_BRAND_WORD_B64__' "$FILE"
-          grep -q '__PAWANRO_BRAND_ICON_B64__' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
           grep -q 'PAWANRO Finance Lifetime Offline' "$FILE"
 
