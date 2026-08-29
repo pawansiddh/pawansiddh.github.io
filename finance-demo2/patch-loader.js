@@ -54,7 +54,9 @@
           ['finance-interaction-audit-r1.js?v=finance-interaction-audit-r1-20260828','Phase 1 interaction audit'],
           ['finance-daily-briefing-r2.js?v=finance-daily-briefing-r2-20260828a','Daily briefing and voice settings R2'],
           ['finance-calendar-studio-r1.js?v=finance-calendar-studio-r1-20260828a','Finance Calendar Studio R1'],
-          ['finance-coedit-audit-r1.js?v=finance-coedit-audit-r1-20260829a','Finance Coedit Audit R1']
+          ['finance-coedit-audit-r1.js?v=finance-coedit-audit-r1-20260829a','Finance Coedit Audit R1'],
+          ['finance-offline-sync-r1.js?v=finance-offline-sync-r1-20260829a','Finance Offline-first Sync R1'],
+          ['finance-phase2-r1.js?v=finance-phase2-r1-20260829a','Finance Phase 2 R1']
         ];
         for(const [src,label] of phase1){try{await loadScript(src)}catch(err){console.error(`PAVENRO ${label} failed to load`,err)}}
       },140);
