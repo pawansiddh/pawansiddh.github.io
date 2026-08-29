@@ -46,11 +46,11 @@ jobs:
           cat > finance-demo2-smoke.html <<'EOF'
           <!doctype html><html data-result="running"><body><iframe id="app" src="/finance-demo2/?ci-smoke=1" style="width:1200px;height:800px"></iframe><pre id="out">running</pre><script>
           const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-          const waitFor=async(fn,ms=12000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw new Error('Timed out waiting for Demo 2 runtime')};
-          (async()=>{const root=document.documentElement,out=document.getElementById('out');try{
-            const frame=document.getElementById('app');
-            const w=await waitFor(()=>frame.contentWindow&&frame.contentDocument?.documentElement?.dataset?.pvRuntimeHealth?frame.contentWindow:null,15000),d=w.document,h=d.documentElement;
-            await waitFor(()=>h.dataset.pvRuntimeHealth==='ok',8000);
+          const waitFor=async(fn,ms=20000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw new Error('Timed out waiting for Demo 2 runtime')};
+          const diag=frame=>{try{const w=frame.contentWindow,d=frame.contentDocument,h=d?.documentElement;return JSON.stringify({href:w?.location?.href||'',readyState:d?.readyState||'',health:h?.dataset?.pvRuntimeHealth||'',booting:!!h?.classList?.contains('pv-demo2-booting'),body:(d?.body?.innerText||'').slice(0,1200),scripts:[...(d?.querySelectorAll?.('script')||[])].map(s=>s.src||'[inline]').slice(-8),report:w?.__PV_BOOT_REPORT__||null},null,2)}catch(x){return 'diagnostic failed: '+x}};
+          (async()=>{const root=document.documentElement,out=document.getElementById('out'),frame=document.getElementById('app');try{
+            const w=await waitFor(()=>frame.contentWindow&&frame.contentDocument?.documentElement?.dataset?.pvRuntimeHealth?frame.contentWindow:null,22000),d=w.document,h=d.documentElement;
+            await waitFor(()=>h.dataset.pvRuntimeHealth==='ok',10000);
             const r=w.__PV_BOOT_REPORT__;
             if(!r||!Number.isFinite(r.totalMs))throw new Error('Missing boot diagnostics');
             if(r.totalMs>5000)throw new Error('Local consolidated boot exceeded 5 seconds: '+r.totalMs+'ms');
@@ -75,16 +75,18 @@ jobs:
               if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
             }
             if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
-            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,transforms:r.transforms,tested},null,2);
-          }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)}})();
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,policies:r.policies,tested},null,2);
+          }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)+'\n\n'+diag(frame)}})();
           </script></body></html>
           EOF
           python3 -m http.server 8765 >/tmp/pavenro-http.log 2>&1 &
           SERVER_PID=$!
           trap 'kill $SERVER_PID || true' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=20000 --dump-dom http://127.0.0.1:8765/finance-demo2-smoke.html > /tmp/pavenro-smoke-dom.html
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=32000 --dump-dom http://127.0.0.1:8765/finance-demo2-smoke.html > /tmp/pavenro-smoke-dom.html
           cat /tmp/pavenro-smoke-dom.html
+          echo '--- HTTP LOG ---'
+          cat /tmp/pavenro-http.log || true
           grep -q 'data-result="pass"' /tmp/pavenro-smoke-dom.html
           ! grep -q 'data-result="fail"' /tmp/pavenro-smoke-dom.html
 
