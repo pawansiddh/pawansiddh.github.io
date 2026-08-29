@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'finance-demo2/finance-sidebar-owner-r1.js'
+      - 'finance-demo2/finance-offline-sync-r1.js'
       - 'finance-demo2/finance-baseline-v3.js'
       - 'finance-demo2/finance-sidebar-clean-r1.css'
       - 'finance-demo2/index.html'
@@ -33,10 +34,12 @@ jobs:
             await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x?.complete&&x.naturalWidth>0},5000);
             const measure=()=>{const top=d.querySelector('.topbar')?.getBoundingClientRect(),brand=d.querySelector('.sidebar .brand')?.getBoundingClientRect(),nav=d.querySelector('#pvSide')?.getBoundingClientRect(),side=d.querySelector('.sidebar')?.getBoundingClientRect();if(!top||!brand||!nav||!side)throw Error('layout element missing');return{topBottom:top.bottom,brandBottom:brand.bottom,navTop:nav.top,topHeight:top.height,brandHeight:brand.height,sideWidth:side.width,brandWidth:brand.width,diffBrand:Math.abs(top.bottom-brand.bottom),diffNav:Math.abs(top.bottom-nav.top)}};
             let expanded=measure();if(expanded.diffBrand>1||expanded.diffNav>1)throw Error('expanded header misaligned '+JSON.stringify(expanded));
+            if(d.getElementById('pvOfflineSyncStatus'))throw Error('sync cloud control must not be visible in topbar');
             d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(180);
-            const mini=await waitFor(()=>{const x=d.querySelector('.sidebar .pv-brand-mini img');return x?.complete&&x.naturalWidth>0&&getComputedStyle(x.parentElement).display!=='none'?x:null},3000);
+            const mini=await waitFor(()=>{const x=d.querySelector('.sidebar .pv-brand-mini img');if(!x?.complete||x.naturalWidth<1)return null;const cs=getComputedStyle(x),ps=getComputedStyle(x.parentElement);return cs.display!=='none'&&cs.visibility!=='hidden'&&Number(cs.opacity)>0&&ps.display!=='none'?x:null},3000);
             let collapsed=measure();if(collapsed.diffBrand>1||collapsed.diffNav>1)throw Error('collapsed header misaligned '+JSON.stringify(collapsed));if(collapsed.brandWidth>collapsed.sideWidth+1)throw Error('collapsed brand overflow '+JSON.stringify(collapsed));
-            root.dataset.result='pass';out.textContent=JSON.stringify({expanded,collapsed,miniWidth:mini.naturalWidth},null,2);
+            if(d.getElementById('pvOfflineSyncStatus'))throw Error('sync cloud control returned after collapse');
+            root.dataset.result='pass';out.textContent=JSON.stringify({expanded,collapsed,miniWidth:mini.naturalWidth,miniDisplay:getComputedStyle(mini).display,syncCloud:false},null,2);
           }catch(e){root.dataset.result='fail';out.textContent=String(e.stack||e)}})();
           </script></body></html>
           EOF
