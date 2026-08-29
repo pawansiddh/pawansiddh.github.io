@@ -1,4 +1,4 @@
-name: Build PAVENRO Finance Lifetime Offline
+name: Build PAWANRO Finance Lifetime Offline
 
 on:
   workflow_dispatch:
@@ -34,7 +34,7 @@ jobs:
           node --check finance-demo2/finance-offline-sync-r1.js
           node --check finance-demo2/finance-phase2-r1.js
           node --check finance-demo2/finance-brand-sidebar-r1.js
-          node --check finance-demo2/finance-ui-controls-r1.js
+          node --check finance-demo2/finance-ui-controls-r2.js
           node --check finance-demo2/sw.js
           python3 -m py_compile finance-demo2/tools/build-offline.py
 
@@ -47,17 +47,28 @@ jobs:
           <!doctype html><html data-result="running"><body><iframe id="app" src="/finance-demo2/?ci-smoke=1" style="width:1200px;height:800px"></iframe><pre id="out">running</pre><script>
           const sleep=ms=>new Promise(r=>setTimeout(r,ms));
           const waitFor=async(fn,ms=20000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw new Error('Timed out waiting for Demo 2 runtime')};
-          const diag=frame=>{try{const w=frame.contentWindow,d=frame.contentDocument,h=d?.documentElement;return JSON.stringify({href:w?.location?.href||'',readyState:d?.readyState||'',health:h?.dataset?.pvRuntimeHealth||'',booting:!!h?.classList?.contains('pv-demo2-booting'),body:(d?.body?.innerText||'').slice(0,1200),scripts:[...(d?.querySelectorAll?.('script')||[])].map(s=>s.src||'[inline]').slice(-8),report:w?.__PV_BOOT_REPORT__||null},null,2)}catch(x){return 'diagnostic failed: '+x}};
+          const diag=frame=>{try{const w=frame.contentWindow,d=frame.contentDocument,h=d?.documentElement;return JSON.stringify({href:w?.location?.href||'',readyState:d?.readyState||'',health:h?.dataset?.pvRuntimeHealth||'',ui:h?.dataset?.pvUiControls||'',booting:!!h?.classList?.contains('pv-demo2-booting'),body:(d?.body?.innerText||'').slice(0,1400),scripts:[...(d?.querySelectorAll?.('script')||[])].map(s=>s.src||'[inline]').slice(-8),report:w?.__PV_BOOT_REPORT__||null},null,2)}catch(x){return 'diagnostic failed: '+x}};
           (async()=>{const root=document.documentElement,out=document.getElementById('out'),frame=document.getElementById('app');try{
             const w=await waitFor(()=>frame.contentWindow&&frame.contentDocument?.documentElement?.dataset?.pvRuntimeHealth?frame.contentWindow:null,22000),d=w.document,h=d.documentElement;
             await waitFor(()=>h.dataset.pvRuntimeHealth==='ok',10000);
             const r=w.__PV_BOOT_REPORT__;
             if(!r||!Number.isFinite(r.totalMs))throw new Error('Missing boot diagnostics');
             if(r.totalMs>5000)throw new Error('Local consolidated boot exceeded 5 seconds: '+r.totalMs+'ms');
+            if(h.dataset.pvUiControls!=='r2')throw new Error('Superseded UI controls are active: '+h.dataset.pvUiControls);
             if(h.classList.contains('pv-demo2-booting'))throw new Error('Boot mask remained active');
             if(!d.querySelector('.topbar'))throw new Error('Topbar missing');
             if(!d.querySelector('#pvSide,.sidebar'))throw new Error('Sidebar missing');
-            if(!d.getElementById('pvAuditBtn'))throw new Error('Change history control missing');
+            const wordmark=await waitFor(()=>d.getElementById('pvPawanroWordmark'),3000);
+            if((wordmark.alt||'').toUpperCase()!=='PAWANRO')throw new Error('PAWANRO wordmark not active');
+            const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');
+            if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
+            const year=d.getElementById('pvPeriodYear');
+            if(!year)throw new Error('Finance year selector missing');
+            const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);
+            if(future.length)throw new Error('Future Finance years are selectable: '+future.join(','));
+            const audit=d.getElementById('pvAuditBtn');if(!audit)throw new Error('Change history control missing');
+            audit.click();await waitFor(()=>d.querySelector('.pv-ca-shade'),2500);d.querySelector('.pv-ca-close')?.click();await sleep(80);
+            if(d.querySelector('.pv-ca-shade'))throw new Error('Change history panel did not close');
             if(d.querySelector('.pv-pl-panel[data-k="calendar"]'))throw new Error('Superseded planning Calendar is still mounted');
             const navs=[...d.querySelectorAll('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]')];
             const wanted=['Dashboard','Accounts','Transactions','Bills','Budget','Income','Funds & Goals','Documents','Calendar','Subscriptions','Debt','Net Worth','Investments','Reports','Notes','Tax Records','Paydays','Settings','Help & Support'];
@@ -75,20 +86,20 @@ jobs:
               if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
             }
             if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
-            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,policies:r.policies,tested},null,2);
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,auditOpened:true,policies:r.policies,tested},null,2);
           }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)+'\n\n'+diag(frame)}})();
           </script></body></html>
           EOF
-          python3 -m http.server 8765 >/tmp/pavenro-http.log 2>&1 &
+          python3 -m http.server 8765 >/tmp/pawanro-http.log 2>&1 &
           SERVER_PID=$!
           trap 'kill $SERVER_PID || true' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=32000 --dump-dom http://127.0.0.1:8765/finance-demo2-smoke.html > /tmp/pavenro-smoke-dom.html
-          cat /tmp/pavenro-smoke-dom.html
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=32000 --dump-dom http://127.0.0.1:8765/finance-demo2-smoke.html > /tmp/pawanro-smoke-dom.html
+          cat /tmp/pawanro-smoke-dom.html
           echo '--- HTTP LOG ---'
-          cat /tmp/pavenro-http.log || true
-          grep -q 'data-result="pass"' /tmp/pavenro-smoke-dom.html
-          ! grep -q 'data-result="fail"' /tmp/pavenro-smoke-dom.html
+          cat /tmp/pawanro-http.log || true
+          grep -q 'data-result="pass"' /tmp/pawanro-smoke-dom.html
+          ! grep -q 'data-result="fail"' /tmp/pawanro-smoke-dom.html
 
       - name: Build exact standalone HTML
         run: python3 finance-demo2/tools/build-offline.py
@@ -96,7 +107,7 @@ jobs:
       - name: Verify standalone artifact
         run: |
           set -e
-          FILE=finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          FILE=finance-demo2/offline-build/PAWANRO_Finance_Lifetime_Offline_EXACT.html
           test -s "$FILE"
           echo "Size: $(wc -c < "$FILE") bytes"
           ! grep -q 'src="patch-loader.js' "$FILE"
@@ -105,20 +116,21 @@ jobs:
           ! grep -q 'finance-phase1-r1.js' "$FILE"
           ! grep -q 'finance-phase1-r2.js' "$FILE"
           ! grep -q 'finance-daily-briefing-r1.js' "$FILE"
-          grep -q 'pavenro-offline-debt-lab-r1.js' "$FILE"
+          ! grep -q '"ui-controls-r1"' "$FILE"
+          grep -q 'pawanro-offline-debt-lab-r1.js' "$FILE"
           grep -q '"daily-briefing-r2"' "$FILE"
           grep -q '"calendar-studio-r1"' "$FILE"
           grep -q '"coedit-audit-r1"' "$FILE"
           grep -q '"phase2-r1"' "$FILE"
           grep -q '"brand-sidebar-r1"' "$FILE"
-          grep -q '"ui-controls-r1"' "$FILE"
+          grep -q '"ui-controls-r2"' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
-          grep -q 'Lifetime Offline Edition' "$FILE"
+          grep -q 'PAWANRO Finance Lifetime Offline' "$FILE"
 
       - name: Upload Lifetime HTML
         uses: actions/upload-artifact@v4
         with:
-          name: PAVENRO-Finance-Lifetime-Offline-EXACT
-          path: finance-demo2/offline-build/PAVENRO_Finance_Lifetime_Offline_EXACT.html
+          name: PAWANRO-Finance-Lifetime-Offline-EXACT
+          path: finance-demo2/offline-build/PAWANRO_Finance_Lifetime_Offline_EXACT.html
           if-no-files-found: error
           retention-days: 7
