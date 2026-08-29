@@ -35,6 +35,7 @@ jobs:
           node --check finance-demo2/finance-phase2-r1.js
           node --check finance-demo2/finance-brand-sidebar-r1.js
           node --check finance-demo2/finance-ui-controls-r2.js
+          node --check finance-demo2/finance-sidebar-shell-r2.js
           node --check finance-demo2/sw.js
           python3 -m py_compile finance-demo2/tools/build-offline.py
 
@@ -47,7 +48,7 @@ jobs:
           <!doctype html><html data-result="running"><body><iframe id="app" src="/finance-demo2/?ci-smoke=1" style="width:1200px;height:800px"></iframe><pre id="out">running</pre><script>
           const sleep=ms=>new Promise(r=>setTimeout(r,ms));
           const waitFor=async(fn,ms=20000)=>{const end=Date.now()+ms;while(Date.now()<end){try{const v=fn();if(v)return v}catch(_){}await sleep(100)}throw new Error('Timed out waiting for Demo 2 runtime')};
-          const diag=frame=>{try{const w=frame.contentWindow,d=frame.contentDocument,h=d?.documentElement;return JSON.stringify({href:w?.location?.href||'',readyState:d?.readyState||'',health:h?.dataset?.pvRuntimeHealth||'',ui:h?.dataset?.pvUiControls||'',booting:!!h?.classList?.contains('pv-demo2-booting'),body:(d?.body?.innerText||'').slice(0,1400),scripts:[...(d?.querySelectorAll?.('script')||[])].map(s=>s.src||'[inline]').slice(-8),report:w?.__PV_BOOT_REPORT__||null},null,2)}catch(x){return 'diagnostic failed: '+x}};
+          const diag=frame=>{try{const w=frame.contentWindow,d=frame.contentDocument,h=d?.documentElement;return JSON.stringify({href:w?.location?.href||'',readyState:d?.readyState||'',health:h?.dataset?.pvRuntimeHealth||'',ui:h?.dataset?.pvUiControls||'',shell:h?.dataset?.pvSidebarShell||'',booting:!!h?.classList?.contains('pv-demo2-booting'),body:(d?.body?.innerText||'').slice(0,1600),scripts:[...(d?.querySelectorAll?.('script')||[])].map(s=>s.src||'[inline]').slice(-10),report:w?.__PV_BOOT_REPORT__||null},null,2)}catch(x){return 'diagnostic failed: '+x}};
           (async()=>{const root=document.documentElement,out=document.getElementById('out'),frame=document.getElementById('app');try{
             const w=await waitFor(()=>frame.contentWindow&&frame.contentDocument?.documentElement?.dataset?.pvRuntimeHealth?frame.contentWindow:null,22000),d=w.document,h=d.documentElement;
             await waitFor(()=>h.dataset.pvRuntimeHealth==='ok',10000);
@@ -55,13 +56,25 @@ jobs:
             if(!r||!Number.isFinite(r.totalMs))throw new Error('Missing boot diagnostics');
             if(r.totalMs>5000)throw new Error('Local consolidated boot exceeded 5 seconds: '+r.totalMs+'ms');
             if(h.dataset.pvUiControls!=='r2')throw new Error('Superseded UI controls are active: '+h.dataset.pvUiControls);
+            if(h.dataset.pvSidebarShell!=='r2')throw new Error('Final sidebar shell R2 is not active');
             if(h.classList.contains('pv-demo2-booting'))throw new Error('Boot mask remained active');
             if(!d.querySelector('.topbar'))throw new Error('Topbar missing');
-            if(!d.querySelector('#pvSide,.sidebar'))throw new Error('Sidebar missing');
+            const side=d.querySelector('.sidebar,#pvSide');if(!side)throw new Error('Sidebar missing');
             const wordmark=await waitFor(()=>d.getElementById('pvPawanroWordmark'),3000);
             if((wordmark.alt||'').toUpperCase()!=='PAWANRO')throw new Error('PAWANRO wordmark not active');
             const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');
             if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
+            const visibleSideText=[...side.querySelectorAll('*')].filter(x=>getComputedStyle(x).display!=='none'&&getComputedStyle(x).visibility!=='hidden').map(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toUpperCase());
+            if(visibleSideText.includes('PAWANRO FINANCE')||visibleSideText.includes('PAVENRO FINANCE'))throw new Error('Duplicate PAWANRO FINANCE section label is visible');
+            const brand=d.querySelector('.sidebar .brand');if(!brand)throw new Error('Sidebar brand container missing');
+            if(getComputedStyle(brand,'::before').display!=='none'||getComputedStyle(brand,'::after').display!=='none')throw new Error('Brand decorative line is still visible');
+            const help=[...side.querySelectorAll('button')].find(x=>/help\s*&?\s*support/i.test(`${x.dataset.v||''} ${x.title||''} ${x.getAttribute('aria-label')||''} ${x.textContent||''}`));
+            if(help&&!/help\s*&?\s*support/i.test(help.textContent||''))throw new Error('Help & Support label missing in expanded sidebar');
+            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(80);
+            const mini=d.querySelector('.sidebar .pv-pawanro-mini');if(!mini||getComputedStyle(mini).display==='none')throw new Error('Collapsed PAWANRO icon is not visible');
+            if(getComputedStyle(wordmark).display!=='none')throw new Error('Expanded wordmark remains visible in collapsed sidebar');
+            if(help&&help.querySelector('.pv-util-label')&&getComputedStyle(help.querySelector('.pv-util-label')).display!=='none')throw new Error('Help label remains visible in collapsed sidebar');
+            d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(60);
             const year=d.getElementById('pvPeriodYear');
             if(!year)throw new Error('Finance year selector missing');
             const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);
@@ -86,7 +99,7 @@ jobs:
               if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
             }
             if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
-            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,auditOpened:true,policies:r.policies,tested},null,2);
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,shell:h.dataset.pvSidebarShell,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,auditOpened:true,sidebarClean:true,policies:r.policies,tested},null,2);
           }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)+'\n\n'+diag(frame)}})();
           </script></body></html>
           EOF
@@ -124,6 +137,7 @@ jobs:
           grep -q '"phase2-r1"' "$FILE"
           grep -q '"brand-sidebar-r1"' "$FILE"
           grep -q '"ui-controls-r2"' "$FILE"
+          grep -q '"sidebar-shell-r2"' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
           grep -q 'PAWANRO Finance Lifetime Offline' "$FILE"
 
