@@ -2,6 +2,9 @@
   const T0=performance.now();
   const report={version:'finance-demo2-consolidated-r1',startedAt:new Date().toISOString(),loaded:[],failed:[],skipped:['patch6 (known malformed and never part of effective Demo 2 runtime)'],timings:{}};
   window.__PV_BOOT_REPORT__=report;
+  const onBootError=e=>report.failed.push({name:'runtime',stage:'window-error',error:String(e?.error||e?.message||'Unknown runtime error')});
+  const onBootRejection=e=>report.failed.push({name:'runtime',stage:'unhandled-rejection',error:String(e?.reason||'Unhandled rejection')});
+  window.addEventListener('error',onBootError);window.addEventListener('unhandledrejection',onBootRejection);
   const mark=(name,t)=>{report.timings[name]=Math.round(performance.now()-t)};
   const fetchText=async(name,url,required=false)=>{
     const t=performance.now();
@@ -30,6 +33,26 @@
     document.dispatchEvent(new CustomEvent('pavenro:ready'));
     report.totalMs=Math.round(performance.now()-T0);report.readyAt=new Date().toISOString();
     document.documentElement.dataset.pvBootMs=String(report.totalMs);
+    const health=()=>{
+      const h={
+        stateBridge:document.documentElement.dataset.pvStateBridge==='ready'&&!!window.__PV_FIN_STATE__,
+        phase1:document.documentElement.dataset.pvPhase1==='r3',
+        phase2:document.documentElement.dataset.pvPhase2==='r1',
+        dailyBriefing:!!window.PavenroDailyBriefing,
+        offlineSync:!!window.PavenroOfflineSync,
+        theme:!!window.__PAVENRO_THEME_STUDIO_R1__,
+        brand:!!window.__PAVENRO_BRAND_SIDEBAR_R1__,
+        uiControls:document.documentElement.dataset.pvUiControls==='r1',
+        changeHistoryButton:!!document.getElementById('pvAuditBtn'),
+        sidebar:!!document.querySelector('#pvSide,.sidebar'),
+        topbar:!!document.querySelector('.topbar')
+      };
+      report.health=h;report.healthy=Object.values(h).every(Boolean)&&!report.failed.some(x=>x.stage==='execute'||x.stage==='decode'||x.stage==='window-error'||x.stage==='unhandled-rejection');
+      document.documentElement.dataset.pvRuntimeHealth=report.healthy?'ok':'check';
+      if(!report.healthy)console.warn('PAVENRO runtime health check',report);
+      window.dispatchEvent(new CustomEvent('pavenro:runtime-health',{detail:report}));
+    };
+    setTimeout(health,1200);
     window.dispatchEvent(new CustomEvent('pavenro:boot-complete',{detail:report}));
   },90)));
 
