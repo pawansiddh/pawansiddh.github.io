@@ -19,6 +19,69 @@ def read(name):
     return p.read_text(encoding='utf-8')
 
 
+def unwrap_runtime(code):
+    if 'DecompressionStream' not in code:
+        return code
+    m = re.search(r"const\s+P=['\"]([A-Za-z0-9+/=]+)['\"]", code)
+    if not m:
+        return code
+    try:
+        return gzip.decompress(base64.b64decode(m.group(1))).decode('utf-8')
+    except Exception:
+        return code
+
+
+def prepare_source(name, code):
+    # Keep the standalone customer build on the same final ownership/performance rules as Demo 2 web.
+    if name == 'phase1-core2-r1':
+        code = code.replace(
+            "setInterval(mount,900);setTimeout(mount,250);",
+            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(mount,90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setInterval(mount,5000);setTimeout(mount,160);"
+        )
+    elif name == 'phase1-planning-r1':
+        code = code.replace(
+            "function mount(force=false){const v=view();if(v==='calendar')action('cal','+ Add event',()=>form('calendar'));else if(v==='subscriptions')action('sub','+ Add subscription',()=>form('subscriptions'));else if(v==='net worth')action('asset','+ New asset',()=>form('assets'));else if(v==='investments')action('inv','+ New investment',()=>form('investments'));else return clear();draw(v)}",
+            "function mount(force=false){const v=view();if(v==='calendar'){clear();return}if(v==='subscriptions')action('sub','+ Add subscription',()=>form('subscriptions'));else if(v==='net worth')action('asset','+ New asset',()=>form('assets'));else if(v==='investments')action('inv','+ New investment',()=>form('investments'));else return clear();draw(v)}"
+        )
+        code = code.replace(
+            "setInterval(mount,900);setTimeout(()=>mount(true),300);",
+            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(()=>mount(true),90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(()=>mount(true),90));setInterval(mount,5000);setTimeout(()=>mount(true),180);"
+        )
+    elif name == 'phase1-records-r1':
+        code = code.replace(
+            "setInterval(mount,900);setTimeout(()=>mount(true),320);",
+            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(()=>mount(true),90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(()=>mount(true),90));setInterval(mount,5000);setTimeout(()=>mount(true),190);"
+        )
+    elif name == 'phase1-status-fix-r1':
+        code = code.replace("setInterval(mount,900);", "window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setInterval(mount,3000);")
+    elif name == 'interaction-audit-r1':
+        code = code.replace(
+            "function intercept(e){const b=e.target.closest('button');if(!b)return false;const txt=N(b.textContent),v=view(),title=detailTitle()||'Selected record';",
+            "function intercept(e){const b=e.target.closest('button');if(!b)return false;if(b.matches('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action')||b.closest('.pv-p1-modal,.pv-c2-modal,.pv-pl-modal,.pv-r-modal,.pv-pl-panel,.pv-r-panel'))return false;const txt=N(b.textContent),v=view(),title=detailTitle()||'Selected record';"
+        )
+        code = code.replace("setTimeout(inject,300);setInterval(inject,1200);", "setTimeout(inject,220);setInterval(inject,5000);")
+    elif name == 'daily-briefing-r2':
+        code = code.replace("setInterval(()=>{mountTopbar();mountSettings()},1200);", "setInterval(()=>{mountTopbar();mountSettings()},5000);")
+    elif name == 'phase2-r1':
+        code = code.replace(
+            "setTimeout(mount,250);setInterval(mount,700);document.addEventListener('change',()=>setTimeout(mount,50),true);",
+            "document.addEventListener('click',e=>{if(e.target.closest('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]'))setTimeout(mount,90)},true);window.addEventListener('pavenro:local-write',()=>setTimeout(mount,90));setTimeout(mount,210);setInterval(mount,3000);document.addEventListener('change',()=>setTimeout(mount,50),true);"
+        )
+    elif name == 'brand-sidebar-r1':
+        code = code.replace("setInterval(install,1400);", "setInterval(install,5000);")
+    elif name == 'ui-controls-r1':
+        code = code.replace(
+            "function recordAudit(action,section=currentSection(),extra={}){",
+            "function recordAudit(action,section=currentSection(),extra={}){if(window.__PV_COEDIT_AUDIT_ACTIVE__)return;"
+        )
+        code = code.replace(
+            "if(b.id==='pvAuditBtn'){e.preventDefault();e.stopImmediatePropagation();openAudit();return}",
+            "if(b.id==='pvAuditBtn'&&!window.__PV_COEDIT_AUDIT_ACTIVE__){e.preventDefault();e.stopImmediatePropagation();openAudit();return}"
+        )
+        code = code.replace("ensureAuditSeed();setTimeout(mount,450);setInterval(mount,900);", "ensureAuditSeed();setTimeout(mount,300);setInterval(mount,3000);")
+    return code
+
+
 def safe_script(code):
     return code.replace('</script>', '<\\/script>')
 
@@ -31,7 +94,7 @@ def style_tag(css, label):
     return f'\n<style data-pavenro-bundled="{label}">\n{css.replace("</style>", "<\\/style>")}\n</style>\n'
 
 
-def delayed_scripts(items, delay=140):
+def delayed_scripts(items, delay=120):
     payload = []
     for label, code in items:
         b64 = base64.b64encode(code.encode('utf-8')).decode('ascii')
@@ -44,11 +107,11 @@ def delayed_scripts(items, delay=140):
 # BASE: decode the exact HTML payload used by finance-demo2.
 # ---------------------------------------------------------------------------
 html = unpack_parts('data', 10)
-html = re.sub(r'<script[^>]+src=["\'][^"\']*patch-loader\.js[^"\']*["\'][^>]*>\s*</script>', '', html, flags=re.I)
+html = re.sub(r'<script[^>]+src=["\'][^"\']*patch-loader(?:-fast-r1)?\.js[^"\']*["\'][^>]*>\s*</script>', '', html, flags=re.I)
 # file:// cannot register service workers; they are unrelated to Finance data persistence.
 html = re.sub(r'navigator\.serviceWorker\.register\([^;]+;?', 'Promise.resolve()', html)
 
-# Inline local image/media references already present in the packed page.
+
 def inline_asset(m):
     attr, quote, value = m.group(1), m.group(2), m.group(3)
     if value.startswith(('data:', 'http:', 'https:', '#', 'blob:', 'javascript:', 'mailto:')):
@@ -60,9 +123,10 @@ def inline_asset(m):
     mime = mimetypes.guess_type(p.name)[0] or 'application/octet-stream'
     return f'{attr}={quote}data:{mime};base64,{base64.b64encode(p.read_bytes()).decode("ascii")}{quote}'
 
+
 html = re.sub(r'\b(src|poster)=(["\'])([^"\']+)\2', inline_asset, html, flags=re.I)
 
-# Inline local stylesheets referenced by the base HTML itself.
+
 def inline_link(m):
     tag = m.group(0)
     hm = re.search(r'href=["\']([^"\']+)["\']', tag, flags=re.I)
@@ -74,32 +138,31 @@ def inline_link(m):
     p = ROOT / href.split('?', 1)[0]
     return style_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}') if p.exists() and p.suffix.lower() == '.css' else tag
 
+
 html = re.sub(r'<link\b[^>]*rel=["\'][^"\']*stylesheet[^"\']*["\'][^>]*>', inline_link, html, flags=re.I)
 
-# Inline local scripts referenced by the base HTML itself.
+
 def inline_script(m):
     tag, src = m.group(0), m.group(1)
     if src.startswith(('http:', 'https:', 'data:')):
         return tag
     clean = src.split('?', 1)[0]
-    if clean.endswith('patch-loader.js'):
+    if clean.endswith(('patch-loader.js', 'patch-loader-fast-r1.js')):
         return ''
     p = ROOT / clean
     return script_tag(p.read_text(encoding='utf-8'), f'base-{p.stem}') if p.exists() and p.suffix.lower() == '.js' else tag
 
+
 html = re.sub(r'<script\b[^>]*src=["\']([^"\']+)["\'][^>]*>\s*</script>', inline_script, html, flags=re.I)
 
 # ---------------------------------------------------------------------------
-# CURRENT WEB RUNTIME PARITY
-# finance-demo2's patch6 payload is malformed. The live patch-loader therefore:
-# patch-v4 -> patch-v5 -> patch6 throws -> fallback baseline/search/sidebar/debt/theme/bell.
-# We intentionally mirror that visible live state instead of inventing a repaired patch6.
+# CURRENT DEMO 2 FINAL RUNTIME PARITY
 # ---------------------------------------------------------------------------
 try:
     unpack_parts('patch6', 4)
-    print('NOTE: patch6 decoded; repository behavior changed since bundler was written.')
+    print('NOTE: patch6 decoded; repository behavior changed since consolidation.')
 except Exception as e:
-    print('Mirroring live fallback: skipping malformed patch6:', e)
+    print('Final Demo 2 intentionally skips malformed patch6:', e)
 
 runtime = [
     ('script', 'patch-v4', unpack_parts('patch', 4)),
@@ -112,14 +175,22 @@ runtime = [
     ('script', 'theme-studio-r1', read('finance-theme-studio-r1.js')),
     ('script', 'bell-contrast-r1', read('finance-bell-contrast-r1.js')),
 ]
+
 phase_scripts = [
-    ('state-bridge-r1', read('finance-state-bridge-r1.js')),
-    ('phase1-r3', read('finance-phase1-r3.js')),
-    ('phase1-core2-r1', read('finance-phase1-core2-r1.js')),
-    ('phase1-planning-r1', read('finance-phase1-planning-r1.js')),
-    ('phase1-records-r1', read('finance-phase1-records-r1.js')),
-    ('phase1-status-fix-r1', read('finance-phase1-status-fix-r1.js')),
-    ('interaction-audit-r1', read('finance-interaction-audit-r1.js')),
+    ('state-bridge-r1', prepare_source('state-bridge-r1', read('finance-state-bridge-r1.js'))),
+    ('phase1-r3', prepare_source('phase1-r3', read('finance-phase1-r3.js'))),
+    ('phase1-core2-r1', prepare_source('phase1-core2-r1', read('finance-phase1-core2-r1.js'))),
+    ('phase1-planning-r1', prepare_source('phase1-planning-r1', read('finance-phase1-planning-r1.js'))),
+    ('phase1-records-r1', prepare_source('phase1-records-r1', read('finance-phase1-records-r1.js'))),
+    ('phase1-status-fix-r1', prepare_source('phase1-status-fix-r1', read('finance-phase1-status-fix-r1.js'))),
+    ('interaction-audit-r1', prepare_source('interaction-audit-r1', read('finance-interaction-audit-r1.js'))),
+    ('daily-briefing-r2', prepare_source('daily-briefing-r2', read('finance-daily-briefing-r2.js'))),
+    ('calendar-studio-r1', unwrap_runtime(read('finance-calendar-studio-r1.js'))),
+    ('coedit-audit-r1', unwrap_runtime(read('finance-coedit-audit-r1.js'))),
+    ('coedit-owner-marker', "window.__PV_COEDIT_AUDIT_ACTIVE__=!!document.getElementById('pvAuditBtn');"),
+    ('phase2-r1', prepare_source('phase2-r1', read('finance-phase2-r1.js'))),
+    ('brand-sidebar-r1', prepare_source('brand-sidebar-r1', read('finance-brand-sidebar-r1.js'))),
+    ('ui-controls-r1', prepare_source('ui-controls-r1', read('finance-ui-controls-r1.js'))),
 ]
 
 # Offline-only safety. No normal Finance screen is redesigned.
@@ -132,7 +203,7 @@ offline_safety = r'''
   addEventListener('offline',()=>document.documentElement.dataset.network='offline');
   window.PavenroOfflineBackup={
     export(){
-      const d={edition:'PAVENRO Finance Lifetime Offline',version:1,created:new Date().toISOString(),localStorage:{}};
+      const d={edition:'PAVENRO Finance Lifetime Offline',version:2,created:new Date().toISOString(),localStorage:{}};
       for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&/pavenro|finance|pv-fin/i.test(k))d.localStorage[k]=localStorage.getItem(k)}
       const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='PAVENRO-Finance-Backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)
     },
@@ -143,24 +214,22 @@ offline_safety = r'''
     const cards=[...document.querySelectorAll('.card,.settings-card,.settings-pane')],host=cards.find(c=>/data\s*&\s*backup|backup/i.test(c.textContent||''))||cards[cards.length-1];if(!host)return;
     const x=document.createElement('div');x.id='pvOfflineBackupBox';x.style.cssText='margin-top:10px;padding:10px;border:1px solid var(--pvx-border,var(--border,#d8e3da));border-radius:10px;background:var(--pvx-panel2,var(--panel2,#eef3ee));font:11px Inter,system-ui';x.innerHTML='<b>Lifetime Offline Backup</b><div style="margin-top:4px;opacity:.7">Export a backup before changing browser or computer.</div><div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap"><button type="button" data-pv-export>Export Backup</button><button type="button" data-pv-import>Restore Backup</button><input hidden type="file" accept="application/json,.json" data-pv-file></div>';host.appendChild(x);const f=x.querySelector('[data-pv-file]');x.querySelector('[data-pv-export]').onclick=()=>PavenroOfflineBackup.export();x.querySelector('[data-pv-import]').onclick=()=>f.click();f.onchange=()=>f.files?.[0]&&PavenroOfflineBackup.import(f.files[0]).catch(e=>alert(e.message))
   }
-  document.addEventListener('click',()=>setTimeout(mountBackup,180),true);setInterval(mountBackup,1200);setTimeout(mountBackup,500)
+  document.addEventListener('click',()=>setTimeout(mountBackup,180),true);setInterval(mountBackup,5000);setTimeout(mountBackup,500)
 })();
 '''
 phase_scripts.append(('offline-safety', offline_safety))
 
-# CSS-only boot mask: never participates in app layout measurements.
 boot = '''<style id="pvOfflineBootMask">html.pv-offline-booting body{opacity:0!important;pointer-events:none!important}html.pv-offline-booting::before{content:"Loading PAVENRO Finance...\\A Lifetime Offline Edition";white-space:pre;position:fixed;inset:0;z-index:2147483646;display:grid;place-items:center;text-align:center;background:#f5f6f1;color:#17301f;font:600 15px/1.8 Inter,system-ui}html.pv-offline-booting::after{content:"";position:fixed;left:50%;top:calc(50% - 48px);z-index:2147483647;width:36px;height:36px;margin:-18px 0 0 -18px;border:4px solid #dce8df;border-top-color:#28623f;border-radius:50%;animation:pvOfflineSpin .8s linear infinite}@keyframes pvOfflineSpin{to{transform:rotate(360deg)}}</style><script>document.documentElement.classList.add('pv-offline-booting')</script>'''
 meta = '<meta name="pavenro-edition" content="Finance Lifetime Offline"><meta name="robots" content="noindex,nofollow">'
 if '<head>' in html.lower():
     p = html.lower().find('<head>') + len('<head>')
     html = html[:p] + meta + boot + html[p:]
 
-# Exact runtime ordering matters for card sizes, text positions, themes and feature overrides.
 bundle = ''
 for kind, label, code in runtime:
     bundle += script_tag(code, label) if kind == 'script' else style_tag(code, label)
 bundle += script_tag("document.dispatchEvent(new CustomEvent('pavenro:ready'));", 'ready-event')
-bundle += delayed_scripts(phase_scripts, 140)
+bundle += delayed_scripts(phase_scripts, 120)
 
 if '</body>' in html.lower():
     p = html.lower().rfind('</body>')
@@ -168,10 +237,9 @@ if '</body>' in html.lower():
 else:
     html += bundle
 
-# QA: no network loader is needed at runtime.
-for forbidden in ['src="patch-loader.js', "src='patch-loader.js", 'data/0.txt']:
+for forbidden in ['src="patch-loader.js', "src='patch-loader.js", 'src="patch-loader-fast-r1.js', "src='patch-loader-fast-r1.js", 'data/0.txt', 'finance-phase1-r1.js', 'finance-phase1-r2.js', 'finance-daily-briefing-r1.js']:
     if forbidden in html:
-        raise RuntimeError('Residual online dependency: '+forbidden)
+        raise RuntimeError('Residual superseded/online dependency: '+forbidden)
 external_resources = re.findall(r'<(?:script|link|img)\b[^>]*(?:src|href)=["\']https?://[^"\']+', html, flags=re.I)
 if external_resources:
     print('WARNING: external resource tags remain:', len(external_resources), file=sys.stderr)
@@ -179,4 +247,4 @@ if external_resources:
 OUT.write_text(html, encoding='utf-8')
 print(f'Built {OUT} ({OUT.stat().st_size:,} bytes)')
 print('Runtime layers:', [x[1] for x in runtime])
-print('Delayed feature layers:', [x[0] for x in phase_scripts])
+print('Final feature layers:', [x[0] for x in phase_scripts])
