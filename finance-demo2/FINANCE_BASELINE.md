@@ -1,3 +1,7 @@
+# HISTORICAL INHERITED BASELINE — NOT THE DEMO 2 AUTHORITY
+
+> **Demo 2 rule:** For `/finance-demo2/`, the authoritative latest-state contract is [`FINANCE_DEMO2_FINAL_STATE.md`](./FINANCE_DEMO2_FINAL_STATE.md). This inherited baseline documents the stable build Demo 2 started from. Where this file conflicts with the Demo 2 final-state contract, the Demo 2 contract wins. In particular, the historical v6/`patch6` requirement below must **not** be restored in Demo 2 because that payload is malformed and was never part of the effective working Demo 2 runtime.
+
 # PAVENRO Finance Canonical Baseline
 
 This file is the permanent acceptance contract for `/finance-demo/`. `FINANCE_FINAL_AUDIT.md` records the full latest-decision history; when an older requirement conflicts with that audit, the later audited decision wins.
