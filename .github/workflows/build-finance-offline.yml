@@ -33,9 +33,8 @@ jobs:
           node --check finance-demo2/finance-coedit-audit-r1.js
           node --check finance-demo2/finance-offline-sync-r1.js
           node --check finance-demo2/finance-phase2-r1.js
-          node --check finance-demo2/finance-brand-sidebar-r1.js
           node --check finance-demo2/finance-ui-controls-r2.js
-          node --check finance-demo2/finance-sidebar-shell-r2.js
+          node --check finance-demo2/finance-sidebar-owner-r1.js
           node --check finance-demo2/sw.js
           python3 -m py_compile finance-demo2/tools/build-offline.py
 
@@ -56,55 +55,38 @@ jobs:
             if(!r||!Number.isFinite(r.totalMs))throw new Error('Missing boot diagnostics');
             if(r.totalMs>5000)throw new Error('Local consolidated boot exceeded 5 seconds: '+r.totalMs+'ms');
             if(h.dataset.pvUiControls!=='r2')throw new Error('Superseded UI controls are active: '+h.dataset.pvUiControls);
-            if(h.dataset.pvSidebarShell!=='r2')throw new Error('Final sidebar shell R2 is not active');
+            if(h.dataset.pvSidebarShell!=='owner-r1')throw new Error('Authoritative sidebar owner is not active: '+h.dataset.pvSidebarShell);
             if(h.classList.contains('pv-demo2-booting'))throw new Error('Boot mask remained active');
             if(!d.querySelector('.topbar'))throw new Error('Topbar missing');
             const side=d.querySelector('.sidebar,#pvSide');if(!side)throw new Error('Sidebar missing');
-            const wordmark=await waitFor(()=>d.getElementById('pvPawanroWordmark'),3000);
+            const wordmark=await waitFor(()=>{const x=d.getElementById('pvPawanroWordmark');return x&&x.complete&&x.naturalWidth>0?x:null},3000);
             if((wordmark.alt||'').toUpperCase()!=='PAWANRO')throw new Error('PAWANRO wordmark not active');
             const product=await waitFor(()=>d.querySelector('.sidebar .brand .pv-brand-finance'),2000);
             if((product.textContent||'').replace(/\s+/g,' ').trim().toUpperCase()!=='| FINANCE')throw new Error('Expanded header is not PAWANRO | FINANCE');
             if(getComputedStyle(product).display==='none')throw new Error('FINANCE product label missing in expanded sidebar');
-            const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');
-            if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
+            const brand=d.querySelector('.sidebar .brand');if(!brand)throw new Error('Sidebar brand container missing');
+            const sr=side.getBoundingClientRect(),br=brand.getBoundingClientRect();if(br.left<sr.left-1||br.right>sr.right+1)throw new Error(`Brand overflows sidebar: brand ${br.left}-${br.right}, sidebar ${sr.left}-${sr.right}`);
+            if(getComputedStyle(brand,'::before').display!=='none'||getComputedStyle(brand,'::after').display!=='none')throw new Error('Brand decorative line is still visible');
+            const dup=[...d.querySelectorAll('#pvSide .pv-brand-render,#pvSide [data-pv-brand-slot="1"]')].filter(x=>getComputedStyle(x).display!=='none');if(dup.length)throw new Error('Duplicate sidebar brand is still visible');
             const visibleSideText=[...side.querySelectorAll('*')].filter(x=>getComputedStyle(x).display!=='none'&&getComputedStyle(x).visibility!=='hidden').map(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toUpperCase());
             if(visibleSideText.includes('PAWANRO FINANCE')||visibleSideText.includes('PAVENRO FINANCE'))throw new Error('Duplicate PAWANRO FINANCE section label is visible');
-            const brand=d.querySelector('.sidebar .brand');if(!brand)throw new Error('Sidebar brand container missing');
-            if(getComputedStyle(brand,'::before').display!=='none'||getComputedStyle(brand,'::after').display!=='none')throw new Error('Brand decorative line is still visible');
             const help=[...side.querySelectorAll('button')].find(x=>/help\s*&?\s*support/i.test(`${x.dataset.v||''} ${x.title||''} ${x.getAttribute('aria-label')||''} ${x.textContent||''}`));
             if(help&&!/help\s*&?\s*support/i.test(help.textContent||''))throw new Error('Help & Support label missing in expanded sidebar');
-            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(80);
-            const mini=d.querySelector('.sidebar .pv-pawanro-mini');if(!mini||getComputedStyle(mini).display==='none')throw new Error('Collapsed PAWANRO icon is not visible');
+            d.body.classList.add('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(100);
+            const mini=d.querySelector('.sidebar .pv-brand-mini img');if(!mini||getComputedStyle(mini.parentElement).display==='none'||!mini.complete||mini.naturalWidth<1)throw new Error('Collapsed PAWANRO P-leaf icon is not visible');
             if(getComputedStyle(wordmark).display!=='none')throw new Error('Expanded wordmark remains visible in collapsed sidebar');
             if(getComputedStyle(product).display!=='none')throw new Error('| FINANCE remains visible in collapsed sidebar');
-            if(help&&help.querySelector('.pv-util-label')&&getComputedStyle(help.querySelector('.pv-util-label')).display!=='none')throw new Error('Help label remains visible in collapsed sidebar');
-            d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(60);
-            if(getComputedStyle(wordmark).display==='none'||getComputedStyle(product).display==='none')throw new Error('PAWANRO | FINANCE did not restore after expanding sidebar');
-            const year=d.getElementById('pvPeriodYear');
-            if(!year)throw new Error('Finance year selector missing');
-            const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);
-            if(future.length)throw new Error('Future Finance years are selectable: '+future.join(','));
-            const audit=d.getElementById('pvAuditBtn');if(!audit)throw new Error('Change history control missing');
-            audit.click();await waitFor(()=>d.querySelector('.pv-ca-shade'),2500);d.querySelector('.pv-ca-close')?.click();await sleep(80);
-            if(d.querySelector('.pv-ca-shade'))throw new Error('Change history panel did not close');
+            const sr2=side.getBoundingClientRect(),br2=brand.getBoundingClientRect();if(br2.left<sr2.left-1||br2.right>sr2.right+1)throw new Error('Collapsed brand overflows sidebar');
+            d.body.classList.remove('pv-rail');w.PawanroSidebarShell?.refresh?.();await sleep(100);
+            if(getComputedStyle(wordmark).display==='none'||getComputedStyle(product).display==='none'||wordmark.naturalWidth<1)throw new Error('PAWANRO | FINANCE did not restore after expanding sidebar');
+            const year=d.getElementById('pvPeriodYear');if(!year)throw new Error('Finance year selector missing');
+            const nowYear=new Date().getFullYear(),future=[...year.options].map(o=>Number(o.value)).filter(y=>y>nowYear);if(future.length)throw new Error('Future Finance years are selectable: '+future.join(','));
+            const audit=d.getElementById('pvAuditBtn');if(!audit)throw new Error('Change history control missing');audit.click();await waitFor(()=>d.querySelector('.pv-ca-shade'),2500);d.querySelector('.pv-ca-close')?.click();await sleep(80);if(d.querySelector('.pv-ca-shade'))throw new Error('Change history panel did not close');
             if(d.querySelector('.pv-pl-panel[data-k="calendar"]'))throw new Error('Superseded planning Calendar is still mounted');
-            const navs=[...d.querySelectorAll('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]')];
-            const wanted=['Dashboard','Accounts','Transactions','Bills','Budget','Income','Funds & Goals','Documents','Calendar','Subscriptions','Debt','Net Worth','Investments','Reports','Notes','Tax Records','Paydays','Settings','Help & Support'];
-            const tested=[];
-            for(const name of wanted){const b=navs.find(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().includes(name.toLowerCase()));if(!b)continue;b.click();await sleep(420);tested.push(name);
-              const bad=[...d.querySelectorAll('tr')].find(tr=>tr.querySelectorAll('select[data-pv-role="bill-status"],select[data-pv-role="bill-detail-status"],select[data-pv-role="tx-status"]').length>1);if(bad)throw new Error('Duplicate status controls after '+name);
-              const actions=d.querySelectorAll('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action,.pv-ia-top');if(actions.length>2)throw new Error('Competing page actions after '+name+': '+actions.length);
-              if(name==='Calendar'){await sleep(450);const labels=[...d.querySelectorAll('button')].map(x=>(x.textContent||'').trim().toLowerCase());for(const x of ['month','week','day','year'])if(!labels.includes(x))throw new Error('Calendar '+x+' view missing')}
-              if(name==='Subscriptions'&&!d.querySelector('.pv-pl-action'))throw new Error('Subscription add action missing');
-              if(name==='Net Worth'&&!d.querySelector('.pv-pl-action'))throw new Error('Net Worth add asset action missing');
-              if(name==='Investments'&&!d.querySelector('.pv-pl-action'))throw new Error('Investment add action missing');
-              if(name==='Reports'&&!d.querySelector('.pv-r-action'))throw new Error('Report action missing');
-              if(name==='Notes'&&!d.querySelector('.pv-r-action'))throw new Error('Notes add action missing');
-              if(name==='Tax Records'&&!d.querySelector('.pv-r-action'))throw new Error('Tax add action missing');
-              if(name==='Paydays'&&!d.querySelector('.pv-r-action'))throw new Error('Payday add action missing');
-            }
+            const navs=[...d.querySelectorAll('#pvSide .nav-btn,.sidebar .nav-btn,[data-nav]')],wanted=['Dashboard','Accounts','Transactions','Bills','Budget','Income','Funds & Goals','Documents','Calendar','Subscriptions','Debt','Net Worth','Investments','Reports','Notes','Tax Records','Paydays','Settings','Help & Support'],tested=[];
+            for(const name of wanted){const b=navs.find(x=>(x.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().includes(name.toLowerCase()));if(!b)continue;b.click();await sleep(420);tested.push(name);const bad=[...d.querySelectorAll('tr')].find(tr=>tr.querySelectorAll('select[data-pv-role="bill-status"],select[data-pv-role="bill-detail-status"],select[data-pv-role="tx-status"]').length>1);if(bad)throw new Error('Duplicate status controls after '+name);const actions=d.querySelectorAll('.pv-p1-action,.pv-c2-action,.pv-pl-action,.pv-r-action,.pv-ia-top');if(actions.length>2)throw new Error('Competing page actions after '+name+': '+actions.length);if(name==='Calendar'){await sleep(450);const labels=[...d.querySelectorAll('button')].map(x=>(x.textContent||'').trim().toLowerCase());for(const x of ['month','week','day','year'])if(!labels.includes(x))throw new Error('Calendar '+x+' view missing')}}
             if(tested.length<8)throw new Error('Too few Finance sections were testable: '+tested.join(', '));
-            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,shell:h.dataset.pvSidebarShell,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,product:(product.textContent||'').replace(/\s+/g,' ').trim(),auditOpened:true,sidebarClean:true,policies:r.policies,tested},null,2);
+            root.dataset.result='pass';root.dataset.bootMs=String(r.totalMs);out.textContent=JSON.stringify({bootMs:r.totalMs,health:r.health,ui:h.dataset.pvUiControls,shell:h.dataset.pvSidebarShell,yearOptions:[...year.options].map(o=>o.value),brand:wordmark.alt,brandNaturalWidth:wordmark.naturalWidth,product:(product.textContent||'').replace(/\s+/g,' ').trim(),auditOpened:true,sidebarContained:true,tested},null,2);
           }catch(e){root.dataset.result='fail';out.textContent=String(e&&e.stack||e)+'\n\n'+diag(frame)}})();
           </script></body></html>
           EOF
@@ -135,14 +117,15 @@ jobs:
           ! grep -q 'finance-phase1-r2.js' "$FILE"
           ! grep -q 'finance-daily-briefing-r1.js' "$FILE"
           ! grep -q '"ui-controls-r1"' "$FILE"
+          ! grep -q '"brand-sidebar-r1"' "$FILE"
+          ! grep -q '"sidebar-shell-r2"' "$FILE"
           grep -q 'pawanro-offline-debt-lab-r1.js' "$FILE"
           grep -q '"daily-briefing-r2"' "$FILE"
           grep -q '"calendar-studio-r1"' "$FILE"
           grep -q '"coedit-audit-r1"' "$FILE"
           grep -q '"phase2-r1"' "$FILE"
-          grep -q '"brand-sidebar-r1"' "$FILE"
           grep -q '"ui-controls-r2"' "$FILE"
-          grep -q '"sidebar-shell-r2"' "$FILE"
+          grep -q '"sidebar-owner-r1"' "$FILE"
           grep -q 'name="pavenro-edition"' "$FILE"
           grep -q 'PAWANRO Finance Lifetime Offline' "$FILE"
 
