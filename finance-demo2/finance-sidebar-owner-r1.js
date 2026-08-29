@@ -4,19 +4,21 @@ window.__PAWANRO_SIDEBAR_OWNER_R1__=true;
 document.documentElement.dataset.pvSidebarShell='owner-r1';
 const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)],norm=v=>String(v??'').replace(/\s+/g,' ').trim();
 const css=document.createElement('style');css.id='pv-sidebar-owner-r1-style';css.textContent=`
-.sidebar{overflow-x:hidden!important}
-.sidebar .brand{box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;height:50px!important;min-height:50px!important;padding:0 10px!important;margin:0!important;inset:auto!important;left:auto!important;right:auto!important;transform:none!important;border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:0!important;overflow:hidden!important;position:relative!important}
+:root{--pv-bh:var(--pv-th)!important}
+.sidebar{overflow-x:hidden!important;padding-top:0!important}
+.sidebar .brand{box-sizing:border-box!important;width:var(--pv-w,226px)!important;max-width:var(--pv-w,226px)!important;min-width:0!important;height:var(--pv-th,64px)!important;min-height:var(--pv-th,64px)!important;padding:0 10px!important;margin:0!important;inset:auto!important;left:0!important;right:auto!important;top:0!important;transform:none!important;border:0!important;outline:0!important;box-shadow:none!important;background:var(--sidebar,#123f2b)!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:0!important;overflow:hidden!important;position:fixed!important;z-index:190!important}
 .sidebar .brand::before,.sidebar .brand::after{display:none!important;content:none!important;border:0!important;width:0!important;height:0!important}
 .sidebar .brand>hr,.sidebar .brand>.divider,.sidebar .brand>.separator,.sidebar .brand>.pv-sep,.sidebar .brand>small,.sidebar .pv-brand-actions{display:none!important}
 .sidebar .pv-brand-word{display:block!important;width:124px!important;height:auto!important;max-width:124px!important;max-height:18px!important;object-fit:contain!important;object-position:left center!important;margin:0!important;padding:0!important;border:0!important;opacity:1!important;visibility:visible!important;filter:none!important;flex:0 0 124px!important}
 .sidebar .pv-brand-finance{display:inline-flex!important;align-items:center!important;margin:0 0 0 7px!important;padding:0!important;color:#fff!important;white-space:pre!important;line-height:1!important;flex:0 0 auto!important}
 .sidebar .pv-brand-bar{font:500 13px/1 Inter,system-ui,sans-serif!important;opacity:.8!important;margin:0 5px 0 0!important}
 .sidebar .pv-brand-product{font:800 8.5px/1 Inter,system-ui,sans-serif!important;letter-spacing:.08em!important;margin:0!important;padding:0!important}
-.sidebar .pv-brand-mini{display:none!important;width:38px!important;height:38px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;flex:0 0 38px!important}
-.sidebar .pv-brand-mini img{display:block!important;width:34px!important;height:34px!important;object-fit:contain!important;margin:0!important;padding:0!important;border:0!important}
-.sidebar[data-pv-brand-collapsed="1"] .brand{box-sizing:border-box!important;width:100%!important;max-width:100%!important;height:50px!important;min-height:50px!important;padding:0!important;margin:0!important;justify-content:center!important;overflow:hidden!important}
-.sidebar[data-pv-brand-collapsed="1"] .pv-brand-word,.sidebar[data-pv-brand-collapsed="1"] .pv-brand-finance{display:none!important}
-.sidebar[data-pv-brand-collapsed="1"] .pv-brand-mini{display:flex!important}
+.sidebar .pv-brand-mini{display:none!important;width:42px!important;height:42px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;flex:0 0 42px!important}
+.sidebar .pv-brand-mini img{display:block!important;width:36px!important;height:36px!important;object-fit:contain!important;margin:0!important;padding:0!important;border:0!important}
+body.pv-rail .sidebar .brand,.sidebar[data-pv-brand-collapsed="1"] .brand{box-sizing:border-box!important;width:var(--pv-r,58px)!important;max-width:var(--pv-r,58px)!important;height:var(--pv-th,64px)!important;min-height:var(--pv-th,64px)!important;padding:0!important;margin:0!important;left:0!important;top:0!important;justify-content:center!important;overflow:hidden!important;position:fixed!important}
+body.pv-rail .sidebar .pv-brand-word,body.pv-rail .sidebar .pv-brand-finance,.sidebar[data-pv-brand-collapsed="1"] .pv-brand-word,.sidebar[data-pv-brand-collapsed="1"] .pv-brand-finance{display:none!important}
+body.pv-rail .sidebar .pv-brand-mini,.sidebar[data-pv-brand-collapsed="1"] .pv-brand-mini{display:flex!important}
+#pvSide{top:var(--pv-th,64px)!important}
 .sidebar [data-pv-obsolete-brand]{display:none!important}
 .sidebar .pv-util-label{display:inline!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 .sidebar[data-pv-brand-collapsed="1"] .pv-util-label{display:none!important}
@@ -33,6 +35,12 @@ async function loadAssets(){
  await assetPromise;
 }
 function side(){return q('.sidebar')||q('[data-sidebar]')}
+function syncHeaderHeight(){
+ const top=q('.topbar');if(!top)return;
+ const h=Math.round(top.getBoundingClientRect().height)||64;
+ document.documentElement.style.setProperty('--pv-bh',h+'px');
+ document.documentElement.style.setProperty('--pv-sidebar-head-h',h+'px');
+}
 function build(s){
  const b=q('.brand,.sidebar-brand,.brand-row',s);if(!b||!WORD||!ICON)return false;
  b.classList.add('brand');b.removeAttribute('style');b.replaceChildren();
@@ -43,16 +51,17 @@ function build(s){
 }
 function clean(s){
  const sr=s.getBoundingClientRect();
- qa('*',s).forEach(el=>{if(el.closest('.brand')||el.closest('button,a,input,select'))return;const t=norm(el.textContent).toUpperCase(),r=el.getBoundingClientRect(),top=r.top-sr.top;if((t==='PAWANRO FINANCE'||t==='PAVENRO FINANCE'||t==='PAVENRO FOCUS · FINANCE'||t==='PAWANRO FOCUS · FINANCE')||((t==='$'||t==='|'||t==='FINANCE')&&top<90)||(top>=0&&top<65&&r.height>0&&r.height<=3&&r.width>=28)){el.dataset.pvObsoleteBrand='1';el.style.setProperty('display','none','important')}});
+ qa('*',s).forEach(el=>{if(el.closest('.brand')||el.closest('button,a,input,select'))return;const t=norm(el.textContent).toUpperCase(),r=el.getBoundingClientRect(),top=r.top-sr.top;if((t==='PAWANRO FINANCE'||t==='PAVENRO FINANCE'||t==='PAVENRO FOCUS · FINANCE'||t==='PAWANRO FOCUS · FINANCE')||((t==='$'||t==='|'||t==='FINANCE')&&top<100)||(top>=0&&top<70&&r.height>0&&r.height<=3&&r.width>=28)){el.dataset.pvObsoleteBrand='1';el.style.setProperty('display','none','important')}});
  qa('#pvSide [data-pv-brand-slot="1"],#pvSide .pv-brand-render,.pv-brand-render[data-pv-brand-slot]',s).forEach(el=>{el.dataset.pvObsoleteBrand='1';el.style.setProperty('display','none','important')});
 }
 function utility(s,name,icon){const b=qa('button',s).find(x=>norm(x.dataset.v||x.dataset.nav||x.title||x.getAttribute('aria-label')||x.textContent).toLowerCase().includes(name.toLowerCase()));if(!b)return;b.dataset.v=name;b.title=name;b.setAttribute('aria-label',name);let l=q('.pv-util-label',b);if(!l){b.textContent='';const i=document.createElement('span');i.className='pv-util-icon';i.textContent=icon;i.setAttribute('aria-hidden','true');l=document.createElement('span');l.className='pv-util-label';b.append(i,l)}l.textContent=name}
 function refresh(force=false){
+ syncHeaderHeight();
  const s=side();if(!s)return;const collapsed=document.body.classList.contains('pv-rail')||s.getBoundingClientRect().width<100;s.dataset.pvBrandCollapsed=collapsed?'1':'0';const mode=collapsed?'c':'e',w=q('#pvPawanroWordmark',s),p=q('.brand .pv-brand-finance',s),m=q('.brand .pv-brand-mini',s);
  if(WORD&&ICON&&(force||!w||!p||!m||mode!==lastMode)){build(s);lastMode=mode}
  clean(s);utility(s,'Groups','◎');utility(s,'Settings','⚙');utility(s,'Help & Support','?');
 }
 async function start(){try{await loadAssets();refresh(true)}catch(e){console.error('PAWANRO brand assets failed',e)}}
 document.addEventListener('click',()=>setTimeout(()=>refresh(false),60),true);window.addEventListener('resize',()=>refresh(false));window.addEventListener('pavenro:ready',()=>refresh(true));window.addEventListener('pavenro:local-write',()=>setTimeout(()=>refresh(false),60));
-start();const s=side();if(s&&'ResizeObserver'in window)new ResizeObserver(()=>refresh(false)).observe(s);window.PawanroSidebarShell={refresh:()=>refresh(true),reload:start};
+start();const s=side();if(s&&'ResizeObserver'in window)new ResizeObserver(()=>refresh(false)).observe(s);const t=q('.topbar');if(t&&'ResizeObserver'in window)new ResizeObserver(()=>refresh(false)).observe(t);window.PawanroSidebarShell={refresh:()=>refresh(true),reload:start};
 })();
