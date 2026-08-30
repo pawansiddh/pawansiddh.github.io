@@ -1,0 +1,55 @@
+name: Sync Tulshii Finance Preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-tulshii-finance.yml'
+      - 'tulshii-finance/source-version.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tulshii-finance-preview-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout live site
+        uses: actions/checkout@v4
+        with:
+          path: site
+
+      - name: Checkout Tulshii Finance source
+        uses: actions/checkout@v4
+        with:
+          repository: pawansiddh/Tulshii-Finance
+          ref: main
+          path: finance
+
+      - name: Build standalone Finance preview
+        run: python finance/tools/build-offline.py
+
+      - name: Publish Finance into live site
+        run: |
+          set -euo pipefail
+          mkdir -p site/tulshii-finance
+          cp finance/offline-build/PAWANRO_Finance_Lifetime_Offline_EXACT.html site/tulshii-finance/index.html
+
+      - name: Commit live preview
+        working-directory: site
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tulshii-finance/index.html
+          if git diff --cached --quiet; then
+            echo "Tulshii Finance preview is already current."
+            exit 0
+          fi
+          git commit -m "Sync Tulshii Finance live preview"
+          git push
