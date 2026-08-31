@@ -1,0 +1,10 @@
+/* PAVENRO Finance — keep the navigation toggle only in the topbar.
+   The older R3 baseline uses a more-specific rail selector, so override it exactly. */
+body.pv-rail #pvExpand,
+body:not(.pv-rail) #pvCollapse,
+#pvSide #pvExpand,
+.sidebar .pv-brand-actions #pvCollapse {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

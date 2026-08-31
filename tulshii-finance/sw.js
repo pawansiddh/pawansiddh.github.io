@@ -1,0 +1,1 @@
+importScripts('./sw-r2.js?v=pawanro-finance-r14-20260829');
