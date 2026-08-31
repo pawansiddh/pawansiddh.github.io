@@ -46,7 +46,7 @@ jobs:
           from pathlib import Path
           p = Path('site/tulshii-finance/index.html')
           html = p.read_text(encoding='utf-8')
-          marker = '<script src="finance-decision-engine-r1.js?v=simulation-r3-20260831"></script><script src="finance-simulation-center-r1.js?v=simulation-r3-20260831"></script><script src="finance-preview-quality-fix-r1.js?v=quality-r1-20260831"></script>'
+          marker = '<script src="finance-decision-engine-r1.js?v=simulation-r4-20260831"></script><script src="finance-simulation-center-r1.js?v=simulation-r4-20260831"></script><script src="finance-preview-quality-fix-r1.js?v=quality-r2-20260831"></script>'
           if marker not in html:
               html = html.replace('</body>', marker + '</body>')
           html = html.replace('PAWANRO Finance', 'TULSHII Finance')
@@ -65,5 +65,5 @@ jobs:
             echo "Tulshii Finance preview is already current."
             exit 0
           fi
-          git commit -m "Sync Tulshii Finance Simulation r3 preview"
+          git commit -m "Sync Tulshii Finance Simulation r4 preview"
           git push
