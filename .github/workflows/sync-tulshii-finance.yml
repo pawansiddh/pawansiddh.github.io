@@ -34,11 +34,24 @@ jobs:
       - name: Build standalone Finance preview
         run: python finance/tools/build-offline.py
 
-      - name: Publish Finance into live site
+      - name: Publish Phase 1 preview into live site
         run: |
           set -euo pipefail
           mkdir -p site/tulshii-finance
           cp finance/offline-build/PAWANRO_Finance_Lifetime_Offline_EXACT.html site/tulshii-finance/index.html
+          cp finance/finance-decision-engine-r1.js site/tulshii-finance/finance-decision-engine-r1.js
+          cp finance/finance-decision-center-r1.js site/tulshii-finance/finance-decision-center-r1.js
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('site/tulshii-finance/index.html')
+          html = p.read_text(encoding='utf-8')
+          marker = '<script src="finance-decision-engine-r1.js?v=phase1-20260831"></script><script src="finance-decision-center-r1.js?v=phase1-20260831"></script>'
+          if marker not in html:
+              html = html.replace('</body>', marker + '</body>')
+          html = html.replace('PAWANRO Finance', 'TULSHII Finance')
+          html = html.replace('PAVENRO Focus · Finance', 'TULSHII Finance · Phase 1 Preview')
+          p.write_text(html, encoding='utf-8')
+          PY
 
       - name: Commit live preview
         working-directory: site
@@ -46,10 +59,10 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tulshii-finance/index.html
+          git add tulshii-finance/index.html tulshii-finance/finance-decision-engine-r1.js tulshii-finance/finance-decision-center-r1.js
           if git diff --cached --quiet; then
             echo "Tulshii Finance preview is already current."
             exit 0
           fi
-          git commit -m "Sync Tulshii Finance live preview"
+          git commit -m "Sync Tulshii Finance Phase 1 preview"
           git push
