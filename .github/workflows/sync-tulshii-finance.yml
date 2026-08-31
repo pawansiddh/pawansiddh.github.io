@@ -41,11 +41,12 @@ jobs:
           cp finance/offline-build/PAWANRO_Finance_Lifetime_Offline_EXACT.html site/tulshii-finance/index.html
           cp finance/finance-decision-engine-r1.js site/tulshii-finance/finance-decision-engine-r1.js
           test -f site/tulshii-finance/finance-simulation-center-r1.js
+          test -f site/tulshii-finance/finance-preview-quality-fix-r1.js
           python - <<'PY'
           from pathlib import Path
           p = Path('site/tulshii-finance/index.html')
           html = p.read_text(encoding='utf-8')
-          marker = '<script src="finance-decision-engine-r1.js?v=simulation-r2-20260831"></script><script src="finance-simulation-center-r1.js?v=simulation-r2-20260831"></script>'
+          marker = '<script src="finance-decision-engine-r1.js?v=simulation-r3-20260831"></script><script src="finance-simulation-center-r1.js?v=simulation-r3-20260831"></script><script src="finance-preview-quality-fix-r1.js?v=quality-r1-20260831"></script>'
           if marker not in html:
               html = html.replace('</body>', marker + '</body>')
           html = html.replace('PAWANRO Finance', 'TULSHII Finance')
@@ -59,10 +60,10 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tulshii-finance/index.html tulshii-finance/finance-decision-engine-r1.js tulshii-finance/finance-simulation-center-r1.js
+          git add tulshii-finance/index.html tulshii-finance/finance-decision-engine-r1.js tulshii-finance/finance-simulation-center-r1.js tulshii-finance/finance-preview-quality-fix-r1.js
           if git diff --cached --quiet; then
             echo "Tulshii Finance preview is already current."
             exit 0
           fi
-          git commit -m "Sync Tulshii Finance Simulation r2 preview"
+          git commit -m "Sync Tulshii Finance Simulation r3 preview"
           git push
