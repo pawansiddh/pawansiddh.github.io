@@ -105,6 +105,7 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .sidebar nav .nav-help:hover{background:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 10%,var(--sidebar-bg,var(--panel)));color:var(--sidebar-accent,var(--accent))}
 .focus-search-entry{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 34%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-text,var(--text)) 5%,var(--sidebar-bg,var(--bg)))!important;color:var(--sidebar-muted,var(--muted))!important}
 .focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 44%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--sidebar-accent,var(--accent))!important;font-weight:700;opacity:1!important;backdrop-filter:blur(10px)}
+.focus-more-sections:hover{border-color:var(--sidebar-accent,var(--accent))!important;color:var(--sidebar-accent,var(--accent))!important}
 
 /* Settings never presents an empty category. */
 .settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}
