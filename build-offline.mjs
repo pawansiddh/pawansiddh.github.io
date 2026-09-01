@@ -11,6 +11,7 @@ const escapeStyle = source => source.replaceAll('</style','<\\/style');
 const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','focus-professional-v49.css','tulshii-auth-v58.css','offline-mode.css'];
 const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','focus-professional-v49.js','offline-mode.js'];
 const wordmark=data('tulshii-wordmark.svg','image/svg+xml');
+const loginWordmark=data('tulshii-login-lockup.svg','image/svg+xml');
 const icon=data('tulshii-mark.svg','image/svg+xml');
 
 let html=read('index.html');
@@ -21,6 +22,7 @@ html=html
   .replace(/\s*<link rel="manifest"[^>]*>/g,'')
   .replace(/<link rel="icon"[^>]*>/,`<link rel="icon" type="image/svg+xml" href="${icon}">`)
   .replace('</head>',`<style id="pavenro-offline-styles">${escapeStyle(cssFiles.map(file=>`/* ${file} */\n${read(file)}`).join('\n'))}\n:root{--pavenro-wordmark:url("${wordmark}")}\nbody{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></head>`)
+  .replaceAll('src="tulshii-login-lockup.svg"',`src="${loginWordmark}"`)
   .replaceAll('src="tulshii-wordmark.svg"','src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-tulshii-wordmark')
   .replaceAll('src="tulshii-mark.svg"',`src="${icon}"`)
   .replace(/\s*<button data-view="groups"[^>]*>.*?<\/button>/,'')

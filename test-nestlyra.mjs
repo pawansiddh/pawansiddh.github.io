@@ -5,6 +5,7 @@ import {JSDOM, VirtualConsole} from 'jsdom';
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const trackerCss=fs.readFileSync(new URL('./tracker-update.css',import.meta.url),'utf8');
 const responsiveCss=fs.readFileSync(new URL('./nestlyra-v43.css',import.meta.url),'utf8');
+const loginLockup=fs.readFileSync(new URL('./tulshii-login-lockup.svg',import.meta.url),'utf8');
 assert.match(responsiveCss,/\.subject-export-actions \.mini-btn\{width:auto;height:34px/,'Export selection controls must remain readable instead of collapsing into square buttons');
 assert.match(responsiveCss,/@media\(max-width:520px\).*\.subject-export-actions \.mini-btn\{flex:1\}/s,'Export controls must remain usable on mobile');
 const browserErrors=[];
@@ -51,7 +52,9 @@ assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login shoul
 assert.match(document.querySelector('.auth-account-note').textContent,/One secure TULSHII account/);
 assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
 assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
-assert.ok(document.querySelector('img[src$="tulshii-wordmark.svg"]'),'Login must use the TULSHII wordmark');
+assert.ok(document.querySelector('img[src$="tulshii-login-lockup.svg"][alt="TULSHII.com"]'),'Login must use the complete TULSHII.com brand lockup');
+assert.match(loginLockup,/>\.com</,'The login lockup must place .com beneath the two-person ii mark');
+assert.match(loginLockup,/joining hands/,'The login lockup must identify the bonded ii figures accessibly');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();

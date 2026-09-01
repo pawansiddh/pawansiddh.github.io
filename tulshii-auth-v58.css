@@ -98,8 +98,8 @@ html[style*="--login-image"] .auth-art{
 
 .auth-visual-brand img,
 .auth-card-brand img{
-  width:150px!important;
-  height:42px!important;
+  width:174px!important;
+  height:56px!important;
   object-fit:contain;
   object-position:left center;
   filter:none!important;
@@ -356,8 +356,8 @@ html[style*="--login-image"] .auth-art{
 }
 
 .auth-card-brand img{
-  width:132px!important;
-  height:34px!important;
+  width:154px!important;
+  height:50px!important;
   padding:0!important;
   border-radius:0!important;
   background:transparent!important;
@@ -549,7 +549,7 @@ html[style*="--login-image"] .auth-art{
     min-height:285px!important;
   }
   .auth-visual-brand{top:20px;left:20px}
-  .auth-visual-brand img{width:133px!important;height:37px!important}
+  .auth-visual-brand img{width:150px!important;height:50px!important}
   .auth-visual-brand .auth-product-lockup{display:none}
   .auth-art-copy{top:72px;left:21px;right:16px;max-width:355px}
   .auth-art-copy h1{margin:10px 0 8px;font-size:31px}
@@ -574,7 +574,7 @@ html[style*="--login-image"] .auth-art{
     border-radius:16px!important;
   }
   .auth-card-brand{display:flex;margin-bottom:16px}
-  .auth-card-brand img{width:120px!important}
+  .auth-card-brand img{width:142px!important;height:46px!important}
 }
 
 @media(max-width:410px){
