@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#21653F" />
+  <meta name="theme-color" content="#315F46" />
   <meta name="description" content="TULSHII Focus is a private-first, customizable learning, exam, planning and career workspace." />
   <title>TULSHII Focus</title>
   <script>try{const saved=JSON.parse(localStorage.getItem('studyTracker.v30')||'{}');if(localStorage.getItem('studyTracker.cloudAccount')||saved.profile)document.documentElement.classList.add('session-pending')}catch{}</script>
@@ -688,57 +688,73 @@ body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.t
 }
 
 /* focus-professional-v49.css */
-/* TULSHII Focus v49 — professional visual system aligned with TULSHII Finance. */
+/* TULSHII Focus v51 — curated professional color systems. */
 :root{
-  --bg:#07130f;--panel:#0d2018;--panel2:#132a20;--line:#294638;--text:#f1f7f3;--muted:#9aafa2;
-  --accent:#4fa576;--accent2:#79bd91;--danger:#e36a64;--warn:#d9a74c;--success:#61b980;--border:var(--line);
-  --shadow:0 12px 34px rgba(0,0,0,.24);--radius:12px;
+  --bg:#0c1321;--panel:#131d2d;--panel2:#1b2738;--surface-raised:#182436;--line:#2b394d;--text:#f3f6fa;--muted:#9aa8bb;
+  --accent:#8296ba;--accent2:#a6ba68;--accent-soft:#22314a;--on-accent:#0b1320;--danger:#de7371;--warn:#d5a958;--success:#65b982;--info:#73a2c6;--border:var(--line);
+  --chart-1:var(--accent);--chart-2:var(--accent2);--chart-3:#6fa7a0;--chart-4:#d1a45b;--sidebar-bg:#09101b;--sidebar-text:#f3f6fa;--sidebar-muted:#9aa8bb;--sidebar-accent:#b5c779;
+  --shadow:0 1px 1px rgba(0,0,0,.1),0 14px 38px rgba(0,0,0,.2);--radius:12px;
 }
 
-body.theme-category-personal,body.theme-nestlyra{
-  --bg:#f5f6f1;--panel:#fff;--panel2:#edf3ee;--line:#d8e3da;--text:#17301f;--muted:#607064;
-  --accent:#21653f;--accent2:#35784f;--danger:#c54a43;--warn:#a66e16;--success:#2e7d4b;--sidebar-bg:#f8faf6;
-  --shadow:0 1px 2px rgba(23,48,31,.035),0 10px 28px rgba(33,101,63,.065);
+body.theme-category-personal{
+  --bg:#f6f4ec;--panel:#fff;--panel2:#edf2e7;--surface-raised:#fffdf8;--line:#d5ddd0;--text:#17251c;--muted:#647068;
+  --accent:#315f46;--accent2:#8ba26b;--accent-soft:#e3ebe0;--on-accent:#fff;--danger:#bd4c48;--warn:#9a691e;--success:#2f7650;--info:#3f7084;
+  --chart-1:#315f46;--chart-2:#8ba26b;--chart-3:#5d8780;--chart-4:#b28758;--sidebar-bg:#eef2e6;--sidebar-text:#1a3022;--sidebar-muted:#617066;--sidebar-accent:#315f46;
+  --shadow:0 1px 2px rgba(23,37,28,.04),0 12px 32px rgba(49,95,70,.075);
+}
+body.theme-nestlyra{
+  --bg:#f2f5f1;--panel:#fff;--panel2:#e8efea;--surface-raised:#f9fbf9;--line:#cfdcd3;--text:#102a1d;--muted:#5c6d63;
+  --accent:#0f5a3d;--accent2:#3d6e6e;--accent-soft:#deebe3;--on-accent:#fff;--danger:#bd4c48;--warn:#956719;--success:#287249;--info:#356c78;
+  --chart-1:#0f5a3d;--chart-2:#3d6e6e;--chart-3:#a5b862;--chart-4:#b88655;--sidebar-bg:#0d4b33;--sidebar-text:#f4f8f5;--sidebar-muted:#b9cdc1;--sidebar-accent:#c3d66f;
+  --shadow:0 1px 2px rgba(13,75,51,.045),0 12px 32px rgba(13,75,51,.09);
 }
 body.theme-category-blank{
-  --bg:#f5f6f7;--panel:#fff;--panel2:#eef1f3;--line:#d9dfe3;--text:#1e2b32;--muted:#65727a;
-  --accent:#4b6572;--accent2:#647d88;--danger:#bc4c49;--warn:#9a6a1c;--success:#317b53;--sidebar-bg:#fafbfb;
-  --shadow:0 1px 2px rgba(30,43,50,.035),0 10px 28px rgba(50,70,80,.06);
+  --bg:#f3f5f6;--panel:#fff;--panel2:#e9eef1;--surface-raised:#fbfcfc;--line:#d2dbe0;--text:#182530;--muted:#63717c;
+  --accent:#40576b;--accent2:#8091a0;--accent-soft:#e4e9ed;--on-accent:#fff;--danger:#b94d4b;--warn:#93681f;--success:#347454;--info:#416f8d;
+  --chart-1:#40576b;--chart-2:#8091a0;--chart-3:#527d78;--chart-4:#aa825b;--sidebar-bg:#e9eef1;--sidebar-text:#1d2c38;--sidebar-muted:#667681;--sidebar-accent:#40576b;
+  --shadow:0 1px 2px rgba(24,37,48,.04),0 12px 30px rgba(64,87,107,.07);
 }
 body.theme-category-school{
-  --bg:#f2f6fb;--panel:#fff;--panel2:#eaf1f8;--line:#d2deeb;--text:#172d45;--muted:#60748a;
-  --accent:#285f96;--accent2:#3f79ad;--danger:#bd4c50;--warn:#a46d16;--success:#2d7651;--sidebar-bg:#f8fbfe;
-  --shadow:0 1px 2px rgba(23,45,69,.035),0 10px 28px rgba(40,95,150,.065);
+  --bg:#f2f5f9;--panel:#fff;--panel2:#e9eff6;--surface-raised:#fbfcfe;--line:#cedae6;--text:#14263a;--muted:#617287;
+  --accent:#235b8e;--accent2:#7197b8;--accent-soft:#e0eaf4;--on-accent:#fff;--danger:#bd4c50;--warn:#9a681c;--success:#2e7352;--info:#356d9c;
+  --chart-1:#235b8e;--chart-2:#7197b8;--chart-3:#53877c;--chart-4:#b17d52;--sidebar-bg:#e9eff6;--sidebar-text:#172b40;--sidebar-muted:#61758a;--sidebar-accent:#235b8e;
+  --shadow:0 1px 2px rgba(20,38,58,.04),0 12px 31px rgba(35,91,142,.075);
 }
 body.theme-category-business{
-  --bg:#f8f5ed;--panel:#fffdf8;--panel2:#f2ecdd;--line:#e3d9c3;--text:#332b1d;--muted:#756b59;
-  --accent:#8a621c;--accent2:#a87b2d;--danger:#b84a45;--warn:#9b6815;--success:#397452;--sidebar-bg:#fdfaf3;
-  --shadow:0 1px 2px rgba(51,43,29,.035),0 10px 28px rgba(138,98,28,.06);
+  --bg:#f7f3eb;--panel:#fffdfa;--panel2:#f0e7db;--surface-raised:#fffaf4;--line:#dfd2c2;--text:#32271f;--muted:#74675d;
+  --accent:#87563a;--accent2:#b58b66;--accent-soft:#ede0d3;--on-accent:#fff;--danger:#b84b47;--warn:#94651c;--success:#3a7453;--info:#486f7d;
+  --chart-1:#87563a;--chart-2:#b58b66;--chart-3:#6f8872;--chart-4:#b29a58;--sidebar-bg:#f0e7db;--sidebar-text:#38291f;--sidebar-muted:#78695e;--sidebar-accent:#87563a;
+  --shadow:0 1px 2px rgba(50,39,31,.04),0 12px 31px rgba(135,86,58,.075);
 }
 body.theme-light{
-  --bg:#f4f6f8;--panel:#fff;--panel2:#edf1f4;--line:#d8e0e6;--text:#1b2a34;--muted:#62717c;
-  --accent:#355f73;--accent2:#4d7b8e;--danger:#be4e4b;--warn:#9d6c1e;--success:#307851;--sidebar-bg:#fafbfc;
-  --shadow:0 1px 2px rgba(27,42,52,.035),0 10px 28px rgba(53,95,115,.06);
+  --bg:#f3f6f7;--panel:#fff;--panel2:#e8f0f2;--surface-raised:#fbfdfd;--line:#cfdbdf;--text:#152a33;--muted:#60737c;
+  --accent:#326173;--accent2:#7f9aa6;--accent-soft:#dfebee;--on-accent:#fff;--danger:#b94d4a;--warn:#96691f;--success:#337653;--info:#3d7188;
+  --chart-1:#326173;--chart-2:#7f9aa6;--chart-3:#4e8478;--chart-4:#ac8257;--sidebar-bg:#e8f0f2;--sidebar-text:#18303a;--sidebar-muted:#637780;--sidebar-accent:#326173;
+  --shadow:0 1px 2px rgba(21,42,51,.04),0 12px 31px rgba(50,97,115,.07);
 }
 body.theme-focus-paper{
-  --bg:#f7f3eb;--panel:#fffdf8;--panel2:#f1eadf;--line:#ded3c3;--text:#302a22;--muted:#746b60;
-  --accent:#76583d;--accent2:#947253;--danger:#b94e48;--warn:#996719;--success:#3b7653;--sidebar-bg:#fcf8f1;
-  --shadow:0 1px 2px rgba(48,42,34,.035),0 10px 28px rgba(118,88,61,.06);
+  --bg:#f6f0e5;--panel:#fffdf8;--panel2:#ece3d3;--surface-raised:#fffbf4;--line:#ddd1bc;--text:#2e2a22;--muted:#716b5f;
+  --accent:#6d6244;--accent2:#9a8759;--accent-soft:#e9e1d1;--on-accent:#fff;--danger:#b64d48;--warn:#8d651e;--success:#497055;--info:#4d6c79;
+  --chart-1:#6d6244;--chart-2:#9a8759;--chart-3:#657b70;--chart-4:#aa7653;--sidebar-bg:#ece3d3;--sidebar-text:#332e25;--sidebar-muted:#736b5d;--sidebar-accent:#6d6244;
+  --shadow:0 1px 2px rgba(46,42,34,.04),0 12px 31px rgba(109,98,68,.075);
 }
 body.theme-ocean{
-  --bg:#071923;--panel:#0d2531;--panel2:#12313f;--line:#275064;--text:#eff9fc;--muted:#9cb5c0;
-  --accent:#3c91ae;--accent2:#55a9bc;--danger:#e27470;--warn:#dcb25d;--success:#55b887;--sidebar-bg:#081c27;
-  --shadow:0 12px 34px rgba(0,0,0,.24);
-}
-body.theme-cyber{
-  --bg:#15131c;--panel:#201d29;--panel2:#2a2634;--line:#4a4058;--text:#faf5fb;--muted:#b8aabd;
-  --accent:#bd5d92;--accent2:#6ba9b5;--danger:#ed716f;--warn:#d7a957;--success:#60b887;--sidebar-bg:#17141f;
-  --shadow:0 12px 34px rgba(0,0,0,.25);
+  --bg:#081916;--panel:#10241f;--panel2:#183129;--surface-raised:#132a24;--line:#2c4a40;--text:#f1f7f3;--muted:#9fb4aa;
+  --accent:#61ad8d;--accent2:#9ebb6a;--accent-soft:#1a3b30;--on-accent:#07150f;--danger:#e17672;--warn:#dbb360;--success:#69bd86;--info:#68a6b2;
+  --chart-1:#61ad8d;--chart-2:#9ebb6a;--chart-3:#68a6b2;--chart-4:#d2a35b;--sidebar-bg:#06130f;--sidebar-text:#f1f7f3;--sidebar-muted:#9fb4aa;--sidebar-accent:#a9c773;
+  --shadow:0 1px 1px rgba(0,0,0,.16),0 15px 40px rgba(0,0,0,.24);
 }
 body.theme-matrix{
-  --bg:#09170f;--panel:#10251a;--panel2:#173222;--line:#31533e;--text:#f0f8f2;--muted:#a1b7a7;
-  --accent:#53a86c;--accent2:#86b961;--danger:#e27470;--warn:#d8ac58;--success:#62ba7c;--sidebar-bg:#0a1a11;
-  --shadow:0 12px 34px rgba(0,0,0,.24);
+  --bg:#0b1711;--panel:#12251a;--panel2:#193122;--surface-raised:#152b1e;--line:#2d4b37;--text:#f0f7f2;--muted:#9fb2a5;
+  --accent:#74a57d;--accent2:#b0bc6e;--accent-soft:#1d3a28;--on-accent:#08130c;--danger:#df7772;--warn:#d8af5e;--success:#70bc83;--info:#70a5aa;
+  --chart-1:#74a57d;--chart-2:#b0bc6e;--chart-3:#70a5aa;--chart-4:#d0a05d;--sidebar-bg:#08120d;--sidebar-text:#f0f7f2;--sidebar-muted:#9fb2a5;--sidebar-accent:#b9c878;
+  --shadow:0 1px 1px rgba(0,0,0,.16),0 15px 40px rgba(0,0,0,.24);
+}
+body.theme-cyber{
+  --bg:#0c1321;--panel:#131d2d;--panel2:#1b2738;--surface-raised:#182436;--line:#2b394d;--text:#f3f6fa;--muted:#9aa8bb;
+  --accent:#8296ba;--accent2:#a6ba68;--accent-soft:#22314a;--on-accent:#0b1320;--danger:#de7371;--warn:#d5a958;--success:#65b982;--info:#73a2c6;
+  --chart-1:#8296ba;--chart-2:#a6ba68;--chart-3:#6fa7a0;--chart-4:#d1a45b;--sidebar-bg:#09101b;--sidebar-text:#f3f6fa;--sidebar-muted:#9aa8bb;--sidebar-accent:#b5c779;
+  --shadow:0 1px 1px rgba(0,0,0,.1),0 14px 38px rgba(0,0,0,.2);
 }
 
 html,body{background:var(--bg);color:var(--text)}
@@ -750,7 +766,7 @@ body .card,body .stat{border-color:var(--line);background:var(--panel);color:var
 body input,body textarea,body select,body .search-wrap{max-width:100%;border-color:var(--line);background:var(--panel);color:var(--text)}
 body input::placeholder,body textarea::placeholder{color:color-mix(in srgb,var(--muted) 82%,transparent)}
 body .btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);box-shadow:none}
-body .btn.primary{border-color:var(--accent)!important;background:var(--accent)!important;color:#fff!important;box-shadow:0 5px 14px color-mix(in srgb,var(--accent) 20%,transparent)!important}
+body .btn.primary{border-color:var(--accent)!important;background:var(--accent)!important;color:var(--on-accent)!important;box-shadow:0 5px 14px color-mix(in srgb,var(--accent) 20%,transparent)!important}
 body .btn.ghost{border-color:var(--line);background:var(--panel);color:var(--text)}
 body .btn.danger{border-color:color-mix(in srgb,var(--danger) 34%,var(--line))!important;background:color-mix(in srgb,var(--danger) 12%,var(--panel))!important;color:var(--danger)!important}
 body .mini-btn{display:inline-grid;min-width:36px;min-height:36px;padding:0 10px;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);line-height:1}
@@ -759,9 +775,9 @@ body .record-edit{min-width:48px;white-space:nowrap}
 body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent);outline-offset:2px}
 
 /* One TULSHII identity in the application shell. */
-.sidebar>.focus-brand{color:var(--text)}
-.focus-brand-copy{gap:7px}.focus-brand-copy>.focus-brand-divider{color:color-mix(in srgb,var(--muted) 72%,transparent);font-style:normal}.focus-brand-copy small{color:var(--accent)}
-.tulshii-wordmark{display:flex;align-items:flex-end;height:30px;color:var(--text);white-space:nowrap}
+.sidebar>.focus-brand{color:var(--sidebar-text,var(--text))}
+.focus-brand-copy{gap:7px}.focus-brand-copy>.focus-brand-divider{color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 72%,transparent);font-style:normal}.focus-brand-copy small{color:var(--sidebar-accent,var(--accent))}
+.tulshii-wordmark{display:flex;align-items:flex-end;height:30px;color:inherit;white-space:nowrap}
 .tulshii-wordmark>b{font:700 15px/24px Inter,sans-serif;letter-spacing:.105em}
 .tulshii-ii{display:flex;position:relative;align-items:flex-end;gap:3px;width:15px;height:25px;margin:0 0 3px 1px}
 .tulshii-ii>i{position:relative;width:6px;height:17px;border-radius:5px 5px 2px 2px;background:#a8ba64;box-shadow:inset 0 -1px rgba(23,48,31,.12)}
@@ -772,13 +788,13 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .page-head>.eyebrow,.v42-module>.eyebrow,#app .product-credit,#app .parent-product-credit{display:none!important}
 
 /* All enabled sections remain visible; the navigation itself scrolls when needed. */
-.sidebar nav{overflow-y:auto;scrollbar-color:color-mix(in srgb,var(--accent) 28%,var(--line)) transparent}
+.sidebar nav{overflow-y:auto;scrollbar-color:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 30%,var(--line)) transparent}
 .sidebar nav .nav-entry{flex:0 0 auto}
-.sidebar nav .nav-main,.sidebar nav .nav-help{color:var(--muted)}
-.sidebar nav .nav-main:hover,.sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--accent) 11%,var(--panel));color:var(--accent);box-shadow:inset 3px 0 var(--accent)}
-.sidebar nav .nav-help:hover{background:var(--panel2);color:var(--accent)}
-.focus-search-entry{border-color:var(--line)!important;background:var(--panel)!important;color:var(--muted)!important}
-.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--accent) 42%,var(--line))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--accent)!important;font-weight:700;opacity:1!important;backdrop-filter:blur(10px)}
+.sidebar nav .nav-main,.sidebar nav .nav-help{color:var(--sidebar-muted,var(--muted))}
+.sidebar nav .nav-main:hover,.sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 13%,var(--sidebar-bg,var(--panel)));color:var(--sidebar-accent,var(--accent));box-shadow:inset 3px 0 var(--sidebar-accent,var(--accent))}
+.sidebar nav .nav-help:hover{background:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 10%,var(--sidebar-bg,var(--panel)));color:var(--sidebar-accent,var(--accent))}
+.focus-search-entry{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 34%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-text,var(--text)) 5%,var(--sidebar-bg,var(--bg)))!important;color:var(--sidebar-muted,var(--muted))!important}
+.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 44%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--sidebar-accent,var(--accent))!important;font-weight:700;opacity:1!important;backdrop-filter:blur(10px)}
 
 /* Settings never presents an empty category. */
 .settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}
@@ -786,6 +802,76 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .settings-sidebar nav button:hover,.settings-sidebar nav button.active{background:color-mix(in srgb,var(--accent) 11%,var(--panel2));color:var(--accent)}
 .settings-sidebar nav button span{color:var(--accent)}
 .module-disabled-setting[data-setting-category="data"]{display:block!important}
+
+/* Appearance is a theme studio, not a row of decorative color chips. */
+.settings-shell .settings-grid>[data-setting-category="appearance"]{grid-column:1/-1;padding:0;overflow:hidden}
+.appearance-studio{display:grid;gap:0}
+.appearance-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,310px);align-items:center;gap:24px;padding:25px 26px;border-bottom:1px solid var(--line);background:linear-gradient(115deg,color-mix(in srgb,var(--accent) 10%,var(--panel)),var(--panel) 58%,color-mix(in srgb,var(--accent2) 11%,var(--panel)))}
+.appearance-kicker{display:block;margin-bottom:7px;color:var(--accent);font-size:9px;font-weight:800;letter-spacing:.16em}
+.appearance-hero h3{margin:0 0 7px;font:700 24px/1.15 'Space Grotesk',Inter,sans-serif}
+.appearance-hero p{max-width:720px;margin:0;color:var(--muted);font-size:11px;line-height:1.65}
+.appearance-quality-rule{display:grid;gap:5px;padding:15px 17px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--panel) 86%,transparent);box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 8%,transparent)}
+.appearance-quality-rule strong{color:var(--accent);font:700 20px/1 'Space Grotesk',Inter,sans-serif;letter-spacing:.04em}
+.appearance-quality-rule span{color:var(--muted);font-size:9px;line-height:1.45}
+.appearance-group{padding:22px 26px}.appearance-group+.appearance-group{margin:0;padding-top:22px;border-top:1px solid var(--line)}
+.appearance-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
+.appearance-section-head h4{margin:0 0 4px;color:var(--text);font-size:12px;letter-spacing:.01em;text-transform:none}
+.appearance-section-head p{margin:0;color:var(--muted);font-size:10px;line-height:1.55}
+.appearance-section-head>span{flex:0 0 auto;padding:5px 8px;border:1px solid var(--line);border-radius:20px;background:var(--panel2);color:var(--muted);font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.appearance-theme-grid{display:grid;grid-template-columns:repeat(3,minmax(190px,1fr));gap:12px}
+.appearance-theme-grid .theme-chip{position:relative;display:grid;width:100%;height:auto;min-height:154px;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);text-align:left;box-shadow:0 1px 2px color-mix(in srgb,var(--text) 5%,transparent);transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.appearance-theme-grid .theme-chip:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));transform:translateY(-1px);box-shadow:0 10px 24px color-mix(in srgb,var(--text) 8%,transparent)}
+.appearance-theme-grid .theme-chip.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent),0 11px 25px color-mix(in srgb,var(--text) 8%,transparent)}
+.appearance-theme-grid .theme-chip.active:after{content:'✓';position:absolute;right:9px;top:9px;z-index:3;display:grid;width:22px;height:22px;place-items:center;border-radius:50%;background:var(--theme-accent);color:var(--theme-panel);font-size:11px;font-weight:900;box-shadow:0 2px 8px #0003}
+.theme-preview{position:relative;display:block;height:78px;overflow:hidden;border-bottom:1px solid color-mix(in srgb,var(--theme-text) 12%,transparent);background:var(--theme-bg)}
+.theme-preview i{position:absolute;display:block}
+.theme-preview-sidebar{inset:0 auto 0 0;width:24%;background:var(--theme-sidebar)}
+.theme-preview-sidebar:before,.theme-preview-sidebar:after{content:'';position:absolute;left:18%;right:18%;height:3px;border-radius:4px;background:color-mix(in srgb,var(--theme-accent) 70%,var(--theme-panel))}
+.theme-preview-sidebar:before{top:18px;box-shadow:0 12px color-mix(in srgb,var(--theme-text) 22%,transparent),0 24px color-mix(in srgb,var(--theme-text) 14%,transparent)}
+.theme-preview-sidebar:after{top:7px;height:5px;background:var(--theme-secondary)}
+.theme-preview-top{left:24%;right:0;top:0;height:16px;border-bottom:1px solid color-mix(in srgb,var(--theme-text) 10%,transparent);background:var(--theme-panel)}
+.theme-preview-card{top:25px;height:40px;border:1px solid color-mix(in srgb,var(--theme-text) 10%,transparent);border-radius:5px;background:var(--theme-panel);box-shadow:0 3px 8px color-mix(in srgb,var(--theme-text) 7%,transparent)}
+.theme-preview-card-a{left:29%;width:27%}.theme-preview-card-b{left:60%;right:5%}
+.theme-preview-card-a:before,.theme-preview-card-b:before{content:'';position:absolute;left:7px;right:30%;top:8px;height:3px;border-radius:3px;background:color-mix(in srgb,var(--theme-text) 22%,transparent);box-shadow:0 8px color-mix(in srgb,var(--theme-text) 12%,transparent)}
+.theme-preview-chart{left:64%;right:9%;bottom:20px;height:13px;border-bottom:2px solid var(--theme-accent);border-left:2px solid transparent;transform:skewY(-10deg)}
+.theme-card-copy{display:grid;gap:3px;padding:11px 12px 6px}.theme-card-copy strong{font-size:11px}.theme-card-copy small{color:var(--muted);font-size:8px;line-height:1.4}
+.theme-swatches{display:flex;gap:5px;padding:0 12px 11px}.theme-swatches i{width:13px;height:13px;border:1px solid color-mix(in srgb,var(--text) 12%,transparent);border-radius:50%}
+.appearance-theme-grid .theme-chip>em{position:absolute;top:8px;left:calc(24% + 8px);z-index:2;padding:4px 6px;border-radius:12px;background:color-mix(in srgb,var(--theme-panel) 88%,transparent);color:var(--theme-accent);font-size:7px;font-style:normal;font-weight:800;letter-spacing:.04em;box-shadow:0 2px 8px #0002}
+.category-theme-note{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 26px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--accent) 7%,var(--panel));color:var(--muted)}
+.category-theme-note>span{display:grid;gap:2px}.category-theme-note small{color:var(--muted);font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.category-theme-note strong{color:var(--text);font-size:12px}.category-theme-note i{color:var(--muted);font-size:9px;font-style:normal;line-height:1.45}
+.category-theme-note .btn{flex:0 0 auto}
+.appearance-advanced-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:0}
+.appearance-advanced-grid label,.appearance-login-row>label{display:grid;gap:7px;margin:0;color:var(--muted);font-size:9px;font-weight:700}
+.appearance-advanced-grid select,.appearance-login-row select{width:100%;min-height:42px;background:var(--panel2)}
+.appearance-login-row{display:grid;grid-template-columns:minmax(190px,1fr) auto;align-items:end;gap:16px}
+.appearance-image-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0}.appearance-upload{display:inline-flex;align-items:center}.appearance-upload input{display:none}
+
+/* One semantic surface system across every module. */
+body :is(.task-row,.note-item,.cal-day,.job-search,.job-quick button,.job-files button,.modal-close,.preset-card,.manual-component-directory,.family-room-panel,.family-compose){border-color:var(--line);background:var(--panel2);color:var(--text)}
+body :is(.task-row,.note-item,.cal-day,.preset-card):hover{background:color-mix(in srgb,var(--accent) 6%,var(--panel2))}
+body .stat-icon,body .job-role>i,body .job-company-badge{background:var(--accent-soft);color:var(--accent)}
+body .avatar{background:var(--accent);color:var(--on-accent)}
+body .dot,body .floating-message-badge{background:var(--danger)}
+body .side-timer{border-color:var(--line);background:var(--panel2);color:var(--text)}
+body .side-timer span{color:var(--sidebar-accent,var(--accent))}
+body .analog-clock{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 36%,transparent);background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--sidebar-text,var(--text)) 7%,var(--sidebar-bg,var(--bg))) 0 58%,var(--sidebar-bg,var(--bg)) 60%);box-shadow:0 6px 18px color-mix(in srgb,var(--sidebar-accent,var(--accent)) 14%,transparent)}
+body .analog-clock i{background:var(--sidebar-text,var(--text))}.analog-clock b{background:var(--sidebar-accent,var(--accent))}
+body .streak-mini{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 32%,transparent);background:color-mix(in srgb,var(--sidebar-text,var(--text)) 5%,var(--sidebar-bg,var(--bg)));color:var(--sidebar-text,var(--text))}
+body .progress-ring,body.theme-nestlyra .progress-ring{background:conic-gradient(var(--chart-1) calc(var(--p)*1%),var(--panel2) 0)!important}
+body .progress-ring:after,body.theme-nestlyra .progress-ring:after{background:var(--panel)!important}
+body :is(.bar,.progress-line,.accuracy-bar){background:color-mix(in srgb,var(--muted) 15%,var(--panel2))}
+body :is(.bar,.accuracy-bar)>i{background:linear-gradient(90deg,var(--chart-1),var(--chart-2))}
+body .toggle{background:color-mix(in srgb,var(--muted) 28%,var(--panel2))}.toggle.on{background:var(--accent)}
+body .toast{background:var(--text);color:var(--panel)}
+body .job-row:hover{background:color-mix(in srgb,var(--accent) 7%,var(--panel))}
+body .badge,body .job-status{background:var(--panel2);color:var(--muted)}
+body :is(.badge.success,.status-selected,.status-offer){background:color-mix(in srgb,var(--success) 13%,var(--panel));color:var(--success)}
+body :is(.badge.warn,.status-interview){background:color-mix(in srgb,var(--warn) 14%,var(--panel));color:var(--warn)}
+body :is(.badge.danger,.status-rejected,.status-withdrawn){background:color-mix(in srgb,var(--danger) 13%,var(--panel));color:var(--danger)}
+body :is(.status-applied,.status-screening){background:color-mix(in srgb,var(--info) 13%,var(--panel));color:var(--info)}
+body .calendar-filter.active{border-color:color-mix(in srgb,currentColor 42%,var(--line));background:color-mix(in srgb,currentColor 9%,var(--panel))}
+body .cal-event{background:color-mix(in srgb,var(--accent) 12%,var(--panel));color:var(--accent)}
+body .calendar-current-line{background:var(--danger)}
 
 /* Mock Test Lab: semantic performance colors, legible ledger, and useful empty state. */
 .mock-gauge-body .negative-delta{color:var(--danger)!important}.mock-gauge-body .positive-delta{color:var(--success)!important}
@@ -826,11 +912,23 @@ dialog:has(.job-storage-note),dialog:has(.job-detail){width:min(760px,calc(100vw
 .mock-gauge-body small,.mock-weakness p{font-size:9px}
 .v42-empty p{font-size:11px}.v42-empty h3{font-size:15px}
 
+@media(max-width:1100px){
+  .appearance-theme-grid{grid-template-columns:repeat(2,minmax(180px,1fr))}
+  .appearance-advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:760px){
   .floating-messages.topbar-message{display:grid;width:36px;height:36px;flex-basis:36px}
   .mock-ledger article{grid-template-columns:72px minmax(0,1fr) 48px;align-items:start}
   .mock-ledger .record-actions{grid-column:2/4;justify-content:flex-end}
   dialog:has(.job-storage-note),dialog:has(.job-detail){width:calc(100vw - 20px)}
+  .appearance-hero{grid-template-columns:1fr;padding:20px}.appearance-quality-rule{max-width:none}
+  .appearance-group{padding:19px 20px}.category-theme-note{margin:0 20px}
+  .appearance-login-row{grid-template-columns:1fr}.appearance-image-actions{justify-content:flex-start}
+}
+@media(max-width:520px){
+  .appearance-theme-grid,.appearance-advanced-grid{grid-template-columns:1fr}
+  .appearance-section-head,.category-theme-note{align-items:flex-start;flex-direction:column}
+  .category-theme-note .btn{width:100%}.appearance-image-actions{align-items:stretch;flex-direction:column}.appearance-image-actions .btn{justify-content:center;width:100%}
 }
 
 /* offline-mode.css */
@@ -1282,8 +1380,8 @@ const PEN_MODULES=[
 ['24. Assembling the Pieces','Enumerating the Public Network|Attacking a Public Machine|Gaining Access to the Internal Network|Enumerating the Internal Network|Attacking an Internal Web Application']
 ];
 function datePlus(days){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
-function penSubject(){const total=PEN_MODULES.reduce((n,x)=>n+x[1].split('|').length,0);let i=0;return {id:'pen200',name:'PEN-200 (2023)',description:'Penetration Testing with Kali Linux — 90-day book plan',color:'#7c5cff',icon:'P2',modules:PEN_MODULES.map(([name,list])=>({id:uid(),name,topics:list.split('|').map(name=>({id:uid(),name,status:'not-started',due:datePlus(Math.min(89,Math.floor(i++*90/total))) }))}))}}
-function sampleSubject(){const modules=[['1. Getting Started',['Define your learning goal','Set a target completion date','Choose study resources','Plan weekly study time','Create your first milestone']],['2. Core Concepts',['Read the introduction','Learn key terminology','Review the first concept','Summarize important ideas','Complete a short knowledge check']],['3. Guided Practice',['Follow a worked example','Repeat the example independently','Record useful notes','Identify difficult areas','Complete the practice exercise']],['4. Applied Learning',['Plan a small project','Complete project step one','Complete project step two','Review your results','Document what you learned']],['5. Review & Completion',['Revise important concepts','Retry incomplete exercises','Complete the final assessment','Write a learning summary','Mark the subject complete']]];let day=0;return {id:'sample-subject',name:'Sample Learning Course',description:'Example subject showing how modules, topics, deadlines and progress work. Edit or delete it when you are ready.',color:'#7c5cff',icon:'EX',modules:modules.map(([name,topics])=>({id:uid(),name,topics:topics.map(name=>({id:uid(),name,status:'not-started',due:datePlus(day++)}))}))}}
+function penSubject(){const total=PEN_MODULES.reduce((n,x)=>n+x[1].split('|').length,0);let i=0;return {id:'pen200',name:'PEN-200 (2023)',description:'Penetration Testing with Kali Linux — 90-day book plan',color:'#315f46',icon:'P2',modules:PEN_MODULES.map(([name,list])=>({id:uid(),name,topics:list.split('|').map(name=>({id:uid(),name,status:'not-started',due:datePlus(Math.min(89,Math.floor(i++*90/total))) }))}))}}
+function sampleSubject(){const modules=[['1. Getting Started',['Define your learning goal','Set a target completion date','Choose study resources','Plan weekly study time','Create your first milestone']],['2. Core Concepts',['Read the introduction','Learn key terminology','Review the first concept','Summarize important ideas','Complete a short knowledge check']],['3. Guided Practice',['Follow a worked example','Repeat the example independently','Record useful notes','Identify difficult areas','Complete the practice exercise']],['4. Applied Learning',['Plan a small project','Complete project step one','Complete project step two','Review your results','Document what you learned']],['5. Review & Completion',['Revise important concepts','Retry incomplete exercises','Complete the final assessment','Write a learning summary','Mark the subject complete']]];let day=0;return {id:'sample-subject',name:'Sample Learning Course',description:'Example subject showing how modules, topics, deadlines and progress work. Edit or delete it when you are ready.',color:'#315f46',icon:'EX',modules:modules.map(([name,topics])=>({id:uid(),name,topics:topics.map(name=>({id:uid(),name,status:'not-started',due:datePlus(day++)}))}))}}
 const seed={profile:null,settings:{theme:'category-personal',sounds:true,notifications:true,fontStyle:'modern',textScale:'normal',density:'comfortable',radiusStyle:'soft',motion:'full',focusCategory:'personal',categorySetupPending:false,themeManuallyChosen:false,loginImage:'',loginImagePosition:'center',loginImageShade:'balanced'},subjects:[sampleSubject()],tasks:[],events:[],jobApplications:[],notes:[{id:uid(),title:'How to use this sample',subjectId:'sample-subject',content:'Open the sample subject, update topic statuses, change due dates, add your own modules, or delete the sample and create a real subject.',updated:today()}],activity:[],activeWorkspace:'primary',workspaces:[{id:'primary',name:'My First Workspace',archived:false}]};
 const cloudConfig=window.STUDY_TRACKER_CONFIG||{},sb=cloudConfig.supabaseUrl&&window.supabase?window.supabase.createClient(cloudConfig.supabaseUrl,cloudConfig.supabaseAnonKey):null;
 let cloudUser=null,syncTimer=null,invalidatingSession=false,state=load(),viewName='dashboard',selectedSubject=state.subjects[0]?.id||'',selectedNote=state.notes[0]?.id,calDate=new Date(),timerSeconds=25*60,timerInitial=25*60,timerHandle=null,jobQuery='',jobFilter='All',jobSort='newest';
@@ -1328,7 +1426,7 @@ function todayView(){const due=state.tasks.filter(t=>t.due===today());return hea
 function tasksView(){return head('All tasks','Plan today, tomorrow or any future date','<button class="btn primary" onclick="taskModal()">+ New task</button>')+`<section class="card">${taskRows([...state.tasks].sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')))}</section>`}
 function analytics(){setTimeout(drawCharts);const completed=allTopics().filter(t=>t.status==='completed').length;return head('Progress analytics','Understand your momentum and consistency')+`<div class="grid stats"><div class="stat"><div><small>Study hours</small><strong>${Math.round(state.activity.reduce((a,x)=>a+x.minutes,0)/60)}</strong></div></div><div class="stat"><div><small>Topics completed</small><strong>${completed}</strong></div></div><div class="stat"><div><small>Accuracy</small><strong>${overall()}%</strong></div></div><div class="stat"><div><small>Current streak</small><strong>${streak()} days</strong></div></div></div><div class="grid analytics-grid"><section class="card"><div class="card-title"><h3>Subject progress</h3></div><div class="chart-box"><canvas id="progressChart"></canvas></div></section><section class="card"><div class="card-title"><h3>Status distribution</h3></div><div class="chart-box"><canvas id="statusChart"></canvas></div></section></div>`}
 let progressChartInstance=null,statusChartInstance=null;
-function drawCharts(){const progressCanvas=document.getElementById('progressChart'),statusCanvas=document.getElementById('statusChart');if(!window.Chart||!progressCanvas||!statusCanvas)return;progressChartInstance?.destroy();statusChartInstance?.destroy();Chart.defaults.color='#8493a9';progressChartInstance=new Chart(progressCanvas,{type:'bar',data:{labels:state.subjects.map(s=>s.name),datasets:[{data:state.subjects.map(pct),backgroundColor:state.subjects.map(s=>s.color),borderRadius:8}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,grid:{color:'#1d2c42'}},x:{grid:{display:false}}}}});const t=allTopics();statusChartInstance=new Chart(statusCanvas,{type:'doughnut',data:{labels:['Completed','In progress','Not started'],datasets:[{data:['completed','in-progress','not-started'].map(x=>t.filter(y=>y.status===x).length),backgroundColor:['#35d07f','#7c5cff','#29384d'],borderWidth:0}]},options:{maintainAspectRatio:false,cutout:'70%'}})}
+function drawCharts(){const progressCanvas=document.getElementById('progressChart'),statusCanvas=document.getElementById('statusChart');if(!window.Chart||!progressCanvas||!statusCanvas)return;progressChartInstance?.destroy();statusChartInstance?.destroy();const css=getComputedStyle(document.body),chart1=css.getPropertyValue('--chart-1').trim()||'#315f46',chart2=css.getPropertyValue('--chart-2').trim()||'#8ba26b',chart3=css.getPropertyValue('--chart-3').trim()||'#5d8780',line=css.getPropertyValue('--line').trim()||'#d5ddd0',muted=css.getPropertyValue('--muted').trim()||'#647068';Chart.defaults.color=muted;progressChartInstance=new Chart(progressCanvas,{type:'bar',data:{labels:state.subjects.map(s=>s.name),datasets:[{data:state.subjects.map(pct),backgroundColor:state.subjects.map((s,index)=>s.color||[chart1,chart2,chart3][index%3]),borderRadius:8}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,grid:{color:line}},x:{grid:{display:false}}}}});const t=allTopics();statusChartInstance=new Chart(statusCanvas,{type:'doughnut',data:{labels:['Completed','In progress','Not started'],datasets:[{data:['completed','in-progress','not-started'].map(x=>t.filter(y=>y.status===x).length),backgroundColor:[chart2,chart1,line],borderWidth:0}]},options:{maintainAspectRatio:false,cutout:'70%'}})}
 function notes(){let n=state.notes.find(x=>x.id===selectedNote)||state.notes[0];return head('Notes','Keep methodology, commands and revision notes together','<button class="btn primary" onclick="newNote()">+ New note</button>')+`<div class="grid note-layout"><aside class="card note-list">${state.notes.map(x=>`<button class="note-item ${x.id===n?.id?'active':''}" onclick="selectNote('${x.id}')"><strong>${escapeHtml(x.title)}</strong><small>${escapeHtml(subjectName(x.subjectId))} · ${x.updated}</small></button>`).join('')}</aside><section class="card note-editor">${n?`<input value="${escapeHtml(n.title)}" oninput="editNote('title',this.value)"><textarea oninput="editNote('content',this.value)">${escapeHtml(n.content)}</textarea><div class="modal-actions"><button class="btn danger" onclick="deleteNote('${n.id}')">Delete note</button></div>`:'<div class="empty">Create your first note.</div>'}</section></div>`}
 function calendar(){const y=calDate.getFullYear(),m=calDate.getMonth(),first=new Date(y,m,1),start=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),prev=new Date(y,m,0).getDate(),todayTasks=state.tasks.filter(t=>t.due===today());let cells='';for(let i=0;i<42;i++){let d,muted=false,month=m;if(i<start){d=prev-start+i+1;month=m-1;muted=true}else if(i>=start+days){d=i-start-days+1;month=m+1;muted=true}else d=i-start+1;const iso=new Date(y,month,d,12).toISOString().slice(0,10),items=[...state.tasks.filter(t=>t.due===iso).map(t=>({...t,kind:'task'})),...(state.events||[]).filter(e=>e.date===iso).map(e=>({...e,kind:'event'})),...allTopics().filter(t=>t.due===iso).map(t=>({id:t.id,title:t.name,kind:'topic'})),...(state.jobApplications||[]).filter(a=>a.followUpDate===iso&&!jobTerminal(a.status)).map(a=>({id:a.id,title:`Follow up: ${a.company}`,kind:'job'}))];cells+=`<button class="cal-day ${muted?'muted':''} ${iso===today()?'today':''}" onclick="calendarDay('${iso}')"><span class="cal-num">${d}</span>${items.slice(0,3).map(e=>`<span class="cal-event ${e.kind}">${escapeHtml(e.title)}</span>`).join('')}${items.length>3?`<small>+${items.length-3} more</small>`:''}</button>`}return head('Calendar & today plan','Study deadlines, today tasks, events and job follow-ups',`<div class="job-head-actions"><button class="btn ghost" onclick="taskModal()">+ Today task</button><button class="btn primary" onclick="eventModal()">+ Add event</button></div>`)+`<div class="grid calendar-layout"><section class="card calendar-card"><div class="calendar-head"><button class="icon-btn" onclick="moveMonth(-1)">‹</button><button class="btn ghost" onclick="calDate=new Date();render()">Today</button><h3>${calDate.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</h3><button class="icon-btn" onclick="moveMonth(1)">›</button></div><div class="calendar-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="day-name">${x}</div>`).join('')}${cells}</div></section><aside class="card today-panel"><div class="card-title"><h3>Today plan</h3><span>${todayTasks.length} task${todayTasks.length===1?'':'s'}</span></div>${taskRows(todayTasks)}</aside></div>`}
 function settings(){const themes=[['dark','#7c5cff'],['cyber','#ff3e9d'],['matrix','#3cdb71'],['ocean','#1b9cff'],['light','#dce8f5']];return head('User & app settings','Your complete account and application control center')+`<div class="grid settings-grid"><section class="card"><div class="card-title"><h3>Profile & security</h3></div><div class="setting-row"><span>Signed in as</span><strong>${escapeHtml(state.profile?.name||'Local user')}</strong></div><div class="setting-row"><span>Account email</span><strong>${escapeHtml(state.profile?.email||cloudUser?.email||'Local profile')}</strong></div><div class="modal-actions"><button class="btn ghost" onclick="signOut()">↪ Sign out</button><button class="btn primary" onclick="profileModal()">Edit profile / password</button></div></section><section class="card"><div class="card-title"><h3>Workspace control</h3><span>${state.workspaces.length} total</span></div><label class="workspace-switcher settings-workspace">Active workspace<select id="settingsWorkspaceSelect" aria-label="Current workspace" onchange="switchWorkspace(this.value)">${state.workspaces.filter(w=>!w.archived||w.id===state.activeWorkspace).map(w=>`<option value="${w.id}" ${w.id===state.activeWorkspace?'selected':''}>${escapeHtml(w.name)}</option>`).join('')}</select></label>${state.workspaces.map(w=>`<div class="setting-row"><span>${escapeHtml(w.name)} ${w.archived?'(Archived)':''}</span><button class="mini-btn" onclick="workspaceModal('${w.id}')">✎</button></div>`).join('')}<div class="modal-actions"><button class="btn primary" onclick="workspaceModal()">+ New workspace</button></div></section><section class="card"><div class="card-title"><h3>Appearance</h3></div><div class="theme-list">${themes.map(([n,c])=>`<button title="${n}" class="theme-chip ${state.settings.theme===n?'active':''}" style="--swatch:${c}" onclick="setTheme('${n}')"></button>`).join('')}</div></section><section class="card"><div class="card-title"><h3>Sound & notifications</h3></div><div class="setting-row"><span>Completion sound</span><button class="toggle ${state.settings.sounds?'on':''}" onclick="toggleSetting('sounds')"></button></div><div class="setting-row"><span>Deadline notifications</span><button class="toggle ${state.settings.notifications?'on':''}" onclick="toggleSetting('notifications')"></button></div></section><section class="card"><div class="card-title"><h3>Subjects import / export</h3></div><p class="task-meta">Choose one or several subjects. Only their modules and topics are exported; tasks, jobs, notes, events, profile and settings are never included.</p><div class="modal-actions"><button class="btn ghost" onclick="importInput.click()">Import subjects</button><button class="btn ghost" onclick="exportJSON()">Choose subjects to export</button><button class="btn primary" onclick="downloadSubjectTemplate()">Sample JSON</button></div></section><section class="card"><div class="card-title"><h3>Account control</h3></div><p class="task-meta">Permanently delete this account and its tracker data.</p><div class="modal-actions"><button class="btn danger" onclick="deleteAccountModal()">Delete account</button></div></section></div>`}
@@ -1341,7 +1439,7 @@ window.loginFaqModal=()=>modal(`<div class="login-faq"><span class="eyebrow">LOG
 function render(){sideStreak.textContent=`${streak()} days`;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===viewName));const views={dashboard,subjects,tasks:tasksView,notes,calendar,jobs:jobTracker,messages:window.familyMessagingView,timer:timerView,settings,help:helpView,subject:subjectView};view.innerHTML=(views[viewName]||dashboard)();if(viewName==='settings'&&typeof enhanceSettingsNavigation==='function')setTimeout(enhanceSettingsNavigation)}
 window.setView=(n,options={})=>{viewName=n;rememberView(n);setNavigationOpen(false);if(!options.fromHistory)updateViewHistory(n,{replace:Boolean(options.replace)});render()};window.openSubject=id=>{selectedSubject=id;viewName='subject';rememberView('subject');setNavigationOpen(false);updateViewHistory('subject');render()};
 function modal(html){modalBody.innerHTML=html;const d=document.querySelector('#modal');if(!d.open)d.showModal()}function closeModal(){document.querySelector('#modal').close()}function field(id){return document.getElementById(id)}
-window.subjectModal=id=>{const s=state.subjects.find(x=>x.id===id);modal(`<h2>${s?'Edit':'Add'} subject</h2><div class="form-grid"><label>Name<input id="fName" value="${escapeHtml(s?.name||'')}"></label><label>Short icon<input id="fIcon" maxlength="3" value="${escapeHtml(s?.icon||'')}"></label><label class="full">Description<input id="fDesc" value="${escapeHtml(s?.description||'')}"></label><label>Color<input id="fColor" type="color" value="${s?.color||'#7c5cff'}"></label></div><div class="modal-actions">${s?'<button type="button" class="btn danger" onclick="deleteSubject(\''+s.id+'\')">Delete</button>':''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveSubject('${id||''}')">Save</button></div>`)};
+window.subjectModal=id=>{const s=state.subjects.find(x=>x.id===id);modal(`<h2>${s?'Edit':'Add'} subject</h2><div class="form-grid"><label>Name<input id="fName" value="${escapeHtml(s?.name||'')}"></label><label>Short icon<input id="fIcon" maxlength="3" value="${escapeHtml(s?.icon||'')}"></label><label class="full">Description<input id="fDesc" value="${escapeHtml(s?.description||'')}"></label><label>Color<input id="fColor" type="color" value="${s?.color||'#315f46'}"></label></div><div class="modal-actions">${s?'<button type="button" class="btn danger" onclick="deleteSubject(\''+s.id+'\')">Delete</button>':''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveSubject('${id||''}')">Save</button></div>`)};
 window.saveSubject=id=>{const s=state.subjects.find(x=>x.id===id),name=field('fName').value.trim(),data={name,icon:(field('fIcon').value||name.slice(0,2)).toUpperCase(),description:field('fDesc').value.trim(),color:field('fColor').value};if(!data.name)return toast('Subject name is required');if(s)Object.assign(s,data);else state.subjects.push({id:uid(),...data,modules:[]});save();closeModal();render();toast('Subject saved')};
 window.deleteSubject=id=>{if(!confirm('Delete this subject and all its modules?'))return;state.subjects=state.subjects.filter(s=>s.id!==id);save();closeModal();viewName='subjects';render()};
 window.moduleModal=sid=>modal(`<h2>Add module</h2><label>Module name<input id="fModule"></label><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveModule('${sid}')">Add module</button></div>`);
@@ -1376,10 +1474,10 @@ window.exportSubjectsModal=()=>{if(!state.subjects.length)return toast('Create o
 window.toggleSubjectExportSelection=checked=>document.querySelectorAll('[data-export-subject]').forEach(input=>input.checked=Boolean(checked));
 window.exportSelectedSubjects=()=>{const ids=[...document.querySelectorAll('[data-export-subject]:checked')].map(input=>input.value);if(!ids.length)return toast('Choose at least one subject');const payload=buildSubjectExport(ids);download(payload.filename,payload.data,'application/json');closeModal();toast(`${payload.subjects.length} subject${payload.subjects.length===1?'':'s'} exported`)};
 window.exportJSON=window.exportSubjectsModal;function download(name,data,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
-window.downloadSubjectTemplate=()=>download('study-subjects-template.json',JSON.stringify({format:'study-tracker-subjects',version:1,subjects:[{name:'Example Subject',description:'What you want to learn',color:'#7c5cff',icon:'EX',modules:[{name:'Module 1',topics:[{name:'Topic 1',status:'not-started',due:''}]}]}]},null,2),'application/json');
+window.downloadSubjectTemplate=()=>download('study-subjects-template.json',JSON.stringify({format:'study-tracker-subjects',version:1,subjects:[{name:'Example Subject',description:'What you want to learn',color:'#315f46',icon:'EX',modules:[{name:'Module 1',topics:[{name:'Topic 1',status:'not-started',due:''}]}]}]},null,2),'application/json');
 window.exportExcel=()=>{if(!window.XLSX)return toast('Excel library unavailable');const wb=XLSX.utils.book_new(),rows=allTopics().map(t=>({Subject:subjectName(t.subjectId),Module:t.module,Topic:t.name,Status:t.status,'Due Date':t.due||''}));XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Subjects');XLSX.writeFile(wb,`tracker-subjects-${today()}.xlsx`)};
 function validImportedSubject(s){return s&&typeof s.name==='string'&&Array.isArray(s.modules)&&s.modules.every(m=>m&&typeof m.name==='string'&&Array.isArray(m.topics))}
-function prepareImportedSubject(s){return {id:uid(),name:s.name.trim(),description:String(s.description||''),color:/^#[0-9a-f]{6}$/i.test(s.color||'')?s.color:'#7c5cff',icon:String(s.icon||s.name.slice(0,2)).slice(0,3).toUpperCase(),modules:s.modules.map(m=>({id:uid(),name:m.name.trim(),topics:m.topics.map(t=>({id:uid(),name:String(t.name||'Untitled topic'),status:['not-started','in-progress','completed'].includes(t.status)?t.status:'not-started',due:/^\d{4}-\d{2}-\d{2}$/.test(t.due||'')?t.due:''}))}))}}
+function prepareImportedSubject(s){return {id:uid(),name:s.name.trim(),description:String(s.description||''),color:/^#[0-9a-f]{6}$/i.test(s.color||'')?s.color:'#315f46',icon:String(s.icon||s.name.slice(0,2)).slice(0,3).toUpperCase(),modules:s.modules.map(m=>({id:uid(),name:m.name.trim(),topics:m.topics.map(t=>({id:uid(),name:String(t.name||'Untitled topic'),status:['not-started','in-progress','completed'].includes(t.status)?t.status:'not-started',due:/^\d{4}-\d{2}-\d{2}$/.test(t.due||'')?t.due:''}))}))}}
 importInput.addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result),subjects=Array.isArray(x)?x:x.subjects;if(!Array.isArray(subjects)||!subjects.length||!subjects.every(validImportedSubject))throw Error();state.subjects.push(...subjects.map(prepareImportedSubject));selectedSubject=state.subjects[0]?.id||'';save();render();toast(`${subjects.length} subject${subjects.length===1?'':'s'} imported`)}catch{toast('Invalid subjects JSON — download the sample format')}finally{importInput.value=''}};r.readAsText(file)});
 window.signOut=async()=>{familyStopVoice?.();sessionStorage.removeItem('studyTracker.family.role');sessionStorage.removeItem('studyTracker.family.sessionType');sessionStorage.removeItem('studyTracker.family.loginIntent');sessionStorage.setItem('studyTracker.forceLogin','1');if(sb&&cloudUser){await sb.auth.signOut();clearClientAccount()}location.reload()};
 window.deleteAccountModal=()=>modal(`<h2>Delete account permanently</h2><p>This deletes your login, tracker data, workspaces, group memberships, messages and activity. Owned groups transfer to another member when possible; otherwise they are deleted. You must create a new account to use this email again.</p><label>Type <strong>DELETE</strong> to confirm<input id="deleteConfirm" autocomplete="off" placeholder="DELETE"></label><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn danger" onclick="deleteAccount()">Delete account permanently</button></div>`);
@@ -2431,19 +2529,19 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     return head(`Good ${new Date().getHours()<12?'morning':new Date().getHours()<18?'afternoon':'evening'}, ${h((state.profile?.name||'Learner').split(' ')[0])}`,role[1])+`<div class="v42-role"><span>${role[0]}</span><small>Only enabled modules are included</small></div><div class="v42-dashboard"><section class="card v42-overall"><div class="card-title"><h3>Overall readiness</h3><span>Role-aware</span></div><div><canvas id="v42OverallDonut"></canvas><strong>${overall}%</strong></div><p>${focus?`Recommended next focus: <b>${h(focus.label)}</b> (${clamp(focus.value)}%)`:'Add your first records to unlock a recommendation.'}</p></section><section class="card v42-bars"><div class="card-title"><h3>Section progress</h3><span>${enabled.length} enabled</span></div><canvas id="v42ModuleBars"></canvas></section><section class="card v42-line"><div class="card-title"><h3>Seven-day focus</h3><span>${week} minutes</span></div><canvas id="v42FocusLine"></canvas></section><section class="card v42-now"><div class="card-title"><h3>Today</h3><button onclick="setView('calendar')">Calendar →</button></div><div><span><b>${topics.filter(item=>item.status==='completed').length}</b><small>topics complete</small></span><span><b>${due}</b><small>tasks due</small></span><span><b>${Math.round(week/60*10)/10}h</b><small>seven-day focus</small></span></div></section></div>`;
   }
 
-  function chartTheme(){const css=getComputedStyle(document.body);return {accent:css.getPropertyValue('--accent').trim()||'#4c5fd5',muted:css.getPropertyValue('--muted').trim()||'#66708b',line:css.getPropertyValue('--line').trim()||'#dfe4ef'}}
+  function chartTheme(){const css=getComputedStyle(document.body);return {accent:css.getPropertyValue('--chart-1').trim()||css.getPropertyValue('--accent').trim()||'#315f46',accent2:css.getPropertyValue('--chart-2').trim()||css.getPropertyValue('--accent2').trim()||'#8ba26b',muted:css.getPropertyValue('--muted').trim()||'#66708b',line:css.getPropertyValue('--line').trim()||'#dfe4ef'}}
   function resetChart(key){charts[key]?.destroy?.();delete charts[key]}
   function drawDashboard(){
     if(!window.Chart)return;['overall','modules','focus'].forEach(resetChart);const data=window.v42Dashboard||{snapshots:[],overall:0},theme=chartTheme(),usable=data.snapshots.filter(item=>item.total||item.value).slice(0,12),days=Array.from({length:7},(_,index)=>dateOffset(index-6)),minutes=days.map(day=>(state.activity||[]).filter(item=>item.date===day).reduce((sum,item)=>sum+Number(item.minutes||0),0)),common={responsive:true,maintainAspectRatio:false};
     const donut=document.querySelector('#v42OverallDonut');if(donut)charts.overall=new Chart(donut,{type:'doughnut',data:{datasets:[{data:[data.overall,100-data.overall],backgroundColor:[theme.accent,theme.line],borderWidth:0}]},options:{...common,cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
-    const bars=document.querySelector('#v42ModuleBars');if(bars)charts.modules=new Chart(bars,{type:'bar',data:{labels:usable.map(item=>item.label),datasets:[{data:usable.map(item=>clamp(item.value)),backgroundColor:usable.map((_,index)=>index%2?theme.accent:'#20b8a6'),borderRadius:6,maxBarThickness:15}]},options:{...common,indexAxis:'y',scales:{x:{beginAtZero:true,max:100,ticks:{color:theme.muted,font:{size:8}},grid:{color:theme.line}},y:{ticks:{color:theme.muted,font:{size:8}},grid:{display:false}}},plugins:{legend:{display:false}}}});
+    const bars=document.querySelector('#v42ModuleBars');if(bars)charts.modules=new Chart(bars,{type:'bar',data:{labels:usable.map(item=>item.label),datasets:[{data:usable.map(item=>clamp(item.value)),backgroundColor:usable.map((_,index)=>index%2?theme.accent:theme.accent2),borderRadius:6,maxBarThickness:15}]},options:{...common,indexAxis:'y',scales:{x:{beginAtZero:true,max:100,ticks:{color:theme.muted,font:{size:8}},grid:{color:theme.line}},y:{ticks:{color:theme.muted,font:{size:8}},grid:{display:false}}},plugins:{legend:{display:false}}}});
     const line=document.querySelector('#v42FocusLine');if(line)charts.focus=new Chart(line,{type:'line',data:{labels:days.map(day=>new Date(`${day}T12:00`).toLocaleDateString(undefined,{weekday:'short'})),datasets:[{data:minutes,borderColor:theme.accent,backgroundColor:`${theme.accent}22`,fill:true,tension:.38,pointRadius:2}]},options:{...common,scales:{y:{beginAtZero:true,ticks:{color:theme.muted,font:{size:8}},grid:{color:theme.line}},x:{ticks:{color:theme.muted,font:{size:8}},grid:{display:false}}},plugins:{legend:{display:false}}}});
   }
   function drawMockCharts(rows){
     if(!window.Chart)return;resetChart('mockDonut');resetChart('mockLine');const theme=chartTheme(),scores=rows.map(score),latest=scores.at(-1)||0,common={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};const donut=document.querySelector('#v42MockDonut');if(donut)charts.mockDonut=new Chart(donut,{type:'doughnut',data:{datasets:[{data:[latest,100-latest],backgroundColor:[theme.accent,theme.line],borderWidth:0}]},options:{...common,cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});const line=document.querySelector('#v42MockLine');if(line)charts.mockLine=new Chart(line,{type:'line',data:{labels:rows.map((item,index)=>item.date||`#${index+1}`),datasets:[{data:scores,borderColor:theme.accent,backgroundColor:`${theme.accent}14`,fill:true,tension:.32,pointRadius:3,pointBackgroundColor:theme.accent}]},options:{...common,scales:{y:{beginAtZero:true,max:100,ticks:{color:theme.muted},grid:{color:theme.line}},x:{ticks:{color:theme.muted},grid:{display:false}}}}});
   }
   function drawPracticeChart(rows){
-    if(!window.Chart)return;resetChart('practice');const theme=chartTheme(),canvas=document.querySelector('#v42PracticeLine');if(canvas)charts.practice=new Chart(canvas,{type:'line',data:{labels:rows.map((item,index)=>item.date||`#${index+1}`),datasets:[{label:'Accuracy %',data:rows.map(score),borderColor:'#1e9a79',backgroundColor:'#1e9a7922',fill:true,tension:0,pointRadius:3},{label:'Minutes',data:rows.map(item=>Number(item.duration||0)),borderColor:theme.accent,pointRadius:2,borderDash:[4,4]}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{color:theme.muted},grid:{color:theme.line}},x:{ticks:{color:theme.muted},grid:{display:false}}},plugins:{legend:{display:true,position:'bottom',labels:{color:theme.muted,boxWidth:8}}}}});
+    if(!window.Chart)return;resetChart('practice');const theme=chartTheme(),canvas=document.querySelector('#v42PracticeLine');if(canvas)charts.practice=new Chart(canvas,{type:'line',data:{labels:rows.map((item,index)=>item.date||`#${index+1}`),datasets:[{label:'Accuracy %',data:rows.map(score),borderColor:theme.accent2,backgroundColor:`${theme.accent2}22`,fill:true,tension:0,pointRadius:3},{label:'Minutes',data:rows.map(item=>Number(item.duration||0)),borderColor:theme.accent,pointRadius:2,borderDash:[4,4]}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{color:theme.muted},grid:{color:theme.line}},x:{ticks:{color:theme.muted},grid:{display:false}}},plugins:{legend:{display:true,position:'bottom',labels:{color:theme.muted,boxWidth:8}}}}});
   }
 
   window.dashboard=dashboardV42;
@@ -2508,10 +2606,10 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
   const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';
   const CATEGORY={
-    blank:{label:'Blank',theme:'category-blank',color:'#56647a',tag:'Clean light',description:'A neutral workspace you can shape yourself.',modules:['subjects','calendar']},
-    school:{label:'School',theme:'category-school',color:'#2869d8',tag:'Blue default',description:'Subjects, assignments and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},
-    business:{label:'Business',theme:'category-business',color:'#b47a12',tag:'Yellow default',description:'Projects, plans, resources and team goals.',modules:['projects','tasks','calendar','notes','goals','resources','groups']},
-    personal:{label:'Personal',theme:'category-personal',color:'#27754b',tag:'Green default',description:'Habits, goals and a calmer personal plan.',modules:['tasks','calendar','notes','habits','goals','projects','groups']}
+    blank:{label:'Blank',theme:'category-blank',color:'#40576b',tag:'Studio Slate',description:'A composed neutral workspace you can shape yourself.',modules:['subjects','calendar']},
+    school:{label:'School',theme:'category-school',color:'#235b8e',tag:'Scholar Cobalt',description:'Clear blue structure for subjects and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},
+    business:{label:'Business',theme:'category-business',color:'#87563a',tag:'Warm Earth',description:'Editorial warmth for projects, resources and team goals.',modules:['projects','tasks','calendar','notes','goals','resources','groups']},
+    personal:{label:'Personal',theme:'category-personal',color:'#315f46',tag:'Focus Morning',description:'Warm cream, forest ink and calm sage progress.',modules:['tasks','calendar','notes','habits','goals','projects','groups']}
   };
   const THEME_NAMES=['category-blank','category-school','category-business','category-personal','focus-paper'];
   const h=value=>typeof escapeHtml==='function'?escapeHtml(value):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -2571,31 +2669,35 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
   function appearanceMarkup(){
     const s=state.settings||{};
+    const selectedTheme={cyber:'dark'}[s.theme]||s.theme;
     const themes=[
-      ['category-blank','Blank Light','#56647a','#f4f6f9','#182231'],
-      ['category-school','School Blue','#2869d8','#eef5ff','#152a47'],
-      ['category-business','Business Gold','#b47a12','#fbf7eb','#30291d'],
-      ['category-personal','Personal Green','#27754b','#eff7f1','#193326'],
-      ['nestlyra','Focus Sage','#21653F','#f5f6f1','#17301f'],
-      ['auto','Automatic','#7181EA','#e9edf5','#1c2333'],
-      ['dark','Midnight','#7c5cff','#09111d','#edf4ff'],
-      ['ocean','Ocean','#1b9cff','#071421','#edf8ff'],
-      ['cyber','Cyber','#ff3e9d','#0b0d1c','#fff'],
-      ['matrix','Matrix','#3cdb71','#07140c','#effff3'],
-      ['focus-paper','Warm Paper','#835f3f','#f7f3eb','#2d2923']
+      ['category-personal','Focus Morning','Warm cream · sage progress','#f6f4ec','#ffffff','#315f46','#8ba26b','#17251c','#eef2e6','Recommended'],
+      ['nestlyra','Finance Forest','Forest shell · teal analysis','#f2f5f1','#ffffff','#0f5a3d','#3d6e6e','#102a1d','#0d4b33','Finance reference'],
+      ['category-school','Scholar Cobalt','Clear blue · steady attention','#f2f5f9','#ffffff','#235b8e','#7197b8','#14263a','#e9eff6',''],
+      ['category-business','Warm Earth','Cream · walnut · muted clay','#f7f3eb','#fffdfa','#87563a','#b58b66','#32271f','#f0e7db',''],
+      ['category-blank','Studio Slate','Neutral canvas · precise ink','#f3f5f6','#ffffff','#40576b','#8091a0','#182530','#e9eef1',''],
+      ['light','Cloud Teal','Cool white · quiet teal','#f3f6f7','#ffffff','#326173','#7f9aa6','#152a33','#e8f0f2',''],
+      ['focus-paper','Linen Study','Linen · olive · editorial ink','#f6f0e5','#fffdf8','#6d6244','#9a8759','#2e2a22','#ece3d3',''],
+      ['ocean','Deep Teal','Dark teal · mint signal','#081916','#10241f','#61ad8d','#9ebb6a','#f1f7f3','#06130f',''],
+      ['matrix','Evergreen Night','Deep forest · botanical signal','#0b1711','#12251a','#74a57d','#b0bc6e','#f0f7f2','#08120d',''],
+      ['dark','Night Focus','Ink navy · sage signal','#0c1321','#131d2d','#7a8fb4','#a6ba68','#f3f6fa','#09101b',''],
+      ['auto','Automatic','Morning by day · night after dark','#f1f2ec','#ffffff','#526f5f','#849b70','#17251c','#111c22','System']
     ];
     const category=CATEGORY[s.focusCategory||'blank'];
-    return `<div class="card-title"><h3>Appearance</h3><span>Saved to this account</span></div>
-      <div class="appearance-group"><h4>Theme collection</h4><div class="appearance-theme-grid">${themes.map(([name,label,color,bg,text])=>`<button type="button" title="${label}" class="theme-chip ${s.theme===name?'active':''}" style="--swatch:${color};--theme-bg:${bg};--theme-text:${text}" onclick="setTheme('${name}')"><span>${label}</span></button>`).join('')}</div></div>
-      <div class="category-theme-note"><span>Your ${h(category.label)} starting theme is <strong>${h(category.tag)}</strong>. Manual theme choices are kept when the category changes.</span><button type="button" class="btn ghost" onclick="useFocusCategoryTheme()">Use category default</button></div>
-      <div class="appearance-advanced-grid">
+    return `<div class="appearance-studio">
+      <header class="appearance-hero"><div><span class="appearance-kicker">TULSHII VISUAL SYSTEM</span><h3>Appearance</h3><p>Choose a complete color system—not a decorative tint. Each palette keeps surfaces calm, contrast decisive and semantic colors reserved for meaning.</p></div><div class="appearance-quality-rule" aria-label="Professional color balance"><strong>80 / 15 / 5</strong><span>neutral canvas · supporting surface · confident accent</span></div></header>
+      <section class="appearance-group"><div class="appearance-section-head"><div><h4>Curated color systems</h4><p>Ten professionally balanced palettes plus automatic day and night mode.</p></div><span>Account saved</span></div><div class="appearance-theme-grid">${themes.map(([name,label,description,bg,panel,accent,secondary,text,sidebar,badge])=>`<button type="button" aria-pressed="${selectedTheme===name}" title="Use ${label}" class="theme-chip ${selectedTheme===name?'active':''}" style="--theme-bg:${bg};--theme-panel:${panel};--theme-accent:${accent};--theme-secondary:${secondary};--theme-text:${text};--theme-sidebar:${sidebar}" onclick="setTheme('${name}')"><span class="theme-preview" aria-hidden="true"><i class="theme-preview-sidebar"></i><i class="theme-preview-top"></i><i class="theme-preview-card theme-preview-card-a"></i><i class="theme-preview-card theme-preview-card-b"></i><i class="theme-preview-chart"></i></span><span class="theme-card-copy"><strong>${label}</strong><small>${description}</small></span><span class="theme-swatches" aria-hidden="true"><i style="background:${text}"></i><i style="background:${accent}"></i><i style="background:${secondary}"></i><i style="background:${bg}"></i></span>${badge?`<em>${badge}</em>`:''}</button>`).join('')}</div></section>
+      <div class="category-theme-note"><span><small>${h(category.label)} workspace default</small><strong>${h(category.tag)}</strong><i>Manual choices stay unchanged when sections are enabled or disabled.</i></span><button type="button" class="btn ghost" onclick="useFocusCategoryTheme()">Restore default</button></div>
+      <section class="appearance-group"><div class="appearance-section-head"><div><h4>Interface composition</h4><p>Fine-tune readability and information density without changing the palette.</p></div></div><div class="appearance-advanced-grid">
         <label>Text style<select onchange="updateAppearance('fontStyle',this.value)"><option value="modern" ${s.fontStyle==='modern'?'selected':''}>Modern — Inter + Poppins</option><option value="system" ${s.fontStyle==='system'?'selected':''}>System — Segoe UI</option><option value="editorial" ${s.fontStyle==='editorial'?'selected':''}>Editorial — Georgia</option></select></label>
         <label>Text size<select onchange="updateAppearance('textScale',this.value)"><option value="compact" ${s.textScale==='compact'?'selected':''}>Compact</option><option value="normal" ${!s.textScale||s.textScale==='normal'?'selected':''}>Comfortable</option><option value="large" ${s.textScale==='large'?'selected':''}>Large</option></select></label>
         <label>Layout density<select onchange="updateAppearance('density',this.value)"><option value="compact" ${s.density==='compact'?'selected':''}>Compact</option><option value="comfortable" ${!s.density||s.density==='comfortable'?'selected':''}>Comfortable</option><option value="spacious" ${s.density==='spacious'?'selected':''}>Spacious</option></select></label>
         <label>Corner style<select onchange="updateAppearance('radiusStyle',this.value)"><option value="square" ${s.radiusStyle==='square'?'selected':''}>Structured</option><option value="soft" ${!s.radiusStyle||s.radiusStyle==='soft'?'selected':''}>Soft</option><option value="rounded" ${s.radiusStyle==='rounded'?'selected':''}>Rounded</option></select></label>
         <label>Interface motion<select onchange="updateAppearance('motion',this.value)"><option value="full" ${!s.motion||s.motion==='full'?'selected':''}>Full motion</option><option value="reduced" ${s.motion==='reduced'?'selected':''}>Reduced motion</option></select></label>
         <label>Login image framing<select onchange="updateAppearance('loginImagePosition',this.value)"><option value="left" ${s.loginImagePosition==='left'?'selected':''}>Focus left</option><option value="center" ${!s.loginImagePosition||s.loginImagePosition==='center'?'selected':''}>Focus center</option><option value="right" ${s.loginImagePosition==='right'?'selected':''}>Focus right</option></select></label>
-      </div>`;
+      </div></section>
+      <section class="appearance-group login-image-settings"><div class="appearance-section-head"><div><h4>Login artwork</h4><p>Keep the branded default or upload a personal background. The image is resized and optimized before saving.</p></div><span>${s.loginImage?'Custom artwork':'Brand default'}</span></div><div class="appearance-login-row"><label>Text overlay<select onchange="updateAppearance('loginImageShade',this.value)"><option value="soft" ${s.loginImageShade==='soft'?'selected':''}>Soft contrast</option><option value="balanced" ${!s.loginImageShade||s.loginImageShade==='balanced'?'selected':''}>Balanced contrast</option><option value="strong" ${s.loginImageShade==='strong'?'selected':''}>Strong contrast</option></select></label><div class="appearance-image-actions"><label class="btn primary appearance-upload">Upload image<input type="file" accept="image/jpeg,image/png,image/webp" onchange="uploadLoginImage(event)"></label><button type="button" class="btn ghost" onclick="resetLoginImage()">Restore brand artwork</button></div></div></section>
+    </div>`;
   }
   window.appearanceSettingsMarkup=appearanceMarkup;
 
@@ -2686,7 +2788,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     const subject=state.subjects.find(item=>item.id===id),modules=subject?.modules||[];
     modal(`<h2>${subject?'Edit':'Add'} subject</h2><div class="form-grid"><label class="full">Subject name<input id="fName" value="${h(subject?.name||'')}" placeholder="e.g. Mathematics"></label><label>Short icon<input id="fIcon" maxlength="3" value="${h(subject?.icon||'')}" placeholder="MA"></label><label>Subject type<select id="fSubjectType">${['Course','Academic','Certification','Project','Personal','Other'].map(value=>`<option ${subject?.subjectType===value?'selected':''}>${value}</option>`).join('')}</select></label></div>
       ${optionalDetails('Modules & topics (optional)',`<div id="subjectHierarchyBuilder" class="hierarchy-builder">${(modules.length?modules:[{}]).map(hierarchyModuleMarkup).join('')}</div><div class="structure-actions"><small>Add topics one per line. You can also build the hierarchy later.</small><button type="button" class="btn ghost" onclick="addSubjectHierarchyModule()">+ Module</button></div>`,Boolean(modules.length))}
-      ${optionalDetails('Additional settings',`<div class="form-grid"><label class="full">Description<input id="fDesc" value="${h(subject?.description||'')}" placeholder="What this subject covers"></label><label>Color<input id="fColor" type="color" value="${subject?.color||'#4C5FD5'}"></label><label>Difficulty<select id="fSubjectDifficulty">${['Not set','Beginner','Intermediate','Advanced'].map(value=>`<option ${subject?.difficulty===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Target date<input id="fSubjectTarget" type="date" value="${h(subject?.targetDate||'')}"></label><label>Weekly study goal<input id="fSubjectWeekly" type="number" min="0" max="80" step="0.5" value="${h(subject?.weeklyHours||'')}" placeholder="Hours"></label></div>`,Boolean(subject?.description||subject?.targetDate||subject?.weeklyHours))}
+      ${optionalDetails('Additional settings',`<div class="form-grid"><label class="full">Description<input id="fDesc" value="${h(subject?.description||'')}" placeholder="What this subject covers"></label><label>Color<input id="fColor" type="color" value="${subject?.color||'#315f46'}"></label><label>Difficulty<select id="fSubjectDifficulty">${['Not set','Beginner','Intermediate','Advanced'].map(value=>`<option ${subject?.difficulty===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Target date<input id="fSubjectTarget" type="date" value="${h(subject?.targetDate||'')}"></label><label>Weekly study goal<input id="fSubjectWeekly" type="number" min="0" max="80" step="0.5" value="${h(subject?.weeklyHours||'')}" placeholder="Hours"></label></div>`,Boolean(subject?.description||subject?.targetDate||subject?.weeklyHours))}
       <div class="modal-actions">${subject?`<button type="button" class="btn danger" onclick="deleteSubject('${subject.id}')">Delete</button>`:''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveSubjectV48('${id||''}')">Save subject</button></div>`);
   };
 
@@ -2694,7 +2796,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     const existing=state.subjects.find(item=>item.id===id),name=q('#fName')?.value.trim();if(!name)return toast('Subject name is required');
     const moduleRows=all('[data-hierarchy-module]');
     const modules=moduleRows.map(row=>{const moduleId=row.dataset.moduleId,old=(existing?.modules||[]).find(item=>item.id===moduleId),moduleName=q('[data-hierarchy-module-name]',row)?.value.trim(),topicNames=(q('[data-hierarchy-topics]',row)?.value||'').split(/\n+/).map(value=>value.trim()).filter(Boolean);if(!moduleName&&!topicNames.length)return null;return{id:old?.id||uid(),name:moduleName||`Module ${(existing?.modules||[]).length+1}`,description:old?.description||'',targetDate:old?.targetDate||'',estimatedHours:old?.estimatedHours||'',topics:topicNames.map((topicName,index)=>{const topic=old?.topics?.[index];return{id:topic?.id||uid(),name:topicName,status:topic?.status||'not-started',due:topic?.due||'',priority:topic?.priority||'Normal',estimatedMinutes:topic?.estimatedMinutes||'',notes:topic?.notes||''}})}}).filter(Boolean);
-    const data={name,icon:(q('#fIcon')?.value.trim()||name.slice(0,2)).toUpperCase(),subjectType:q('#fSubjectType')?.value||'Course',description:q('#fDesc')?.value.trim()||'',color:q('#fColor')?.value||'#4C5FD5',difficulty:q('#fSubjectDifficulty')?.value||'Not set',targetDate:q('#fSubjectTarget')?.value||'',weeklyHours:Number(q('#fSubjectWeekly')?.value||0),modules};
+    const data={name,icon:(q('#fIcon')?.value.trim()||name.slice(0,2)).toUpperCase(),subjectType:q('#fSubjectType')?.value||'Course',description:q('#fDesc')?.value.trim()||'',color:q('#fColor')?.value||'#315f46',difficulty:q('#fSubjectDifficulty')?.value||'Not set',targetDate:q('#fSubjectTarget')?.value||'',weeklyHours:Number(q('#fSubjectWeekly')?.value||0),modules};
     if(existing)Object.assign(existing,data);else state.subjects.push({id:uid(),...data});
     save();closeModal();render();toast(existing?'Subject updated':'Subject created');
   };

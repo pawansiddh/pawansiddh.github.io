@@ -5,10 +5,10 @@
 
   const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';
   const CATEGORY={
-    blank:{label:'Blank',theme:'category-blank',color:'#56647a',tag:'Clean light',description:'A neutral workspace you can shape yourself.',modules:['subjects','calendar']},
-    school:{label:'School',theme:'category-school',color:'#2869d8',tag:'Blue default',description:'Subjects, assignments and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},
-    business:{label:'Business',theme:'category-business',color:'#b47a12',tag:'Yellow default',description:'Projects, plans, resources and team goals.',modules:['projects','tasks','calendar','notes','goals','resources','groups']},
-    personal:{label:'Personal',theme:'category-personal',color:'#27754b',tag:'Green default',description:'Habits, goals and a calmer personal plan.',modules:['tasks','calendar','notes','habits','goals','projects','groups']}
+    blank:{label:'Blank',theme:'category-blank',color:'#40576b',tag:'Studio Slate',description:'A composed neutral workspace you can shape yourself.',modules:['subjects','calendar']},
+    school:{label:'School',theme:'category-school',color:'#235b8e',tag:'Scholar Cobalt',description:'Clear blue structure for subjects and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},
+    business:{label:'Business',theme:'category-business',color:'#87563a',tag:'Warm Earth',description:'Editorial warmth for projects, resources and team goals.',modules:['projects','tasks','calendar','notes','goals','resources','groups']},
+    personal:{label:'Personal',theme:'category-personal',color:'#315f46',tag:'Focus Morning',description:'Warm cream, forest ink and calm sage progress.',modules:['tasks','calendar','notes','habits','goals','projects','groups']}
   };
   const THEME_NAMES=['category-blank','category-school','category-business','category-personal','focus-paper'];
   const h=value=>typeof escapeHtml==='function'?escapeHtml(value):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -68,31 +68,35 @@
 
   function appearanceMarkup(){
     const s=state.settings||{};
+    const selectedTheme={cyber:'dark'}[s.theme]||s.theme;
     const themes=[
-      ['category-blank','Blank Light','#56647a','#f4f6f9','#182231'],
-      ['category-school','School Blue','#2869d8','#eef5ff','#152a47'],
-      ['category-business','Business Gold','#b47a12','#fbf7eb','#30291d'],
-      ['category-personal','Personal Green','#27754b','#eff7f1','#193326'],
-      ['nestlyra','Focus Sage','#21653F','#f5f6f1','#17301f'],
-      ['auto','Automatic','#7181EA','#e9edf5','#1c2333'],
-      ['dark','Midnight','#7c5cff','#09111d','#edf4ff'],
-      ['ocean','Ocean','#1b9cff','#071421','#edf8ff'],
-      ['cyber','Cyber','#ff3e9d','#0b0d1c','#fff'],
-      ['matrix','Matrix','#3cdb71','#07140c','#effff3'],
-      ['focus-paper','Warm Paper','#835f3f','#f7f3eb','#2d2923']
+      ['category-personal','Focus Morning','Warm cream · sage progress','#f6f4ec','#ffffff','#315f46','#8ba26b','#17251c','#eef2e6','Recommended'],
+      ['nestlyra','Finance Forest','Forest shell · teal analysis','#f2f5f1','#ffffff','#0f5a3d','#3d6e6e','#102a1d','#0d4b33','Finance reference'],
+      ['category-school','Scholar Cobalt','Clear blue · steady attention','#f2f5f9','#ffffff','#235b8e','#7197b8','#14263a','#e9eff6',''],
+      ['category-business','Warm Earth','Cream · walnut · muted clay','#f7f3eb','#fffdfa','#87563a','#b58b66','#32271f','#f0e7db',''],
+      ['category-blank','Studio Slate','Neutral canvas · precise ink','#f3f5f6','#ffffff','#40576b','#8091a0','#182530','#e9eef1',''],
+      ['light','Cloud Teal','Cool white · quiet teal','#f3f6f7','#ffffff','#326173','#7f9aa6','#152a33','#e8f0f2',''],
+      ['focus-paper','Linen Study','Linen · olive · editorial ink','#f6f0e5','#fffdf8','#6d6244','#9a8759','#2e2a22','#ece3d3',''],
+      ['ocean','Deep Teal','Dark teal · mint signal','#081916','#10241f','#61ad8d','#9ebb6a','#f1f7f3','#06130f',''],
+      ['matrix','Evergreen Night','Deep forest · botanical signal','#0b1711','#12251a','#74a57d','#b0bc6e','#f0f7f2','#08120d',''],
+      ['dark','Night Focus','Ink navy · sage signal','#0c1321','#131d2d','#7a8fb4','#a6ba68','#f3f6fa','#09101b',''],
+      ['auto','Automatic','Morning by day · night after dark','#f1f2ec','#ffffff','#526f5f','#849b70','#17251c','#111c22','System']
     ];
     const category=CATEGORY[s.focusCategory||'blank'];
-    return `<div class="card-title"><h3>Appearance</h3><span>Saved to this account</span></div>
-      <div class="appearance-group"><h4>Theme collection</h4><div class="appearance-theme-grid">${themes.map(([name,label,color,bg,text])=>`<button type="button" title="${label}" class="theme-chip ${s.theme===name?'active':''}" style="--swatch:${color};--theme-bg:${bg};--theme-text:${text}" onclick="setTheme('${name}')"><span>${label}</span></button>`).join('')}</div></div>
-      <div class="category-theme-note"><span>Your ${h(category.label)} starting theme is <strong>${h(category.tag)}</strong>. Manual theme choices are kept when the category changes.</span><button type="button" class="btn ghost" onclick="useFocusCategoryTheme()">Use category default</button></div>
-      <div class="appearance-advanced-grid">
+    return `<div class="appearance-studio">
+      <header class="appearance-hero"><div><span class="appearance-kicker">TULSHII VISUAL SYSTEM</span><h3>Appearance</h3><p>Choose a complete color system—not a decorative tint. Each palette keeps surfaces calm, contrast decisive and semantic colors reserved for meaning.</p></div><div class="appearance-quality-rule" aria-label="Professional color balance"><strong>80 / 15 / 5</strong><span>neutral canvas · supporting surface · confident accent</span></div></header>
+      <section class="appearance-group"><div class="appearance-section-head"><div><h4>Curated color systems</h4><p>Ten professionally balanced palettes plus automatic day and night mode.</p></div><span>Account saved</span></div><div class="appearance-theme-grid">${themes.map(([name,label,description,bg,panel,accent,secondary,text,sidebar,badge])=>`<button type="button" aria-pressed="${selectedTheme===name}" title="Use ${label}" class="theme-chip ${selectedTheme===name?'active':''}" style="--theme-bg:${bg};--theme-panel:${panel};--theme-accent:${accent};--theme-secondary:${secondary};--theme-text:${text};--theme-sidebar:${sidebar}" onclick="setTheme('${name}')"><span class="theme-preview" aria-hidden="true"><i class="theme-preview-sidebar"></i><i class="theme-preview-top"></i><i class="theme-preview-card theme-preview-card-a"></i><i class="theme-preview-card theme-preview-card-b"></i><i class="theme-preview-chart"></i></span><span class="theme-card-copy"><strong>${label}</strong><small>${description}</small></span><span class="theme-swatches" aria-hidden="true"><i style="background:${text}"></i><i style="background:${accent}"></i><i style="background:${secondary}"></i><i style="background:${bg}"></i></span>${badge?`<em>${badge}</em>`:''}</button>`).join('')}</div></section>
+      <div class="category-theme-note"><span><small>${h(category.label)} workspace default</small><strong>${h(category.tag)}</strong><i>Manual choices stay unchanged when sections are enabled or disabled.</i></span><button type="button" class="btn ghost" onclick="useFocusCategoryTheme()">Restore default</button></div>
+      <section class="appearance-group"><div class="appearance-section-head"><div><h4>Interface composition</h4><p>Fine-tune readability and information density without changing the palette.</p></div></div><div class="appearance-advanced-grid">
         <label>Text style<select onchange="updateAppearance('fontStyle',this.value)"><option value="modern" ${s.fontStyle==='modern'?'selected':''}>Modern — Inter + Poppins</option><option value="system" ${s.fontStyle==='system'?'selected':''}>System — Segoe UI</option><option value="editorial" ${s.fontStyle==='editorial'?'selected':''}>Editorial — Georgia</option></select></label>
         <label>Text size<select onchange="updateAppearance('textScale',this.value)"><option value="compact" ${s.textScale==='compact'?'selected':''}>Compact</option><option value="normal" ${!s.textScale||s.textScale==='normal'?'selected':''}>Comfortable</option><option value="large" ${s.textScale==='large'?'selected':''}>Large</option></select></label>
         <label>Layout density<select onchange="updateAppearance('density',this.value)"><option value="compact" ${s.density==='compact'?'selected':''}>Compact</option><option value="comfortable" ${!s.density||s.density==='comfortable'?'selected':''}>Comfortable</option><option value="spacious" ${s.density==='spacious'?'selected':''}>Spacious</option></select></label>
         <label>Corner style<select onchange="updateAppearance('radiusStyle',this.value)"><option value="square" ${s.radiusStyle==='square'?'selected':''}>Structured</option><option value="soft" ${!s.radiusStyle||s.radiusStyle==='soft'?'selected':''}>Soft</option><option value="rounded" ${s.radiusStyle==='rounded'?'selected':''}>Rounded</option></select></label>
         <label>Interface motion<select onchange="updateAppearance('motion',this.value)"><option value="full" ${!s.motion||s.motion==='full'?'selected':''}>Full motion</option><option value="reduced" ${s.motion==='reduced'?'selected':''}>Reduced motion</option></select></label>
         <label>Login image framing<select onchange="updateAppearance('loginImagePosition',this.value)"><option value="left" ${s.loginImagePosition==='left'?'selected':''}>Focus left</option><option value="center" ${!s.loginImagePosition||s.loginImagePosition==='center'?'selected':''}>Focus center</option><option value="right" ${s.loginImagePosition==='right'?'selected':''}>Focus right</option></select></label>
-      </div>`;
+      </div></section>
+      <section class="appearance-group login-image-settings"><div class="appearance-section-head"><div><h4>Login artwork</h4><p>Keep the branded default or upload a personal background. The image is resized and optimized before saving.</p></div><span>${s.loginImage?'Custom artwork':'Brand default'}</span></div><div class="appearance-login-row"><label>Text overlay<select onchange="updateAppearance('loginImageShade',this.value)"><option value="soft" ${s.loginImageShade==='soft'?'selected':''}>Soft contrast</option><option value="balanced" ${!s.loginImageShade||s.loginImageShade==='balanced'?'selected':''}>Balanced contrast</option><option value="strong" ${s.loginImageShade==='strong'?'selected':''}>Strong contrast</option></select></label><div class="appearance-image-actions"><label class="btn primary appearance-upload">Upload image<input type="file" accept="image/jpeg,image/png,image/webp" onchange="uploadLoginImage(event)"></label><button type="button" class="btn ghost" onclick="resetLoginImage()">Restore brand artwork</button></div></div></section>
+    </div>`;
   }
   window.appearanceSettingsMarkup=appearanceMarkup;
 
@@ -183,7 +187,7 @@
     const subject=state.subjects.find(item=>item.id===id),modules=subject?.modules||[];
     modal(`<h2>${subject?'Edit':'Add'} subject</h2><div class="form-grid"><label class="full">Subject name<input id="fName" value="${h(subject?.name||'')}" placeholder="e.g. Mathematics"></label><label>Short icon<input id="fIcon" maxlength="3" value="${h(subject?.icon||'')}" placeholder="MA"></label><label>Subject type<select id="fSubjectType">${['Course','Academic','Certification','Project','Personal','Other'].map(value=>`<option ${subject?.subjectType===value?'selected':''}>${value}</option>`).join('')}</select></label></div>
       ${optionalDetails('Modules & topics (optional)',`<div id="subjectHierarchyBuilder" class="hierarchy-builder">${(modules.length?modules:[{}]).map(hierarchyModuleMarkup).join('')}</div><div class="structure-actions"><small>Add topics one per line. You can also build the hierarchy later.</small><button type="button" class="btn ghost" onclick="addSubjectHierarchyModule()">+ Module</button></div>`,Boolean(modules.length))}
-      ${optionalDetails('Additional settings',`<div class="form-grid"><label class="full">Description<input id="fDesc" value="${h(subject?.description||'')}" placeholder="What this subject covers"></label><label>Color<input id="fColor" type="color" value="${subject?.color||'#4C5FD5'}"></label><label>Difficulty<select id="fSubjectDifficulty">${['Not set','Beginner','Intermediate','Advanced'].map(value=>`<option ${subject?.difficulty===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Target date<input id="fSubjectTarget" type="date" value="${h(subject?.targetDate||'')}"></label><label>Weekly study goal<input id="fSubjectWeekly" type="number" min="0" max="80" step="0.5" value="${h(subject?.weeklyHours||'')}" placeholder="Hours"></label></div>`,Boolean(subject?.description||subject?.targetDate||subject?.weeklyHours))}
+      ${optionalDetails('Additional settings',`<div class="form-grid"><label class="full">Description<input id="fDesc" value="${h(subject?.description||'')}" placeholder="What this subject covers"></label><label>Color<input id="fColor" type="color" value="${subject?.color||'#315f46'}"></label><label>Difficulty<select id="fSubjectDifficulty">${['Not set','Beginner','Intermediate','Advanced'].map(value=>`<option ${subject?.difficulty===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Target date<input id="fSubjectTarget" type="date" value="${h(subject?.targetDate||'')}"></label><label>Weekly study goal<input id="fSubjectWeekly" type="number" min="0" max="80" step="0.5" value="${h(subject?.weeklyHours||'')}" placeholder="Hours"></label></div>`,Boolean(subject?.description||subject?.targetDate||subject?.weeklyHours))}
       <div class="modal-actions">${subject?`<button type="button" class="btn danger" onclick="deleteSubject('${subject.id}')">Delete</button>`:''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveSubjectV48('${id||''}')">Save subject</button></div>`);
   };
 
@@ -191,7 +195,7 @@
     const existing=state.subjects.find(item=>item.id===id),name=q('#fName')?.value.trim();if(!name)return toast('Subject name is required');
     const moduleRows=all('[data-hierarchy-module]');
     const modules=moduleRows.map(row=>{const moduleId=row.dataset.moduleId,old=(existing?.modules||[]).find(item=>item.id===moduleId),moduleName=q('[data-hierarchy-module-name]',row)?.value.trim(),topicNames=(q('[data-hierarchy-topics]',row)?.value||'').split(/\n+/).map(value=>value.trim()).filter(Boolean);if(!moduleName&&!topicNames.length)return null;return{id:old?.id||uid(),name:moduleName||`Module ${(existing?.modules||[]).length+1}`,description:old?.description||'',targetDate:old?.targetDate||'',estimatedHours:old?.estimatedHours||'',topics:topicNames.map((topicName,index)=>{const topic=old?.topics?.[index];return{id:topic?.id||uid(),name:topicName,status:topic?.status||'not-started',due:topic?.due||'',priority:topic?.priority||'Normal',estimatedMinutes:topic?.estimatedMinutes||'',notes:topic?.notes||''}})}}).filter(Boolean);
-    const data={name,icon:(q('#fIcon')?.value.trim()||name.slice(0,2)).toUpperCase(),subjectType:q('#fSubjectType')?.value||'Course',description:q('#fDesc')?.value.trim()||'',color:q('#fColor')?.value||'#4C5FD5',difficulty:q('#fSubjectDifficulty')?.value||'Not set',targetDate:q('#fSubjectTarget')?.value||'',weeklyHours:Number(q('#fSubjectWeekly')?.value||0),modules};
+    const data={name,icon:(q('#fIcon')?.value.trim()||name.slice(0,2)).toUpperCase(),subjectType:q('#fSubjectType')?.value||'Course',description:q('#fDesc')?.value.trim()||'',color:q('#fColor')?.value||'#315f46',difficulty:q('#fSubjectDifficulty')?.value||'Not set',targetDate:q('#fSubjectTarget')?.value||'',weeklyHours:Number(q('#fSubjectWeekly')?.value||0),modules};
     if(existing)Object.assign(existing,data);else state.subjects.push({id:uid(),...data});
     save();closeModal();render();toast(existing?'Subject updated':'Subject created');
   };
