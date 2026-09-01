@@ -12,7 +12,7 @@ assert.doesNotMatch(html,/id="parentLoginForm"/,'Legacy Parent login form must n
 assert.match(html,/One secure TULSHII account/);
 assert.match(html,/src="groups\.js\?v=45"/);
 assert.match(html,/src="nestlyra-v39\.js\?v=58"/);
-assert.match(html,/href="tulshii-auth-v58\.css\?v=58"/);
+assert.match(html,/href="tulshii-auth-v58\.css\?v=59"/);
 assert.match(html,/src="nestlyra-v42\.js\?v=57"/);
 assert.match(html,/src="pavenro-brand\.js\?v=49"/);
 assert.match(html,/src="focus-professional-v49\.js\?v=51"/);
@@ -46,7 +46,7 @@ assert.match(schema,/Version conflict: reload the record before saving/);
 assert.match(schema,/group_update_share_config/);
 assert.match(schema,/share_config jsonb/);
 assert.match(schema,/if database_bytes>=393216000/,'75% free-tier pressure cleanup must remain server enforced');
-assert.match(worker,/tulshii-focus-v58-branded-login/);
+assert.match(worker,/tulshii-focus-v59-login-legibility/);
 assert.match(worker,/skipWaiting/);
 assert.match(worker,/clients\.claim/);
 assert.match(worker,/\.\/groups\.js/);
