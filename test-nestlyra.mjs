@@ -88,7 +88,7 @@ assert.equal(document.body.classList.contains('walkthrough-open'),false,'Mobile 
 assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must never leave the drawer open');
 window.innerWidth=1366;
 
-assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy img')?.alt,'TULSHII');
+assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy .tulshii-wordmark')?.getAttribute('aria-label'),'TULSHII');
 assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy small')?.textContent.trim(),'FOCUS');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');

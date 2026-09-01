@@ -70,7 +70,15 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 
 /* One TULSHII identity in the application shell. */
 .sidebar>.focus-brand{color:var(--text)}
-.focus-brand-copy{gap:7px}.focus-brand-copy>img{width:126px;height:30px}.focus-brand-copy i{color:var(--muted)}.focus-brand-copy small{color:var(--accent)}
+.focus-brand-copy{gap:7px}.focus-brand-copy>.focus-brand-divider{color:color-mix(in srgb,var(--muted) 72%,transparent);font-style:normal}.focus-brand-copy small{color:var(--accent)}
+.tulshii-wordmark{display:flex;align-items:flex-end;height:30px;color:var(--text);white-space:nowrap}
+.tulshii-wordmark>b{font:700 15px/24px Inter,sans-serif;letter-spacing:.105em}
+.tulshii-ii{display:flex;position:relative;align-items:flex-end;gap:3px;width:15px;height:25px;margin:0 0 3px 1px}
+.tulshii-ii>i{position:relative;width:6px;height:17px;border-radius:5px 5px 2px 2px;background:#a8ba64;box-shadow:inset 0 -1px rgba(23,48,31,.12)}
+.tulshii-ii>i:last-child{background:#5e8b69}
+.tulshii-ii>i:before{content:"";position:absolute;left:0;top:-7px;width:6px;height:6px;border-radius:50%;background:inherit}
+.tulshii-ii>i:after{content:"";position:absolute;top:5px;width:6px;height:2px;border-radius:2px;background:inherit;transform-origin:center}
+.tulshii-ii>i:first-child:after{left:4px;transform:rotate(28deg)}.tulshii-ii>i:last-child:after{right:4px;transform:rotate(-28deg)}
 .page-head>.eyebrow,.v42-module>.eyebrow,#app .product-credit,#app .parent-product-credit{display:none!important}
 
 /* All enabled sections remain visible; the navigation itself scrolls when needed. */

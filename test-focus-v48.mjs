@@ -45,7 +45,7 @@ window.applyFocusCategory('school');
 await wait(40);
 if(document.querySelector('#nestlyraWalkthrough'))window.finishNestlyraWalkthrough();
 
-assert.equal(document.querySelector('.focus-brand-copy img')?.alt,'TULSHII');
+assert.equal(document.querySelector('.focus-brand-copy .tulshii-wordmark')?.getAttribute('aria-label'),'TULSHII');
 assert.equal(document.querySelector('.focus-brand-copy small')?.textContent.trim(),'FOCUS');
 assert.ok(document.body.classList.contains('theme-category-school'),'School must start with the blue category theme');
 const visibleEntries=[...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none');

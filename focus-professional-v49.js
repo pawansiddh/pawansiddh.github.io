@@ -9,7 +9,7 @@
     const brand=q('.sidebar>.focus-brand');if(!brand)return;
     brand.setAttribute('aria-label','TULSHII Focus');brand.title='TULSHII | FOCUS';
     const copy=q('.focus-brand-copy',brand);
-    if(copy&&!q('img',copy))copy.innerHTML='<img src="tulshii-wordmark.svg" alt="TULSHII"><i>|</i><small>FOCUS</small>';
+    if(copy&&!q('.tulshii-wordmark',copy))copy.innerHTML='<span class="tulshii-wordmark" role="img" aria-label="TULSHII"><b>TULSH</b><span class="tulshii-ii" aria-hidden="true"><i></i><i></i></span></span><i class="focus-brand-divider">|</i><small>FOCUS</small>';
     const mark=q('.focus-brand-mark',brand);if(mark)mark.src='tulshii-mark.svg';
   }
 

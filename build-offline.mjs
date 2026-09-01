@@ -34,7 +34,7 @@ html=html
   .replace('New to TULSHII? Create an account','Create local account')
   .replace('<strong>Basic Google sign-in only.</strong> Drive PDF storage is coming soon; no Drive permission is requested.','<strong>100% device-only.</strong> No Google, Supabase or cloud permission is used.')
   .replace('Use one account for your personal workspace and every group you join.','A private workspace stored only in this browser.')
-  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-professional-v49\.js\?v=49"><\/script>/,buildScripts());
+  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-professional-v49\.js\?v=50"><\/script>/,buildScripts());
 
 if(/<script src=/.test(html))throw new Error('Offline build still contains a script src');
 if(/<link[^>]+href="https?:/i.test(html))throw new Error('Offline build still contains an external link resource');

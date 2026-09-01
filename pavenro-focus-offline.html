@@ -760,7 +760,15 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 
 /* One TULSHII identity in the application shell. */
 .sidebar>.focus-brand{color:var(--text)}
-.focus-brand-copy{gap:7px}.focus-brand-copy>img{width:126px;height:30px}.focus-brand-copy i{color:var(--muted)}.focus-brand-copy small{color:var(--accent)}
+.focus-brand-copy{gap:7px}.focus-brand-copy>.focus-brand-divider{color:color-mix(in srgb,var(--muted) 72%,transparent);font-style:normal}.focus-brand-copy small{color:var(--accent)}
+.tulshii-wordmark{display:flex;align-items:flex-end;height:30px;color:var(--text);white-space:nowrap}
+.tulshii-wordmark>b{font:700 15px/24px Inter,sans-serif;letter-spacing:.105em}
+.tulshii-ii{display:flex;position:relative;align-items:flex-end;gap:3px;width:15px;height:25px;margin:0 0 3px 1px}
+.tulshii-ii>i{position:relative;width:6px;height:17px;border-radius:5px 5px 2px 2px;background:#a8ba64;box-shadow:inset 0 -1px rgba(23,48,31,.12)}
+.tulshii-ii>i:last-child{background:#5e8b69}
+.tulshii-ii>i:before{content:"";position:absolute;left:0;top:-7px;width:6px;height:6px;border-radius:50%;background:inherit}
+.tulshii-ii>i:after{content:"";position:absolute;top:5px;width:6px;height:2px;border-radius:2px;background:inherit;transform-origin:center}
+.tulshii-ii>i:first-child:after{left:4px;transform:rotate(28deg)}.tulshii-ii>i:last-child:after{right:4px;transform:rotate(-28deg)}
 .page-head>.eyebrow,.v42-module>.eyebrow,#app .product-credit,#app .parent-product-credit{display:none!important}
 
 /* All enabled sections remain visible; the navigation itself scrolls when needed. */
@@ -888,7 +896,7 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
     <aside class="sidebar">
       <div class="brand focus-brand" aria-label="TULSHII Focus">
         <img class="focus-brand-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA1NiIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5UVUxTSElJIHR3by1wZXJzb24gbWFyazwvdGl0bGU+CiAgPGNpcmNsZSBjeD0iMTMiIGN5PSI4IiByPSI2IiBmaWxsPSIjQThCQTY0Ii8+CiAgPGNpcmNsZSBjeD0iMzUiIGN5PSI4IiByPSI2IiBmaWxsPSIjNUU4QjY5Ii8+CiAgPHBhdGggZD0iTTcgMjFjMC00LjYgMi43LTcuNSA2LTcuNXM2IDIuOSA2IDcuNXYyN0g3VjIxWiIgZmlsbD0iI0E4QkE2NCIvPgogIDxwYXRoIGQ9Ik0yOSAyMWMwLTQuNiAyLjctNy41IDYtNy41czYgMi45IDYgNy41djI3SDI5VjIxWiIgZmlsbD0iIzVFOEI2OSIvPgogIDxwYXRoIGQ9Im0xNy44IDIzIDYuMiA2LjggNi4yLTYuOHY3LjdMMjQgMzcuNWwtNi4yLTYuOFYyM1oiIGZpbGw9IiNGNUY4RjUiLz4KPC9zdmc+Cg==" alt="">
-        <span class="focus-brand-copy"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-tulshii-wordmark alt="TULSHII"><i>|</i><small>FOCUS</small></span>
+        <span class="focus-brand-copy"><span class="tulshii-wordmark" role="img" aria-label="TULSHII"><b>TULSH</b><span class="tulshii-ii" aria-hidden="true"><i></i><i></i></span></span><i class="focus-brand-divider">|</i><small>FOCUS</small></span>
       </div>
       <nav id="nav">
         <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
@@ -2748,7 +2756,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     const brand=q('.sidebar>.focus-brand');if(!brand)return;
     brand.setAttribute('aria-label','TULSHII Focus');brand.title='TULSHII | FOCUS';
     const copy=q('.focus-brand-copy',brand);
-    if(copy&&!q('img',copy))copy.innerHTML='<img src="tulshii-wordmark.svg" alt="TULSHII"><i>|</i><small>FOCUS</small>';
+    if(copy&&!q('.tulshii-wordmark',copy))copy.innerHTML='<span class="tulshii-wordmark" role="img" aria-label="TULSHII"><b>TULSH</b><span class="tulshii-ii" aria-hidden="true"><i></i><i></i></span></span><i class="focus-brand-divider">|</i><small>FOCUS</small>';
     const mark=q('.focus-brand-mark',brand);if(mark)mark.src='tulshii-mark.svg';
   }
 
