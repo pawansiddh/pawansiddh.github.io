@@ -95,17 +95,22 @@ assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textC
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
 assert.ok(document.querySelector('[data-nav-entry="assignments"]'),'School preset should include functional Assignments');
 assert.ok(document.querySelector('#focusMoreSections'),'Optional sections should lead to Navigation & modules');
-assert.equal(document.querySelector('[data-nav-entry="settings"]')?.style.display,'none','Settings should move to the upper-right profile control');
+assert.notEqual(document.querySelector('[data-nav-entry="settings"]')?.style.display,'none','Enabled Settings must remain visible as a navigation section');
 assert.equal(document.querySelector('[data-nav-entry="help"]')?.style.display,'none','The full manual should remain available through contextual help and More sections');
-assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,8,'The School workspace should start with exactly eight visible sections');
+const primaryNavEntries=()=>[...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none'&&!['settings','help'].includes(entry.dataset.navEntry));
+assert.equal(primaryNavEntries().length,8,'The School workspace should start with exactly eight primary sections');
 window.toggleTrackerModule('mocks');await wait();
-assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,9,'A ninth enabled section must remain visible in the scrolling sidebar');
+assert.equal(primaryNavEntries().length,9,'A ninth enabled primary section must remain visible in the scrolling sidebar');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.task-row/,'Light themes must normalize task rows');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,'Light themes must normalize note cards');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');
 assert.match(responsiveCss,/\.cert-cards footer\{grid-column:2/,'Certification actions must have a dedicated non-overlapping row');
 assert.match(responsiveCss,/\.subtopic-row>select\{grid-column:2\/4;grid-row:2/,'Mobile topic controls must have explicit rows');
 assert.match(responsiveCss,/\.job-head-actions\{display:grid;width:100%/,'Mobile Job Tracker actions must stay inside the viewport');
+assert.ok(document.querySelector('.topbar-streak #sideStreak'),'Study streak must render in the top navigation');
+assert.equal(document.querySelector('#sideTimer').classList.contains('hidden'),true,'The duplicate sidebar timer tile must remain hidden');
+document.querySelector('#analogClock').click();await wait();
+assert.equal(document.querySelector('#view').dataset.currentView,'timer','The analog clock must open Study Timer');
 
 document.querySelector('#menuBtn').click();
 assert.equal(document.querySelector('#app').classList.contains('nav-open'),true,'Mobile navigation should expose an outside-tap scrim');

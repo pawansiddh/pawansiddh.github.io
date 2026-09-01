@@ -48,10 +48,11 @@ if(document.querySelector('#nestlyraWalkthrough'))window.finishNestlyraWalkthrou
 assert.equal(document.querySelector('.focus-brand-copy .tulshii-wordmark')?.getAttribute('aria-label'),'TULSHII');
 assert.equal(document.querySelector('.focus-brand-copy small')?.textContent.trim(),'FOCUS');
 assert.ok(document.body.classList.contains('theme-category-school'),'School must start with the blue category theme');
-const visibleEntries=[...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none');
-assert.equal(visibleEntries.length,8,`School must start with exactly eight visible sections, found ${visibleEntries.length}`);
+const visibleMainEntries=()=>[...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none'&&!['settings','help'].includes(entry.dataset.navEntry));
+assert.equal(visibleMainEntries().length,8,`School must start with exactly eight primary sections, found ${visibleMainEntries().length}`);
+assert.notEqual(document.querySelector('[data-nav-entry="settings"]')?.style.display,'none','Enabled Settings must remain visible in navigation');
 window.toggleTrackerModule('resources');await wait();
-assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,9,'Every newly enabled section must remain visible after the default eight');
+assert.equal(visibleMainEntries().length,9,'Every newly enabled primary section must remain visible after the default eight');
 assert.ok(document.querySelector('[data-nav-entry="resources"]'),'The enabled Resource Library section must appear in navigation');
 assert.ok(document.querySelector('#focusMoreSections'));
 assert.equal(document.querySelector('#view>.page-head'),null,'Repeated page heading must move into the top bar');

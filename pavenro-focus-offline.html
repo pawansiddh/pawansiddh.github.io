@@ -794,8 +794,15 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .sidebar nav .nav-main:hover,.sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 13%,var(--sidebar-bg,var(--panel)));color:var(--sidebar-accent,var(--accent));box-shadow:inset 3px 0 var(--sidebar-accent,var(--accent))}
 .sidebar nav .nav-help:hover{background:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 10%,var(--sidebar-bg,var(--panel)));color:var(--sidebar-accent,var(--accent))}
 .focus-search-entry{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 34%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-text,var(--text)) 5%,var(--sidebar-bg,var(--bg)))!important;color:var(--sidebar-muted,var(--muted))!important}
-.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--sidebar-accent,var(--accent)) 44%,var(--sidebar-bg,var(--bg)))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--sidebar-accent,var(--accent))!important;font-weight:700;opacity:1!important;backdrop-filter:blur(10px)}
-.focus-more-sections:hover{border-color:var(--sidebar-accent,var(--accent))!important;color:var(--sidebar-accent,var(--accent))!important}
+.focus-more-sections{position:static;z-index:auto;grid-template-columns:14px minmax(0,1fr)!important;gap:5px!important;min-height:30px;margin:5px 0 2px!important;padding:6px 4px!important;border:0!important;border-radius:0!important;background:transparent!important;color:var(--sidebar-muted,var(--muted))!important;font-size:11px;font-weight:600;opacity:.86!important;backdrop-filter:none}
+.focus-more-sections:hover{border:0!important;background:transparent!important;color:var(--sidebar-accent,var(--accent))!important;opacity:1!important}
+
+/* Certification records keep their primary and destructive actions distinct. */
+.cert-cards{grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),420px));justify-content:start}
+.cert-cards article{min-width:0}
+.cert-cards footer{display:grid;grid-template-columns:minmax(112px,auto) 34px;justify-content:start;gap:7px;min-width:0}
+.cert-cards footer .record-edit{min-width:112px;min-height:34px;padding-inline:12px;white-space:nowrap}
+.cert-cards footer .record-delete{width:34px;min-width:34px;min-height:34px;padding:0;place-items:center;white-space:nowrap}
 
 /* Settings never presents an empty category. */
 .settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}
@@ -858,6 +865,10 @@ body .side-timer span{color:var(--sidebar-accent,var(--accent))}
 body .analog-clock{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 36%,transparent);background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--sidebar-text,var(--text)) 7%,var(--sidebar-bg,var(--bg))) 0 58%,var(--sidebar-bg,var(--bg)) 60%);box-shadow:0 6px 18px color-mix(in srgb,var(--sidebar-accent,var(--accent)) 14%,transparent)}
 body .analog-clock i{background:var(--sidebar-text,var(--text))}.analog-clock b{background:var(--sidebar-accent,var(--accent))}
 body .streak-mini{border-color:color-mix(in srgb,var(--sidebar-muted,var(--muted)) 32%,transparent);background:color-mix(in srgb,var(--sidebar-text,var(--text)) 5%,var(--sidebar-bg,var(--bg)));color:var(--sidebar-text,var(--text))}
+.side-timer{display:none!important}
+.sidebar-tools{justify-content:center}
+.topbar-streak{display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;gap:3px;width:48px;height:40px;padding:0 5px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:0 2px 8px color-mix(in srgb,var(--text) 5%,transparent)}
+.topbar-streak span{font-size:11px;line-height:1}.topbar-streak strong{font:700 8px/1 'Space Grotesk',Inter,sans-serif;white-space:nowrap}
 body .progress-ring,body.theme-nestlyra .progress-ring{background:conic-gradient(var(--chart-1) calc(var(--p)*1%),var(--panel2) 0)!important}
 body .progress-ring:after,body.theme-nestlyra .progress-ring:after{background:var(--panel)!important}
 body :is(.bar,.progress-line,.accuracy-bar){background:color-mix(in srgb,var(--muted) 15%,var(--panel2))}
@@ -938,6 +949,7 @@ dialog:has(.job-storage-note),dialog:has(.job-detail){width:min(760px,calc(100vw
   .appearance-advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:760px){
+  .topbar-streak{width:36px;height:36px;grid-template-columns:1fr;grid-template-rows:13px 9px;gap:0;padding:4px 2px}.topbar-streak span{font-size:10px}.topbar-streak strong{font-size:7px}
   .floating-messages.topbar-message{display:grid;width:36px;height:36px;flex-basis:36px}
   .mock-ledger article{grid-template-columns:72px minmax(0,1fr) 48px;align-items:start}
   .mock-ledger .record-actions{grid-column:2/4;justify-content:flex-end}
@@ -1027,10 +1039,9 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-tools">
-          <button id="analogClock" class="analog-clock" aria-label="Open calendar"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
-          <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
+          <button id="analogClock" class="analog-clock" aria-label="Open study timer" title="Open study timer"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
+          <button id="sideTimer" class="side-timer hidden" aria-hidden="true" tabindex="-1" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
-        <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
       </div>
     </aside>
     <button id="sidebarScrim" class="sidebar-scrim" type="button" aria-label="Close navigation"></button>
@@ -1045,6 +1056,7 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
         <div class="top-actions">
           <div id="topbarPageActions" class="topbar-page-actions"></div>
           <button id="quickAdd" class="btn primary">+ New task</button>
+          <div class="topbar-streak" title="Current study streak" aria-label="Current study streak"><span aria-hidden="true">🔥</span><strong id="sideStreak">0 days</strong></div>
           <button id="mobileSearchBtn" class="icon-btn mobile-search-btn" type="button" aria-label="Search" title="Search">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
           </button>
@@ -1504,7 +1516,7 @@ window.signOut=async()=>{familyStopVoice?.();sessionStorage.removeItem('studyTra
 window.deleteAccountModal=()=>modal(`<h2>Delete account permanently</h2><p>This deletes your login, tracker data, workspaces, group memberships, messages and activity. Owned groups transfer to another member when possible; otherwise they are deleted. You must create a new account to use this email again.</p><label>Type <strong>DELETE</strong> to confirm<input id="deleteConfirm" autocomplete="off" placeholder="DELETE"></label><div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn danger" onclick="deleteAccount()">Delete account permanently</button></div>`);
 window.deleteAccount=async()=>{if(field('deleteConfirm').value!=='DELETE')return toast('Type DELETE to confirm');const button=document.querySelector('.modal-actions .danger');if(button){button.disabled=true;button.textContent='Deleting…'}if(sb&&cloudUser){const {data,error}=await sb.rpc('delete_own_account');if(error||data!==true){if(button){button.disabled=false;button.textContent='Delete account permanently'}return toast(error?.message||'Account deletion failed')}try{await sb.auth.signOut({scope:'local'})}catch{}}if(typeof familyDeleteLocalLearnerData==='function')familyDeleteLocalLearnerData();clearClientAccount();redirectWithNotice('Account permanently deleted. Create a new account to continue.')};
 const trackerModal=document.querySelector('#modal');modalClose.onclick=closeModal;trackerModal.addEventListener('click',e=>{if(e.target===trackerModal)closeModal()});trackerModal.addEventListener('cancel',e=>{e.preventDefault();closeModal()});
-nav.addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(b)setView(b.dataset.view)});menuBtn.onclick=()=>setNavigationOpen(!document.querySelector('.sidebar')?.classList.contains('open'));document.querySelector('#sidebarScrim')?.addEventListener('click',()=>setNavigationOpen(false));document.addEventListener('keydown',event=>{if(event.key==='Escape')setNavigationOpen(false)});addEventListener('resize',()=>{if(innerWidth>760)setNavigationOpen(false)});addEventListener('popstate',event=>{if(app.classList.contains('hidden'))return;const previous=event.state?.nestlyraView||'dashboard';setView(previous,{fromHistory:true})});quickAdd.onclick=()=>taskModal();loginForm.addEventListener('submit',login);createLearnerAccountBtn.onclick=createLearnerAccount;document.querySelectorAll('[data-login-faq]').forEach(button=>button.onclick=loginFaqModal);googleLoginBtn.onclick=()=>{if(!sb)return toast('Cloud login is unavailable');sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin}})};avatar.onclick=()=>setView('settings');analogClock.onclick=()=>setView('calendar');sideTimer.onclick=()=>setView('timer');globalSearch.addEventListener('input',e=>{const q=e.target.value.toLowerCase();if(q.length<2)return;const s=state.subjects.find(x=>x.name.toLowerCase().includes(q));if(s){selectedSubject=s.id;return setView('subject')}const j=(state.jobApplications||[]).find(x=>`${x.company} ${x.jobTitle}`.toLowerCase().includes(q));if(j){jobQuery=q;setView('jobs')}});notifBtn.onclick=()=>{const overdue=state.tasks.filter(t=>t.due<today()&&t.status!=='completed').length,jobs=(state.jobApplications||[]).filter(jobDue).length;toast(overdue||jobs?`${overdue} overdue study task${overdue===1?'':'s'} · ${jobs} job follow-up${jobs===1?'':'s'} due`:'You are all caught up')};
+nav.addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(b)setView(b.dataset.view)});menuBtn.onclick=()=>setNavigationOpen(!document.querySelector('.sidebar')?.classList.contains('open'));document.querySelector('#sidebarScrim')?.addEventListener('click',()=>setNavigationOpen(false));document.addEventListener('keydown',event=>{if(event.key==='Escape')setNavigationOpen(false)});addEventListener('resize',()=>{if(innerWidth>760)setNavigationOpen(false)});addEventListener('popstate',event=>{if(app.classList.contains('hidden'))return;const previous=event.state?.nestlyraView||'dashboard';setView(previous,{fromHistory:true})});quickAdd.onclick=()=>taskModal();loginForm.addEventListener('submit',login);createLearnerAccountBtn.onclick=createLearnerAccount;document.querySelectorAll('[data-login-faq]').forEach(button=>button.onclick=loginFaqModal);googleLoginBtn.onclick=()=>{if(!sb)return toast('Cloud login is unavailable');sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin}})};avatar.onclick=()=>setView('settings');analogClock.onclick=()=>setView('timer');sideTimer.onclick=()=>setView('timer');globalSearch.addEventListener('input',e=>{const q=e.target.value.toLowerCase();if(q.length<2)return;const s=state.subjects.find(x=>x.name.toLowerCase().includes(q));if(s){selectedSubject=s.id;return setView('subject')}const j=(state.jobApplications||[]).find(x=>`${x.company} ${x.jobTitle}`.toLowerCase().includes(q));if(j){jobQuery=q;setView('jobs')}});notifBtn.onclick=()=>{const overdue=state.tasks.filter(t=>t.due<today()&&t.status!=='completed').length,jobs=(state.jobApplications||[]).filter(jobDue).length;toast(overdue||jobs?`${overdue} overdue study task${overdue===1?'':'s'} · ${jobs} job follow-up${jobs===1?'':'s'} due`:'You are all caught up')};
 function tickClock(){const d=new Date(),h=(d.getHours()%12)*30+d.getMinutes()/2,m=d.getMinutes()*6,s=d.getSeconds()*6;analogClock.querySelector('.hour').style.transform=`rotate(${h}deg)`;analogClock.querySelector('.minute').style.transform=`rotate(${m}deg)`;analogClock.querySelector('.second').style.transform=`rotate(${s}deg)`}tickClock();setInterval(tickClock,1000);
 async function boot(){
  try{
@@ -1695,8 +1707,8 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     nav.innerHTML = trackerNavMarkup();
     nav.querySelectorAll('button[data-view]').forEach(button => button.classList.toggle('active',button.dataset.view===viewName));
     nav.querySelectorAll('.nav-entry').forEach(entry=>entry.classList.toggle('active',entry.dataset.navEntry===viewName));
-    sideTimer?.classList.toggle('hidden',!trackerModuleEnabled('timer'));
-    analogClock?.classList.toggle('hidden',!trackerModuleEnabled('calendar'));
+    sideTimer?.classList.add('hidden');
+    analogClock?.classList.toggle('hidden',!trackerModuleEnabled('timer'));
     quickAdd?.classList.toggle('hidden',!trackerModuleEnabled('tasks'));
     const visible = state.moduleConfig.enabled.map(id=>MODULES.find(item=>item.id===id)?.label).filter(Boolean);
     globalSearch.placeholder = `Search ${visible.slice(0,3).join(', ').toLowerCase()}${visible.length>3?'…':''}`;
@@ -2744,7 +2756,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     navigation.prepend(search);
     const entries=all('.nav-entry',navigation);
     entries.forEach(entry=>{entry.classList.remove('focus-nav-overflow');entry.style.removeProperty('display');entry.title=navLabel(entry)});
-    entries.filter(entry=>['settings','help'].includes(entry.dataset.navEntry)).forEach(entry=>entry.style.setProperty('display','none','important'));
+    entries.filter(entry=>entry.dataset.navEntry==='help').forEach(entry=>entry.style.setProperty('display','none','important'));
     const more=document.createElement('button');more.id='focusMoreSections';more.type='button';more.className='focus-more-sections';more.title='Navigation & modules';more.innerHTML='<span>＋</span><span>More sections</span>';more.onclick=openFocusModuleSettings;navigation.appendChild(more);
   }
 

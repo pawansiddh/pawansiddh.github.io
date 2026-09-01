@@ -122,7 +122,7 @@
     navigation.prepend(search);
     const entries=all('.nav-entry',navigation);
     entries.forEach(entry=>{entry.classList.remove('focus-nav-overflow');entry.style.removeProperty('display');entry.title=navLabel(entry)});
-    entries.filter(entry=>['settings','help'].includes(entry.dataset.navEntry)).forEach(entry=>entry.style.setProperty('display','none','important'));
+    entries.filter(entry=>entry.dataset.navEntry==='help').forEach(entry=>entry.style.setProperty('display','none','important'));
     const more=document.createElement('button');more.id='focusMoreSections';more.type='button';more.className='focus-more-sections';more.title='Navigation & modules';more.innerHTML='<span>＋</span><span>More sections</span>';more.onclick=openFocusModuleSettings;navigation.appendChild(more);
   }
 

@@ -157,8 +157,8 @@
     nav.innerHTML = trackerNavMarkup();
     nav.querySelectorAll('button[data-view]').forEach(button => button.classList.toggle('active',button.dataset.view===viewName));
     nav.querySelectorAll('.nav-entry').forEach(entry=>entry.classList.toggle('active',entry.dataset.navEntry===viewName));
-    sideTimer?.classList.toggle('hidden',!trackerModuleEnabled('timer'));
-    analogClock?.classList.toggle('hidden',!trackerModuleEnabled('calendar'));
+    sideTimer?.classList.add('hidden');
+    analogClock?.classList.toggle('hidden',!trackerModuleEnabled('timer'));
     quickAdd?.classList.toggle('hidden',!trackerModuleEnabled('tasks'));
     const visible = state.moduleConfig.enabled.map(id=>MODULES.find(item=>item.id===id)?.label).filter(Boolean);
     globalSearch.placeholder = `Search ${visible.slice(0,3).join(', ').toLowerCase()}${visible.length>3?'…':''}`;

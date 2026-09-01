@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="nestlyra-v43.css?v=46" />
   <link rel="stylesheet" href="pavenro-brand.css?v=49" />
   <link rel="stylesheet" href="focus-v48.css?v=49" />
-  <link rel="stylesheet" href="focus-professional-v49.css?v=53" />
+  <link rel="stylesheet" href="focus-professional-v49.css?v=55" />
   <link rel="manifest" href="manifest.webmanifest?v=49" />
   <link rel="icon" type="image/svg+xml" href="tulshii-mark.svg" />
 </head>
@@ -68,10 +68,9 @@
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-tools">
-          <button id="analogClock" class="analog-clock" aria-label="Open calendar"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
-          <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
+          <button id="analogClock" class="analog-clock" aria-label="Open study timer" title="Open study timer"><i class="hour"></i><i class="minute"></i><i class="second"></i><b></b></button>
+          <button id="sideTimer" class="side-timer hidden" aria-hidden="true" tabindex="-1" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
-        <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
       </div>
     </aside>
     <button id="sidebarScrim" class="sidebar-scrim" type="button" aria-label="Close navigation"></button>
@@ -86,6 +85,7 @@
         <div class="top-actions">
           <div id="topbarPageActions" class="topbar-page-actions"></div>
           <button id="quickAdd" class="btn primary">+ New task</button>
+          <div class="topbar-streak" title="Current study streak" aria-label="Current study streak"><span aria-hidden="true">🔥</span><strong id="sideStreak">0 days</strong></div>
           <button id="mobileSearchBtn" class="icon-btn mobile-search-btn" type="button" aria-label="Search" title="Search">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
           </button>
@@ -121,13 +121,13 @@
   <script src="family.js?v=45"></script>
   <script src="messaging.js?v=45"></script>
   <script src="groups.js?v=45"></script>
-  <script src="app.js?v=51"></script>
-  <script src="tracker-modules.js?v=49"></script>
+  <script src="app.js?v=55"></script>
+  <script src="tracker-modules.js?v=55"></script>
   <script src="nestlyra-v37.js?v=48"></script>
   <script src="nestlyra-v39.js?v=45"></script>
   <script src="nestlyra-v42.js?v=51"></script>
   <script src="pavenro-brand.js?v=49"></script>
-  <script src="focus-v48.js?v=51"></script>
+  <script src="focus-v48.js?v=54"></script>
   <script src="focus-professional-v49.js?v=51"></script>
 </body>
 </html>
