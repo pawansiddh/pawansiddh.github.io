@@ -79,7 +79,7 @@ body .btn{border:1px solid var(--line);background:var(--panel2);color:var(--text
 body .btn.primary{border-color:var(--accent)!important;background:var(--accent)!important;color:var(--on-accent)!important;box-shadow:0 5px 14px color-mix(in srgb,var(--accent) 20%,transparent)!important}
 body .btn.ghost{border-color:var(--line);background:var(--panel);color:var(--text)}
 body .btn.danger{border-color:color-mix(in srgb,var(--danger) 34%,var(--line))!important;background:color-mix(in srgb,var(--danger) 12%,var(--panel))!important;color:var(--danger)!important}
-body .mini-btn{display:inline-grid;min-width:36px;min-height:36px;padding:0 10px;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);line-height:1}
+body .mini-btn{display:inline-grid;min-width:36px;min-height:36px;padding:0 10px;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);font-size:11px;font-weight:700;line-height:1}
 body .danger-mini,body .record-delete{border-color:color-mix(in srgb,var(--danger) 36%,var(--line))!important;background:color-mix(in srgb,var(--danger) 11%,var(--panel))!important;color:var(--danger)!important}
 body .record-edit{min-width:48px;white-space:nowrap}
 body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent);outline-offset:2px}
@@ -112,7 +112,7 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .cert-cards article{min-width:0}
 .cert-cards footer{display:grid;grid-template-columns:minmax(112px,auto) 34px;justify-content:start;gap:7px;min-width:0}
 .cert-cards footer .record-edit{min-width:112px;min-height:34px;padding-inline:12px;white-space:nowrap}
-.cert-cards footer .record-delete{width:34px;min-width:34px;min-height:34px;padding:0;place-items:center;white-space:nowrap}
+.cert-cards footer .record-delete{width:34px;min-width:34px;min-height:34px;padding:0;place-items:center;font-size:14px;white-space:nowrap}
 
 /* Settings never presents an empty category. */
 .settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}

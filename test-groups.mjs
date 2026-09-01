@@ -45,7 +45,7 @@ assert.match(schema,/Version conflict: reload the record before saving/);
 assert.match(schema,/group_update_share_config/);
 assert.match(schema,/share_config jsonb/);
 assert.match(schema,/if database_bytes>=393216000/,'75% free-tier pressure cleanup must remain server enforced');
-assert.match(worker,/tulshii-focus-v55-timer-and-streak/);
+assert.match(worker,/tulshii-focus-v56-control-typography/);
 assert.match(worker,/skipWaiting/);
 assert.match(worker,/clients\.claim/);
 assert.match(worker,/\.\/groups\.js/);
