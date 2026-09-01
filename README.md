@@ -27,6 +27,14 @@ Local profiles stay in the browser. Cloud accounts use Supabase for authenticati
 
 Run `supabase-groups-migration.sql` once before enabling Groups in production. The migration keeps existing accounts, converts legacy Family links and messages, and removes the old policy that exposed complete learner tracker records to linked parents.
 
+## Subscription foundation
+
+The provider-neutral TULSHII subscription foundation is documented in
+[`docs/SUBSCRIPTION_SYSTEM.md`](docs/SUBSCRIPTION_SYSTEM.md). Run
+`supabase-subscriptions-v1.sql` followed by the read-only
+`supabase-subscriptions-verify.sql`. Paid household membership is deliberately
+separate from Parent/Learner Family and Groups permissions.
+
 ## Deployment
 
 The preferred PAVENRO Focus beta is Cloudflare Pages. The existing GitHub Pages site remains the legacy production URL until the custom PAVENRO domain rollout.
