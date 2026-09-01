@@ -1,0 +1,135 @@
+/* TULSHII Focus v49 — professional visual system aligned with TULSHII Finance. */
+:root{
+  --bg:#07130f;--panel:#0d2018;--panel2:#132a20;--line:#294638;--text:#f1f7f3;--muted:#9aafa2;
+  --accent:#4fa576;--accent2:#79bd91;--danger:#e36a64;--warn:#d9a74c;--success:#61b980;--border:var(--line);
+  --shadow:0 12px 34px rgba(0,0,0,.24);--radius:12px;
+}
+
+body.theme-category-personal,body.theme-nestlyra{
+  --bg:#f5f6f1;--panel:#fff;--panel2:#edf3ee;--line:#d8e3da;--text:#17301f;--muted:#607064;
+  --accent:#21653f;--accent2:#35784f;--danger:#c54a43;--warn:#a66e16;--success:#2e7d4b;--sidebar-bg:#f8faf6;
+  --shadow:0 1px 2px rgba(23,48,31,.035),0 10px 28px rgba(33,101,63,.065);
+}
+body.theme-category-blank{
+  --bg:#f5f6f7;--panel:#fff;--panel2:#eef1f3;--line:#d9dfe3;--text:#1e2b32;--muted:#65727a;
+  --accent:#4b6572;--accent2:#647d88;--danger:#bc4c49;--warn:#9a6a1c;--success:#317b53;--sidebar-bg:#fafbfb;
+  --shadow:0 1px 2px rgba(30,43,50,.035),0 10px 28px rgba(50,70,80,.06);
+}
+body.theme-category-school{
+  --bg:#f2f6fb;--panel:#fff;--panel2:#eaf1f8;--line:#d2deeb;--text:#172d45;--muted:#60748a;
+  --accent:#285f96;--accent2:#3f79ad;--danger:#bd4c50;--warn:#a46d16;--success:#2d7651;--sidebar-bg:#f8fbfe;
+  --shadow:0 1px 2px rgba(23,45,69,.035),0 10px 28px rgba(40,95,150,.065);
+}
+body.theme-category-business{
+  --bg:#f8f5ed;--panel:#fffdf8;--panel2:#f2ecdd;--line:#e3d9c3;--text:#332b1d;--muted:#756b59;
+  --accent:#8a621c;--accent2:#a87b2d;--danger:#b84a45;--warn:#9b6815;--success:#397452;--sidebar-bg:#fdfaf3;
+  --shadow:0 1px 2px rgba(51,43,29,.035),0 10px 28px rgba(138,98,28,.06);
+}
+body.theme-light{
+  --bg:#f4f6f8;--panel:#fff;--panel2:#edf1f4;--line:#d8e0e6;--text:#1b2a34;--muted:#62717c;
+  --accent:#355f73;--accent2:#4d7b8e;--danger:#be4e4b;--warn:#9d6c1e;--success:#307851;--sidebar-bg:#fafbfc;
+  --shadow:0 1px 2px rgba(27,42,52,.035),0 10px 28px rgba(53,95,115,.06);
+}
+body.theme-focus-paper{
+  --bg:#f7f3eb;--panel:#fffdf8;--panel2:#f1eadf;--line:#ded3c3;--text:#302a22;--muted:#746b60;
+  --accent:#76583d;--accent2:#947253;--danger:#b94e48;--warn:#996719;--success:#3b7653;--sidebar-bg:#fcf8f1;
+  --shadow:0 1px 2px rgba(48,42,34,.035),0 10px 28px rgba(118,88,61,.06);
+}
+body.theme-ocean{
+  --bg:#071923;--panel:#0d2531;--panel2:#12313f;--line:#275064;--text:#eff9fc;--muted:#9cb5c0;
+  --accent:#3c91ae;--accent2:#55a9bc;--danger:#e27470;--warn:#dcb25d;--success:#55b887;--sidebar-bg:#081c27;
+  --shadow:0 12px 34px rgba(0,0,0,.24);
+}
+body.theme-cyber{
+  --bg:#15131c;--panel:#201d29;--panel2:#2a2634;--line:#4a4058;--text:#faf5fb;--muted:#b8aabd;
+  --accent:#bd5d92;--accent2:#6ba9b5;--danger:#ed716f;--warn:#d7a957;--success:#60b887;--sidebar-bg:#17141f;
+  --shadow:0 12px 34px rgba(0,0,0,.25);
+}
+body.theme-matrix{
+  --bg:#09170f;--panel:#10251a;--panel2:#173222;--line:#31533e;--text:#f0f8f2;--muted:#a1b7a7;
+  --accent:#53a86c;--accent2:#86b961;--danger:#e27470;--warn:#d8ac58;--success:#62ba7c;--sidebar-bg:#0a1a11;
+  --shadow:0 12px 34px rgba(0,0,0,.24);
+}
+
+html,body{background:var(--bg);color:var(--text)}
+body{background-image:none!important}
+body .sidebar{background:var(--sidebar-bg,var(--bg));border-color:var(--line)}
+body .topbar{background:color-mix(in srgb,var(--panel) 94%,transparent);border-color:var(--line)}
+body .sidebar-footer{background:transparent!important}
+body .card,body .stat{border-color:var(--line);background:var(--panel);color:var(--text);box-shadow:var(--shadow)}
+body input,body textarea,body select,body .search-wrap{max-width:100%;border-color:var(--line);background:var(--panel);color:var(--text)}
+body input::placeholder,body textarea::placeholder{color:color-mix(in srgb,var(--muted) 82%,transparent)}
+body .btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);box-shadow:none}
+body .btn.primary{border-color:var(--accent)!important;background:var(--accent)!important;color:#fff!important;box-shadow:0 5px 14px color-mix(in srgb,var(--accent) 20%,transparent)!important}
+body .btn.ghost{border-color:var(--line);background:var(--panel);color:var(--text)}
+body .btn.danger{border-color:color-mix(in srgb,var(--danger) 34%,var(--line))!important;background:color-mix(in srgb,var(--danger) 12%,var(--panel))!important;color:var(--danger)!important}
+body .mini-btn{display:inline-grid;min-width:36px;min-height:36px;padding:0 10px;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);line-height:1}
+body .danger-mini,body .record-delete{border-color:color-mix(in srgb,var(--danger) 36%,var(--line))!important;background:color-mix(in srgb,var(--danger) 11%,var(--panel))!important;color:var(--danger)!important}
+body .record-edit{min-width:48px;white-space:nowrap}
+body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent);outline-offset:2px}
+
+/* One TULSHII identity in the application shell. */
+.sidebar>.focus-brand{color:var(--text)}
+.focus-brand-copy{gap:7px}.focus-brand-copy>img{width:126px;height:30px}.focus-brand-copy i{color:var(--muted)}.focus-brand-copy small{color:var(--accent)}
+.page-head>.eyebrow,.v42-module>.eyebrow,#app .product-credit,#app .parent-product-credit{display:none!important}
+
+/* All enabled sections remain visible; the navigation itself scrolls when needed. */
+.sidebar nav{overflow-y:auto;scrollbar-color:color-mix(in srgb,var(--accent) 28%,var(--line)) transparent}
+.sidebar nav .nav-entry{flex:0 0 auto}
+.sidebar nav .nav-main,.sidebar nav .nav-help{color:var(--muted)}
+.sidebar nav .nav-main:hover,.sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--accent) 11%,var(--panel));color:var(--accent);box-shadow:inset 3px 0 var(--accent)}
+.sidebar nav .nav-help:hover{background:var(--panel2);color:var(--accent)}
+.focus-search-entry{border-color:var(--line)!important;background:var(--panel)!important;color:var(--muted)!important}
+.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--accent) 34%,var(--line))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--muted)!important;backdrop-filter:blur(10px)}
+
+/* Settings never presents an empty category. */
+.settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}
+.settings-sidebar nav button{color:var(--muted)}
+.settings-sidebar nav button:hover,.settings-sidebar nav button.active{background:color-mix(in srgb,var(--accent) 11%,var(--panel2));color:var(--accent)}
+.settings-sidebar nav button span{color:var(--accent)}
+.module-disabled-setting[data-setting-category="data"]{display:block!important}
+
+/* Mock Test Lab: semantic performance colors, legible ledger, and useful empty state. */
+.mock-gauge-body .negative-delta{color:var(--danger)!important}.mock-gauge-body .positive-delta{color:var(--success)!important}
+.mock-weakness>div>i b{background:linear-gradient(90deg,var(--danger),var(--warn))}
+.mock-diagnosis-empty{display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;align-content:center;gap:4px 10px!important;height:calc(100% - 30px);margin:0!important;padding:12px!important;border:1px dashed var(--line);border-radius:10px;background:var(--panel2);font-size:10px!important}
+.mock-diagnosis-empty>span{grid-row:1/3;display:grid;width:34px;height:34px;place-items:center;border-radius:9px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));color:var(--accent)}
+.mock-diagnosis-empty>strong{font-size:11px}.mock-diagnosis-empty>p{grid-column:2;margin:0!important;font-size:9px!important}.mock-diagnosis-empty>.btn{grid-column:2;justify-self:start;margin-top:5px;padding:7px 9px;font-size:9px}
+.mock-ledger article{grid-template-columns:82px minmax(150px,1fr) 54px minmax(96px,auto);gap:10px;padding:10px 8px}
+.mock-ledger article>span{min-width:0}.mock-ledger time,.mock-ledger small{font-size:9px}.mock-ledger strong{font-size:11px}.mock-ledger article>b{font-size:16px;text-align:right}
+.mock-ledger .record-actions{display:flex;gap:6px;justify-content:flex-end}
+.mock-ledger .record-actions .mini-btn{height:36px;min-height:36px}
+
+/* Messages now respects the selected theme and lives in the top bar. */
+.floating-messages.topbar-message{position:relative;right:auto;bottom:auto;z-index:auto;flex:0 0 40px;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--accent);box-shadow:none;transform:none}
+.floating-messages.topbar-message:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel));box-shadow:none;transform:none}
+.floating-messages.topbar-message>span{font-size:19px}.floating-messages.topbar-message .floating-message-badge{top:-7px;right:-7px;border-color:var(--panel)}
+.family-chat-layout,.family-room-panel,.family-chat-pane,.family-compose{border-color:var(--line);background:var(--panel)}
+.family-room:hover,.family-room.active{border-color:var(--line);background:var(--panel2);color:var(--text)}
+.family-room-avatar,.family-chat-empty>span{background:color-mix(in srgb,var(--accent) 14%,var(--panel));color:var(--accent)}
+.family-message-list{background:color-mix(in srgb,var(--panel2) 56%,var(--bg))}
+.family-message{border-color:var(--line);background:var(--panel);color:var(--text)}
+.family-message.own{border-color:color-mix(in srgb,var(--accent) 32%,var(--line));background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.family-message p{color:var(--text)}
+.family-retention-banner,.retention-settings{border-color:color-mix(in srgb,var(--accent) 30%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--panel));color:var(--text)}
+.family-retention-banner p,.family-retention-banner p strong,.retention-settings span,.retention-settings b{color:var(--muted)}
+
+/* Dialogs and Job Tracker forms stay inside the viewport. */
+dialog{max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);border-color:var(--line);background:var(--panel);color:var(--text);overflow:auto}
+dialog:has(.job-storage-note),dialog:has(.job-detail){width:min(760px,calc(100vw - 32px))}
+#modalBody,.form-grid,.form-grid>label{min-width:0}.form-grid input,.form-grid textarea,.form-grid select{width:100%}
+.job-upload{min-width:0;overflow:hidden}.job-upload small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-actions{position:sticky;bottom:-1px;z-index:2;padding:10px 0 2px;background:linear-gradient(transparent,var(--panel) 24%)}
+
+/* Replace microscopic legacy module text with market-readable sizing. */
+.v42-module .card-title h3{font-size:14px}.v42-module .card-title span{font-size:10px}
+.v42-module :is(p,small,time,blockquote){line-height:1.45}
+.mock-gauge-body small,.mock-weakness p{font-size:9px}
+.v42-empty p{font-size:11px}.v42-empty h3{font-size:15px}
+
+@media(max-width:760px){
+  .floating-messages.topbar-message{display:grid;width:36px;height:36px;flex-basis:36px}
+  .mock-ledger article{grid-template-columns:72px minmax(0,1fr) 48px;align-items:start}
+  .mock-ledger .record-actions{grid-column:2/4;justify-content:flex-end}
+  dialog:has(.job-storage-note),dialog:has(.job-detail){width:calc(100vw - 20px)}
+}

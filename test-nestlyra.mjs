@@ -31,7 +31,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','focus-professional-v49.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -46,12 +46,12 @@ const clickText=(selector,text)=>{
 };
 await wait(40);
 
-assert.equal(document.title,'PAVENRO Focus');
+assert.equal(document.title,'TULSHII Focus');
 assert.equal(document.querySelectorAll('[data-auth-mode]').length,0,'Login should use one neutral account flow');
-assert.match(document.querySelector('.auth-account-note').textContent,/One secure PAVENRO account/);
+assert.match(document.querySelector('.auth-account-note').textContent,/One secure TULSHII account/);
 assert.equal(document.querySelectorAll('.live-doll').length,7,'Login must render seven original live SVG dolls instead of swapped images');
 assert.equal(document.querySelectorAll('.login-dolls').length,0,'Static login doll image states must be removed');
-assert.ok(document.querySelector('img[src$="pavenro-wordmark-primary.png"]'),'Login must use the integrated PAVENRO letterform wordmark');
+assert.ok(document.querySelector('img[src$="tulshii-wordmark.svg"]'),'Login must use the TULSHII wordmark');
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
@@ -88,7 +88,8 @@ assert.equal(document.body.classList.contains('walkthrough-open'),false,'Mobile 
 assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must never leave the drawer open');
 window.innerWidth=1366;
 
-assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy')?.textContent.replace(/\s+/g,''),'PAVENRO|FOCUS');
+assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy img')?.alt,'TULSHII');
+assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy small')?.textContent.trim(),'FOCUS');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
@@ -96,7 +97,9 @@ assert.ok(document.querySelector('[data-nav-entry="assignments"]'),'School prese
 assert.ok(document.querySelector('#focusMoreSections'),'Optional sections should lead to Navigation & modules');
 assert.equal(document.querySelector('[data-nav-entry="settings"]')?.style.display,'none','Settings should move to the upper-right profile control');
 assert.equal(document.querySelector('[data-nav-entry="help"]')?.style.display,'none','The full manual should remain available through contextual help and More sections');
-assert.ok([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length<=8,'The sidebar should show at most eight sections');
+assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,8,'The School workspace should start with exactly eight visible sections');
+window.toggleTrackerModule('mocks');await wait();
+assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,9,'A ninth enabled section must remain visible in the scrolling sidebar');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.task-row/,'Light themes must normalize task rows');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,'Light themes must normalize note cards');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');
@@ -183,10 +186,10 @@ assert.ok(document.querySelector('.nest-calendar.day'),'Day view should render')
 assert.equal(document.querySelectorAll('.calendar-time-axis span').length,24);
 
 window.eventModal('',new Date().toISOString().slice(0,10));
-document.querySelector('#fEventTitle').value='PAVENRO test event';
+document.querySelector('#fEventTitle').value='Focus test event';
 document.querySelector('#fEventTime').value='10:30';
 window.saveEvent('');await wait();
-assert.match(document.querySelector('.timeline-event')?.textContent||'',/PAVENRO test event/);
+assert.match(document.querySelector('.timeline-event')?.textContent||'',/Focus test event/);
 
 window.setTheme('dark');assert.equal(document.body.classList.contains('theme-nestlyra'),false);
 window.setTheme('nestlyra');assert.equal(document.body.classList.contains('theme-nestlyra'),true);
@@ -197,5 +200,5 @@ assert.match(document.querySelector('#groupsRoot').textContent,/Cloud account re
 window.setView('help');await wait();
 assert.match(document.querySelector('#view').textContent,/Groups, roles and invitations/,'Manual should explain the account-neutral Groups model');
 assert.deepEqual(browserErrors,[],browserErrors.join('\n'));
-console.log('PAVENRO Focus regression passed: unified accounts, Groups, brand, consistent themes, configurable navigation, contextual manuals, functional modules and Calendar.');
+console.log('TULSHII Focus regression passed: unified accounts, Groups, brand, professional themes, expandable navigation, contextual manuals, functional modules and Calendar.');
 dom.window.close();

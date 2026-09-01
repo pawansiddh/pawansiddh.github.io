@@ -270,7 +270,7 @@
     const grid=document.querySelector('.settings-grid');if(!grid)return;
     [...grid.children].forEach(card=>{
       const title=card.querySelector('h3')?.textContent||'';
-      if(/Subjects import/i.test(title))card.classList.toggle('module-disabled-setting',!trackerModuleEnabled('subjects'));
+      if(/Subjects import/i.test(title))card.classList.remove('module-disabled-setting');
       card.querySelectorAll('.setting-row').forEach(row=>{
         if(/Job Tracker updates/i.test(row.textContent))row.classList.toggle('module-disabled-setting',!trackerModuleEnabled('jobs'));
       });

@@ -1,43 +1,7 @@
-/* PAVENRO Focus v45 — production brand system. Internal legacy class names remain for data compatibility. */
-img[src*="pavenro-lockup"],img[src*="pavenro-wordmark-primary"],
-img[data-pavenro-brand="lockup"] {
-  object-fit: contain;
-}
-
-.auth-visual-brand img,
-.auth-card-brand img {
-  width: 186px;
-  height: 44px;
-  filter: drop-shadow(0 5px 12px rgba(7,31,79,.12));
-}
-
-.brand > .brand-wordmark {
-  width: 152px;
-  height: 39px;
-  filter: drop-shadow(0 4px 10px rgba(7,31,79,.1));
-}
-
-.product-credit img,
-.parent-product-credit img {
-  width: 98px;
-  height: 30px;
-  border: 0;
-  object-fit: contain;
-}
-
-.product-credit span small,
-.parent-product-credit span small {
-  letter-spacing: .06em;
-}
-
-body[class*="theme-dark"] .brand > .brand-wordmark,
-body.theme-ocean .brand > .brand-wordmark,
-body.theme-cyber .brand > .brand-wordmark,
-body.theme-matrix .brand > .brand-wordmark {
-  filter: brightness(0) invert(1) drop-shadow(0 4px 10px rgba(50,215,255,.18));
-}
-
-@media (max-width:760px) {
-  .auth-visual-brand img { width: 156px; height: 38px; }
-  .brand > .brand-wordmark { width: 139px; height: 36px; }
-}
+/* TULSHII Focus brand presentation. The legacy filename is retained for cached builds. */
+.auth-visual-brand img,.auth-card-brand img{width:190px;height:48px;object-fit:contain;object-position:left center;filter:drop-shadow(0 5px 12px rgba(18,63,43,.12))}
+.focus-brand-copy>img{display:block;width:128px;height:34px;object-fit:contain;object-position:left center}
+.focus-brand-mark{object-fit:contain}
+body:not(.theme-category-blank):not(.theme-category-school):not(.theme-category-business):not(.theme-category-personal):not(.theme-focus-paper):not(.theme-nestlyra):not(.theme-light) .focus-brand-copy>img{filter:brightness(0) invert(1)}
+.product-credit,.parent-product-credit{display:none!important}
+@media(max-width:760px){.auth-visual-brand img{width:160px;height:40px}.focus-brand-copy>img{width:122px}}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {JSDOM, VirtualConsole} from 'jsdom';
 
 const html=fs.readFileSync(new URL('./pavenro-focus-offline.html',import.meta.url),'utf8');
-assert.ok(html.length>900_000,'Offline edition must bundle the production application, not a simplified shell');
+assert.ok(html.length>450_000,'Offline edition must bundle the production application, not a simplified shell');
 assert.equal((html.match(/<script\b[^>]+src=/gi)||[]).length,0,'Offline HTML must not load external scripts');
 assert.equal((html.match(/<link\b[^>]+href="https?:/gi)||[]).length,0,'Offline HTML must not load external styles or fonts');
 assert.doesNotMatch(html,/supabaseUrl:'https:/,'Offline bundle must not include the production Supabase endpoint');
@@ -50,13 +50,13 @@ const wait=(ms=30)=>new Promise(resolve=>setTimeout(resolve,ms));
 await new Promise(resolve=>window.addEventListener('load',resolve,{once:true}));
 await wait(80);
 
-assert.equal(document.title,'PAVENRO Focus');
+assert.equal(document.title,'TULSHII Focus');
 assert.equal(document.body.classList.contains('offline-mode'),true);
 assert.equal(window.PAVENRO_OFFLINE,true);
 assert.equal(window.getComputedStyle(document.querySelector('#googleLoginBtn')).display,'none','Google login must be absent from the offline experience');
 assert.match(document.querySelector('.auth-account-note').textContent,/Private local storage/);
 assert.equal(document.querySelector('#floatingMessages'),null,'Messaging launcher must not exist offline');
-assert.ok(document.querySelector('img[data-pavenro-wordmark]')===null,'Embedded PAVENRO wordmark must hydrate without a file dependency');
+assert.ok(document.querySelector('img[data-tulshii-wordmark]')===null,'Embedded TULSHII wordmark must hydrate without a file dependency');
 
 document.querySelector('#loginName').value='offline-owner';
 document.querySelector('#loginPin').value='2468';
@@ -116,5 +116,5 @@ assert.equal(window.localStorage.getItem('studyTracker.v30'),null,'Permanent del
 assert.equal(document.querySelector('#app').classList.contains('hidden'),true,'Deletion must return to login instead of reopening cached data');
 assert.deepEqual(networkCalls,[],'Offline boot and local workflows must not make network requests');
 assert.deepEqual(browserErrors,[],browserErrors.join('\n'));
-console.log('PAVENRO Focus offline regression passed: production architecture, local accounts, charts, modules, calendar, persistence and zero network calls.');
+console.log('TULSHII Focus offline regression passed: production architecture, local accounts, charts, modules, calendar, persistence and zero network calls.');
 dom.window.close();

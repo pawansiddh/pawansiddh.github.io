@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {JSDOM,VirtualConsole} from 'jsdom';
 
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
-const css=fs.readFileSync(new URL('./focus-v48.css',import.meta.url),'utf8');
+const css=[fs.readFileSync(new URL('./focus-v48.css',import.meta.url),'utf8'),fs.readFileSync(new URL('./focus-professional-v49.css',import.meta.url),'utf8')].join('\n');
 const errors=[];
 const virtualConsole=new VirtualConsole();
 virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas|not implemented/i.test(error.message))errors.push(error.detail?.stack||error.stack||error.message)});
@@ -27,7 +27,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','focus-professional-v49.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -45,10 +45,14 @@ window.applyFocusCategory('school');
 await wait(40);
 if(document.querySelector('#nestlyraWalkthrough'))window.finishNestlyraWalkthrough();
 
-assert.equal(document.querySelector('.focus-brand-copy').textContent.replace(/\s+/g,'').trim(),'PAVENRO|FOCUS');
+assert.equal(document.querySelector('.focus-brand-copy img')?.alt,'TULSHII');
+assert.equal(document.querySelector('.focus-brand-copy small')?.textContent.trim(),'FOCUS');
 assert.ok(document.body.classList.contains('theme-category-school'),'School must start with the blue category theme');
 const visibleEntries=[...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none');
-assert.ok(visibleEntries.length>=6&&visibleEntries.length<=8,`Sidebar must contain 6–8 visible sections, found ${visibleEntries.length}`);
+assert.equal(visibleEntries.length,8,`School must start with exactly eight visible sections, found ${visibleEntries.length}`);
+window.toggleTrackerModule('resources');await wait();
+assert.equal([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length,9,'Every newly enabled section must remain visible after the default eight');
+assert.ok(document.querySelector('[data-nav-entry="resources"]'),'The enabled Resource Library section must appear in navigation');
 assert.ok(document.querySelector('#focusMoreSections'));
 assert.equal(document.querySelector('#view>.page-head'),null,'Repeated page heading must move into the top bar');
 assert.ok(document.querySelector('#topbarTitle').textContent.trim());
@@ -69,6 +73,13 @@ window.setTheme('focus-paper');await wait();
 assert.ok(document.body.classList.contains('theme-focus-paper'));
 window.applyFocusCategory('school');await wait();
 assert.ok(document.body.classList.contains('theme-focus-paper'),'Manual theme choice must survive later category changes');
+
+window.toggleTrackerModule('subjects');window.setView('settings');await wait(90);
+document.querySelector('[data-setting-nav="data"]')?.click();await wait();
+const dataSettings=document.querySelector('[data-setting-category="data"]');
+assert.ok(dataSettings,'Import / export must always render a settings card');
+assert.equal(dataSettings.classList.contains('module-disabled-setting'),false,'Import / export must remain available when Subjects is disabled');
+window.toggleTrackerModule('subjects');await wait();
 
 window.setView('subjects');await wait();
 window.subjectModal();
@@ -101,6 +112,8 @@ assert.ok(document.querySelector('#groupsRoot'),'Manage groups must bypass the h
 assert.match(css,/focus-sidebar-collapsed \.app/);
 assert.match(css,/theme-category-business/);
 assert.match(css,/notification-panel\.open/);
+assert.match(css,/\.mock-ledger article\{grid-template-columns:82px minmax\(150px,1fr\) 54px minmax\(96px,auto\)/,'Ledger score and actions must use non-overlapping columns');
+assert.equal(document.querySelector('#floatingMessages')?.parentElement?.classList.contains('top-actions'),true,'Messages must live in the top bar instead of overlapping content');
 assert.deepEqual(errors,[],errors.join('\n'));
-console.log('PAVENRO Focus v48 passed: category themes, compact navigation, header shell, subject hierarchy, notification panel and hidden-Groups exception.');
+console.log('TULSHII Focus v49 passed: professional themes, expandable navigation, repaired settings, header shell, subject hierarchy, notifications and Messages placement.');
 dom.window.close();

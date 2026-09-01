@@ -3,7 +3,6 @@
   if(window.__PAVENRO_FOCUS_V48__)return;
   window.__PAVENRO_FOCUS_V48__=true;
 
-  const NAV_LIMIT=8;
   const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';
   const CATEGORY={
     blank:{label:'Blank',theme:'category-blank',color:'#56647a',tag:'Clean light',description:'A neutral workspace you can shape yourself.',modules:['subjects','calendar']},
@@ -19,7 +18,7 @@
 
   function categoryCards(compact=false){
     const current=state.settings?.focusCategory||'blank';
-    return `<div class="focus-category-grid">${Object.entries(CATEGORY).map(([key,item])=>`<button type="button" class="focus-category-card ${current===key?'active':''}" style="--category-color:${item.color}" onclick="applyFocusCategory('${key}')"><i></i><strong>${item.label}</strong><small>${compact?item.description:`${item.description} ${item.modules.length+1} starter sections.`}</small><em>${item.tag}</em></button>`).join('')}</div>`;
+    return `<div class="focus-category-grid">${Object.entries(CATEGORY).map(([key,item])=>`<button type="button" class="focus-category-card ${current===key?'active':''}" style="--category-color:${item.color}" onclick="applyFocusCategory('${key}')"><i></i><strong>${item.label}</strong><small>${compact?item.description:`${item.description} ${item.modules.filter(id=>id!=='timer').length+1} starter sections.`}</small><em>${item.tag}</em></button>`).join('')}</div>`;
   }
 
   window.openFocusCategorySetup=()=>{
@@ -74,7 +73,7 @@
       ['category-school','School Blue','#2869d8','#eef5ff','#152a47'],
       ['category-business','Business Gold','#b47a12','#fbf7eb','#30291d'],
       ['category-personal','Personal Green','#27754b','#eff7f1','#193326'],
-      ['nestlyra','Focus Indigo','#4C5FD5','#f5f7ff','#1c2333'],
+      ['nestlyra','Focus Sage','#21653F','#f5f6f1','#17301f'],
       ['auto','Automatic','#7181EA','#e9edf5','#1c2333'],
       ['dark','Midnight','#7c5cff','#09111d','#edf4ff'],
       ['ocean','Ocean','#1b9cff','#071421','#edf8ff'],
@@ -120,8 +119,6 @@
     const entries=all('.nav-entry',navigation);
     entries.forEach(entry=>{entry.classList.remove('focus-nav-overflow');entry.style.removeProperty('display');entry.title=navLabel(entry)});
     entries.filter(entry=>['settings','help'].includes(entry.dataset.navEntry)).forEach(entry=>entry.style.setProperty('display','none','important'));
-    const sections=entries.filter(entry=>!['settings','help'].includes(entry.dataset.navEntry));
-    sections.slice(NAV_LIMIT).forEach(entry=>{entry.classList.add('focus-nav-overflow');entry.style.setProperty('display','none','important')});
     const more=document.createElement('button');more.id='focusMoreSections';more.type='button';more.className='focus-more-sections';more.title='Navigation & modules';more.innerHTML='<span>＋</span><span>More sections</span>';more.onclick=openFocusModuleSettings;navigation.appendChild(more);
   }
 
@@ -240,5 +237,6 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(bindChrome,0),{once:true});else setTimeout(bindChrome,0);
   const focusUpdateApi={version:'48',categories:CATEGORY,refresh:syncShell};
   if(['localhost','127.0.0.1'].includes(location.hostname))focusUpdateApi.getState=()=>state;
+  window.TULSHII_FOCUS_UPDATE=focusUpdateApi;
   window.PAVENRO_FOCUS_UPDATE=focusUpdateApi;
 })();

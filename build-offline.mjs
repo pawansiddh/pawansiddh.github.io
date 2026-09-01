@@ -8,10 +8,10 @@ const data = (file,type) => `data:${type};base64,${fs.readFileSync(path.join(roo
 const escapeScript = source => source.replaceAll('</script','<\\/script');
 const escapeStyle = source => source.replaceAll('</style','<\\/style');
 
-const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','offline-mode.css'];
-const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','offline-mode.js'];
-const wordmark=data('pavenro-wordmark-primary.png','image/png');
-const icon=data('pavenro-icon-192.png','image/png');
+const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','focus-professional-v49.css','offline-mode.css'];
+const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','focus-professional-v49.js','offline-mode.js'];
+const wordmark=data('tulshii-wordmark.svg','image/svg+xml');
+const icon=data('tulshii-mark.svg','image/svg+xml');
 
 let html=read('index.html');
 html=html
@@ -19,9 +19,10 @@ html=html
   .replace(/\s*<link href="https:\/\/fonts\.googleapis\.com[^>]*>/g,'')
   .replace(/\s*<link rel="stylesheet" href="[^"]+"\s*\/>/g,'')
   .replace(/\s*<link rel="manifest"[^>]*>/g,'')
-  .replace(/<link rel="icon"[^>]*>/,`<link rel="icon" type="image/png" href="${icon}">`)
+  .replace(/<link rel="icon"[^>]*>/,`<link rel="icon" type="image/svg+xml" href="${icon}">`)
   .replace('</head>',`<style id="pavenro-offline-styles">${escapeStyle(cssFiles.map(file=>`/* ${file} */\n${read(file)}`).join('\n'))}\n:root{--pavenro-wordmark:url("${wordmark}")}\nbody{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></head>`)
-  .replaceAll('src="pavenro-wordmark-primary.png"','src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-pavenro-wordmark')
+  .replaceAll('src="tulshii-wordmark.svg"','src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-tulshii-wordmark')
+  .replaceAll('src="tulshii-mark.svg"',`src="${icon}"`)
   .replace(/\s*<button data-view="groups"[^>]*>.*?<\/button>/,'')
   .replace(/\s*<button id="floatingMessages"[\s\S]*?<\/button>/,'')
   .replace(/\s*<div class="parent-product-credit">[\s\S]*?<\/div>/,'')
@@ -30,10 +31,10 @@ html=html
   .replace('you@example.com','Your name')
   .replace('Password or local PIN','Local PIN')
   .replace('Enter your password','Enter your PIN')
-  .replace('New to PAVENRO? Create an account','Create local account')
+  .replace('New to TULSHII? Create an account','Create local account')
   .replace('<strong>Basic Google sign-in only.</strong> Drive PDF storage is coming soon; no Drive permission is requested.','<strong>100% device-only.</strong> No Google, Supabase or cloud permission is used.')
   .replace('Use one account for your personal workspace and every group you join.','A private workspace stored only in this browser.')
-  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-v48\.js\?v=48"><\/script>/,buildScripts());
+  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-professional-v49\.js\?v=49"><\/script>/,buildScripts());
 
 if(/<script src=/.test(html))throw new Error('Offline build still contains a script src');
 if(/<link[^>]+href="https?:/i.test(html))throw new Error('Offline build still contains an external link resource');
@@ -62,5 +63,5 @@ function buildScripts(){
     }
     return `/* ${file} */\n${escapeScript(source)}`;
   }).join('\n');
-  return `<script>window.STUDY_TRACKER_CONFIG={supabaseUrl:'',supabaseAnonKey:''};window.PAVENRO_WORDMARK_DATA=${JSON.stringify(wordmark)};</script>\n<script>${chart}</script>\n<script>${transformed}</script>`;
+  return `<script>window.STUDY_TRACKER_CONFIG={supabaseUrl:'',supabaseAnonKey:''};window.TULSHII_WORDMARK_DATA=${JSON.stringify(wordmark)};</script>\n<script>${chart}</script>\n<script>${transformed}</script>`;
 }
