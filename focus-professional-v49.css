@@ -183,6 +183,26 @@ body .calendar-filter.active{border-color:color-mix(in srgb,currentColor 42%,var
 body .cal-event{background:color-mix(in srgb,var(--accent) 12%,var(--panel));color:var(--accent)}
 body .calendar-current-line{background:var(--danger)}
 
+/* Retire the higher-specificity legacy Nestlyra blue skin when Finance Forest is active. */
+body.theme-nestlyra .sidebar{border-color:var(--line)!important;background:var(--sidebar-bg)!important;color:var(--sidebar-text)!important}
+body.theme-nestlyra .sidebar-footer{background:transparent!important}
+body.theme-nestlyra .topbar{border-color:var(--line)!important;background:color-mix(in srgb,var(--panel) 94%,transparent)!important}
+body.theme-nestlyra .sidebar>.focus-brand{color:var(--sidebar-text)!important}
+body.theme-nestlyra .sidebar nav .nav-main,body.theme-nestlyra .sidebar nav .nav-help{color:var(--sidebar-muted)!important}
+body.theme-nestlyra .sidebar nav .nav-main:hover,body.theme-nestlyra .sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--sidebar-accent) 13%,var(--sidebar-bg))!important;color:var(--sidebar-accent)!important;box-shadow:inset 3px 0 var(--sidebar-accent)!important}
+body.theme-nestlyra .sidebar nav .nav-help:hover{border-color:color-mix(in srgb,var(--sidebar-accent) 35%,var(--sidebar-bg))!important;background:color-mix(in srgb,var(--sidebar-accent) 10%,var(--sidebar-bg))!important;color:var(--sidebar-accent)!important}
+body.theme-nestlyra .focus-search-entry{border-color:color-mix(in srgb,var(--sidebar-muted) 34%,var(--sidebar-bg))!important;background:color-mix(in srgb,var(--sidebar-text) 5%,var(--sidebar-bg))!important;color:var(--sidebar-muted)!important}
+body.theme-nestlyra .settings-sidebar nav button:hover,body.theme-nestlyra .settings-sidebar nav button.active{background:color-mix(in srgb,var(--accent) 11%,var(--panel2))!important;color:var(--accent)!important}
+body.theme-nestlyra :is(.task-row,.note-item,.job-search,.job-quick button,.job-files button,.jd-content,.briefing-stats>div,.briefing-list>div,.manual-steps button,.login-guide-grid section,.faq-list details,.mini-btn,.modal-close,.side-timer,.preset-card,.manual-component-directory){border-color:var(--line)!important;background:var(--panel2)!important;color:var(--text)!important}
+body.theme-nestlyra :is(.dashboard-module-links button>span,.entity-icon,.manual-icon,.topic-state,.job-role>i,.job-company-badge){background:var(--accent-soft)!important;color:var(--accent)!important}
+body.theme-nestlyra :is(.dashboard-module-links button:hover,.preset-card:hover,.preset-card.active){border-color:color-mix(in srgb,var(--accent) 42%,var(--line))!important;background:color-mix(in srgb,var(--accent) 7%,var(--panel2))!important}
+body.theme-nestlyra :is(.job-status,.badge){background:var(--panel2)!important;color:var(--muted)!important}
+body.theme-nestlyra :is(.badge.success,.status-selected,.status-offer){background:color-mix(in srgb,var(--success) 13%,var(--panel))!important;color:var(--success)!important}
+body.theme-nestlyra :is(.badge.warn,.status-interview){background:color-mix(in srgb,var(--warn) 14%,var(--panel))!important;color:var(--warn)!important}
+body.theme-nestlyra :is(.badge.danger,.status-rejected,.status-withdrawn){background:color-mix(in srgb,var(--danger) 13%,var(--panel))!important;color:var(--danger)!important}
+body.theme-nestlyra :is(.status-applied,.status-screening){background:color-mix(in srgb,var(--info) 13%,var(--panel))!important;color:var(--info)!important}
+body.theme-nestlyra .appearance-theme-grid .theme-chip{display:grid!important;width:100%!important;min-width:0!important;background:var(--panel)!important;color:var(--text)!important}
+
 /* Mock Test Lab: semantic performance colors, legible ledger, and useful empty state. */
 .mock-gauge-body .negative-delta{color:var(--danger)!important}.mock-gauge-body .positive-delta{color:var(--success)!important}
 .mock-weakness>div>i b{background:linear-gradient(90deg,var(--danger),var(--warn))}
