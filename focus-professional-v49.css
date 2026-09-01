@@ -80,7 +80,7 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .sidebar nav .nav-main:hover,.sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--accent) 11%,var(--panel));color:var(--accent);box-shadow:inset 3px 0 var(--accent)}
 .sidebar nav .nav-help:hover{background:var(--panel2);color:var(--accent)}
 .focus-search-entry{border-color:var(--line)!important;background:var(--panel)!important;color:var(--muted)!important}
-.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--accent) 34%,var(--line))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--muted)!important;backdrop-filter:blur(10px)}
+.focus-more-sections{position:sticky;bottom:0;z-index:2;margin-bottom:2px!important;border-color:color-mix(in srgb,var(--accent) 42%,var(--line))!important;background:color-mix(in srgb,var(--sidebar-bg,var(--bg)) 94%,transparent)!important;color:var(--accent)!important;font-weight:700;opacity:1!important;backdrop-filter:blur(10px)}
 
 /* Settings never presents an empty category. */
 .settings-sidebar,.settings-shell .settings-grid>.card{background:var(--panel)}
@@ -92,11 +92,12 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 /* Mock Test Lab: semantic performance colors, legible ledger, and useful empty state. */
 .mock-gauge-body .negative-delta{color:var(--danger)!important}.mock-gauge-body .positive-delta{color:var(--success)!important}
 .mock-weakness>div>i b{background:linear-gradient(90deg,var(--danger),var(--warn))}
-.mock-diagnosis-empty{display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;align-content:center;gap:4px 10px!important;height:calc(100% - 30px);margin:0!important;padding:12px!important;border:1px dashed var(--line);border-radius:10px;background:var(--panel2);font-size:10px!important}
+.mock-weakness:has(.mock-diagnosis-empty){display:flex;flex-direction:column;overflow:hidden!important}.mock-weakness>.card-title{flex:0 0 auto}
+.mock-diagnosis-empty{display:grid!important;flex:1;grid-template-columns:34px minmax(0,1fr)!important;align-content:center;gap:4px 10px!important;min-height:0;height:auto;margin:0!important;padding:12px!important;border:1px dashed var(--line);border-radius:10px;background:var(--panel2);font-size:10px!important}
 .mock-diagnosis-empty>span{grid-row:1/3;display:grid;width:34px;height:34px;place-items:center;border-radius:9px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));color:var(--accent)}
-.mock-diagnosis-empty>strong{font-size:11px}.mock-diagnosis-empty>p{grid-column:2;margin:0!important;font-size:9px!important}.mock-diagnosis-empty>.btn{grid-column:2;justify-self:start;margin-top:5px;padding:7px 9px;font-size:9px}
+.mock-diagnosis-empty>strong{font-size:12px}.mock-diagnosis-empty>p{grid-column:2;margin:0!important;font-size:10px!important}.mock-diagnosis-empty>.btn{grid-column:2;justify-self:start;margin-top:5px;padding:7px 9px;font-size:10px}
 .mock-ledger article{grid-template-columns:82px minmax(150px,1fr) 54px minmax(96px,auto);gap:10px;padding:10px 8px}
-.mock-ledger article>span{min-width:0}.mock-ledger time,.mock-ledger small{font-size:9px}.mock-ledger strong{font-size:11px}.mock-ledger article>b{font-size:16px;text-align:right}
+.mock-ledger article>span{min-width:0}.mock-ledger time,.mock-ledger small{font-size:10px}.mock-ledger strong{font-size:12px}.mock-ledger article>b{font-size:16px;text-align:right}
 .mock-ledger .record-actions{display:flex;gap:6px;justify-content:flex-end}
 .mock-ledger .record-actions .mini-btn{height:36px;min-height:36px}
 
