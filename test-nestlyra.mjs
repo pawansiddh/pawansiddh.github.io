@@ -31,7 +31,7 @@ window.HTMLDialogElement.prototype.showModal=function(){this.open=true;this.setA
 window.HTMLDialogElement.prototype.close=function(){this.open=false;this.removeAttribute('open')};
 window.HTMLElement.prototype.scrollIntoView=function(){};
 
-const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js']
+const application=['config.js','jobs.js','family.js','messaging.js','groups.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js']
   .map(file=>`${fs.readFileSync(new URL(`./${file}`,import.meta.url),'utf8')}\n//# sourceURL=${file}`)
   .join('\n');
 window.eval(application);
@@ -55,10 +55,12 @@ assert.ok(document.querySelector('img[src$="pavenro-wordmark-primary.png"]'),'Lo
 document.querySelector('#loginName').value='nestlyra-trial';
 document.querySelector('#loginPin').value='1234';
 document.querySelector('#createLearnerAccountBtn').click();
-await wait(90);
+await wait(170);
 assert.equal(document.querySelector('#app').classList.contains('hidden'),false,`Learner workspace should open: ${document.querySelector('#toast').textContent||'no message'}`);
-assert.equal(document.body.classList.contains('theme-nestlyra'),true,'New users should receive the PAVENRO default theme');
-document.querySelector('#modalClose').click();
+assert.ok(document.querySelector('.focus-category-setup'),'New users should choose a workspace category before the walkthrough');
+window.applyFocusCategory('school');
+await wait(80);
+assert.equal(document.body.classList.contains('theme-category-school'),true,'School users should receive the blue category theme');
 assert.ok(document.querySelector('#v42OverallDonut'),'Dashboard should render a circular overall-readiness graph');
 assert.ok(document.querySelector('#v42ModuleBars'),'Dashboard should render a role-aware module bar graph');
 assert.ok(document.querySelector('#v42FocusLine'),'Dashboard should render a seven-day focus line graph');
@@ -86,16 +88,15 @@ assert.equal(document.body.classList.contains('walkthrough-open'),false,'Mobile 
 assert.equal(document.querySelector('#app').classList.contains('nav-open'),false,'Mobile walkthrough must never leave the drawer open');
 window.innerWidth=1366;
 
-assert.equal(document.querySelector('.sidebar>.brand img')?.alt,'PAVENRO');
-assert.match(document.querySelector('.sidebar>.brand').textContent,/Focus/);
+assert.equal(document.querySelector('.sidebar>.brand .focus-brand-copy')?.textContent.replace(/\s+/g,''),'PAVENRO|FOCUS');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Groups')),true,'Groups should be available to every account');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Job Tracker')),false,'School preset should hide Job Tracker');
 assert.equal([...document.querySelectorAll('#nav button')].some(node=>node.textContent.includes('Habits')),true,'School preset should show Habits');
 assert.ok(document.querySelector('[data-nav-entry="assignments"]'),'School preset should include functional Assignments');
-assert.ok(document.querySelector('[data-nav-entry="resources"]'),'School preset should include the Resource Library');
-assert.ok(document.querySelector('[data-nav-entry="settings"]'),'Settings should be enabled by default');
-assert.ok(document.querySelector('[data-nav-entry="help"]'),'Manual & FAQ should be enabled by default');
-assert.equal(document.querySelectorAll('#nav .nav-entry').length,document.querySelectorAll('#nav .nav-help').length,'Every navigation section should have contextual help');
+assert.ok(document.querySelector('#focusMoreSections'),'Optional sections should lead to Navigation & modules');
+assert.equal(document.querySelector('[data-nav-entry="settings"]')?.style.display,'none','Settings should move to the upper-right profile control');
+assert.equal(document.querySelector('[data-nav-entry="help"]')?.style.display,'none','The full manual should remain available through contextual help and More sections');
+assert.ok([...document.querySelectorAll('#nav .nav-entry')].filter(entry=>entry.style.display!=='none').length<=8,'The sidebar should show at most eight sections');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.task-row/,'Light themes must normalize task rows');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.note-item/,'Light themes must normalize note cards');
 assert.match(trackerCss,/body:is\(\.theme-nestlyra,\.theme-light\) \.side-timer/,'Light themes must normalize the sidebar timer');

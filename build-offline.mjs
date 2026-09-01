@@ -8,8 +8,8 @@ const data = (file,type) => `data:${type};base64,${fs.readFileSync(path.join(roo
 const escapeScript = source => source.replaceAll('</script','<\\/script');
 const escapeStyle = source => source.replaceAll('</style','<\\/style');
 
-const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','offline-mode.css'];
-const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','offline-mode.js'];
+const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','offline-mode.css'];
+const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','offline-mode.js'];
 const wordmark=data('pavenro-wordmark-primary.png','image/png');
 const icon=data('pavenro-icon-192.png','image/png');
 
@@ -23,7 +23,8 @@ html=html
   .replace('</head>',`<style id="pavenro-offline-styles">${escapeStyle(cssFiles.map(file=>`/* ${file} */\n${read(file)}`).join('\n'))}\n:root{--pavenro-wordmark:url("${wordmark}")}\nbody{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></head>`)
   .replaceAll('src="pavenro-wordmark-primary.png"','src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-pavenro-wordmark')
   .replace(/\s*<button data-view="groups"[^>]*>.*?<\/button>/,'')
-  .replace(/\s*<button id="floatingMessages"[\s\S]*?<\/button>\s*<div class="parent-product-credit">[\s\S]*?<\/div>/,'')
+  .replace(/\s*<button id="floatingMessages"[\s\S]*?<\/button>/,'')
+  .replace(/\s*<div class="parent-product-credit">[\s\S]*?<\/div>/,'')
   .replace('Cloud sync when online · local mode when offline','Private local storage · no account server')
   .replace('Email or local account name','Local account name')
   .replace('you@example.com','Your name')
@@ -32,7 +33,7 @@ html=html
   .replace('New to PAVENRO? Create an account','Create local account')
   .replace('<strong>Basic Google sign-in only.</strong> Drive PDF storage is coming soon; no Drive permission is requested.','<strong>100% device-only.</strong> No Google, Supabase or cloud permission is used.')
   .replace('Use one account for your personal workspace and every group you join.','A private workspace stored only in this browser.')
-  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="pavenro-brand\.js\?v=45"><\/script>/,buildScripts());
+  .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-v48\.js\?v=48"><\/script>/,buildScripts());
 
 if(/<script src=/.test(html))throw new Error('Offline build still contains a script src');
 if(/<link[^>]+href="https?:/i.test(html))throw new Error('Offline build still contains an external link resource');

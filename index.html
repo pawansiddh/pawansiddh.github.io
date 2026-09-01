@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="nestlyra-v42.css?v=45" />
   <link rel="stylesheet" href="nestlyra-v43.css?v=46" />
   <link rel="stylesheet" href="pavenro-brand.css?v=45" />
+  <link rel="stylesheet" href="focus-v48.css?v=48" />
   <link rel="manifest" href="manifest.webmanifest?v=45" />
   <link rel="icon" type="image/png" href="pavenro-icon-192.png" />
 </head>
@@ -51,7 +52,10 @@
 
   <div id="app" class="app hidden">
     <aside class="sidebar">
-      <div class="brand"><img class="brand-wordmark" src="pavenro-wordmark-primary.png" alt="PAVENRO"><small>Focus</small></div>
+      <div class="brand focus-brand" aria-label="PAVENRO Focus">
+        <img class="focus-brand-mark" src="pavenro-mark.svg" alt="">
+        <span class="focus-brand-copy"><strong>PAVENRO</strong><i>|</i><small>FOCUS</small></span>
+      </div>
       <nav id="nav">
         <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
         <button data-view="subjects"><span>◫</span>Subjects</button>
@@ -67,7 +71,6 @@
           <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
-        <div class="product-credit"><img src="pavenro-wordmark-primary.png" alt="PAVENRO"><span><small>Designed &amp; developed by PAVENRO</small><em>© 2026</em></span></div>
       </div>
     </aside>
     <button id="sidebarScrim" class="sidebar-scrim" type="button" aria-label="Close navigation"></button>
@@ -75,20 +78,36 @@
     <main class="main">
       <header class="topbar">
         <button id="menuBtn" class="icon-btn mobile-only" aria-label="Open navigation">☰</button>
-        <div class="search-wrap"><span>⌕</span><input id="globalSearch" placeholder="Search subjects, tasks, notes..." /></div>
+        <button id="sidebarCollapse" class="icon-btn sidebar-collapse" type="button" aria-label="Collapse navigation" title="Collapse navigation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM9 5v14M13 9l-3 3 3 3"/></svg>
+        </button>
+        <div id="topbarContext" class="topbar-context" aria-live="polite"><strong id="topbarTitle">Dashboard</strong><small id="topbarSubtitle">Your Focus workspace</small></div>
         <div class="top-actions">
+          <div id="topbarPageActions" class="topbar-page-actions"></div>
           <button id="quickAdd" class="btn primary">+ New task</button>
-          <button id="notifBtn" class="icon-btn" aria-label="Notifications">♢<span id="notifDot" class="dot"></span></button>
+          <button id="mobileSearchBtn" class="icon-btn mobile-search-btn" type="button" aria-label="Search" title="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          </button>
+          <button id="notifBtn" class="icon-btn notification-button" type="button" aria-label="Notifications" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 8h18c0-1-3-1-3-8M9.5 20h5"/></svg><span id="notifDot" class="dot"></span>
+          </button>
           <button class="avatar" id="avatar" aria-label="Open user settings"><img id="avatarImage" alt="" class="hidden"><span id="avatarInitial">P</span></button>
         </div>
       </header>
+      <div id="focusSearchPopover" class="focus-search-popover" aria-hidden="true">
+        <div class="search-wrap"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search subjects, tasks, notes..." autocomplete="off" /></div>
+        <small>Search across the sections enabled in this workspace.</small>
+      </div>
+      <aside id="notificationPanel" class="notification-panel" aria-hidden="true" aria-label="Notifications">
+        <header><span><strong>Notifications</strong><small id="notificationSummary">Your latest Focus updates</small></span><button id="notificationClose" type="button" aria-label="Close notifications">×</button></header>
+        <div id="notificationList" class="notification-list"></div>
+      </aside>
       <div id="view" class="view"></div>
     </main>
     <button id="floatingMessages" class="floating-messages" type="button" aria-label="Open group messages" title="Group messages">
       <span>✉</span>
       <i id="floatingMessageBadge" class="floating-message-badge hidden">0</i>
     </button>
-    <div class="parent-product-credit"><img src="pavenro-wordmark-primary.png" alt="PAVENRO"><span><small>Designed &amp; developed by PAVENRO</small><em>© 2026</em></span></div>
   </div>
 
   <dialog id="modal"><form method="dialog" id="modalForm"><button id="modalClose" class="modal-close" type="button" aria-label="Close dialog">×</button><div id="modalBody"></div></form></dialog>
@@ -101,11 +120,12 @@
   <script src="family.js?v=45"></script>
   <script src="messaging.js?v=45"></script>
   <script src="groups.js?v=45"></script>
-  <script src="app.js?v=45"></script>
-  <script src="tracker-modules.js?v=45"></script>
-  <script src="nestlyra-v37.js?v=45"></script>
+  <script src="app.js?v=48"></script>
+  <script src="tracker-modules.js?v=48"></script>
+  <script src="nestlyra-v37.js?v=48"></script>
   <script src="nestlyra-v39.js?v=45"></script>
   <script src="nestlyra-v42.js?v=45"></script>
   <script src="pavenro-brand.js?v=45"></script>
+  <script src="focus-v48.js?v=48"></script>
 </body>
 </html>

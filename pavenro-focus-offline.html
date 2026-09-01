@@ -512,6 +512,217 @@ body.theme-matrix .brand > .brand-wordmark {
   .brand > .brand-wordmark { width: 139px; height: 36px; }
 }
 
+/* focus-v48.css */
+/* PAVENRO Focus v48 — compact shell, category themes and richer controls. */
+:root{
+  --focus-sidebar-width:244px;
+  --focus-sidebar-rail:68px;
+  --focus-topbar-height:72px;
+}
+
+.app{grid-template-columns:var(--focus-sidebar-width) minmax(0,1fr);transition:grid-template-columns .22s ease}
+.sidebar{width:var(--focus-sidebar-width);padding:0 14px 14px;transition:width .22s ease,padding .22s ease;background:var(--sidebar-bg,#09111d)}
+.sidebar>.focus-brand{height:var(--focus-topbar-height);min-height:var(--focus-topbar-height);padding:0 8px;margin:0 0 8px;border-bottom:1px solid var(--line);gap:9px;overflow:hidden;color:var(--text)}
+.focus-brand-mark{display:none;width:38px;height:38px;flex:0 0 38px;object-fit:contain;padding:4px;border-radius:11px;background:#fff;box-shadow:0 7px 18px color-mix(in srgb,var(--accent) 18%,transparent)}
+.focus-brand-copy{display:flex;align-items:center;gap:7px;min-width:0;white-space:nowrap}
+.focus-brand-copy strong{color:var(--text);font:800 14px/1 'Space Grotesk',Inter,sans-serif;letter-spacing:.13em}
+.focus-brand-copy i{color:color-mix(in srgb,var(--muted) 68%,transparent);font:400 18px/1 Inter,sans-serif}
+.focus-brand-copy small{margin:0;color:var(--accent);font:800 10px/1 Inter,sans-serif;letter-spacing:.12em}
+
+.sidebar nav{gap:3px}
+.sidebar nav .nav-entry{min-height:38px}
+.sidebar nav .nav-main{min-height:38px;padding:8px 10px}
+.sidebar nav .nav-main>span:first-child{width:20px;display:grid;place-items:center;flex:0 0 20px}
+.sidebar nav .nav-help{border:0!important;background:transparent!important;opacity:.32}
+.sidebar nav .nav-help:hover{opacity:.85}
+.focus-search-entry,.focus-more-sections{display:grid!important;grid-template-columns:20px minmax(0,1fr);align-items:center;gap:12px;width:100%;min-height:38px;padding:8px 10px!important}
+.focus-search-entry{margin-bottom:5px!important;color:var(--muted)!important;border:1px solid color-mix(in srgb,var(--line) 74%,transparent)!important;background:color-mix(in srgb,var(--panel2) 42%,transparent)!important}
+.focus-search-entry svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
+.focus-more-sections{margin-top:6px!important;color:var(--muted)!important;opacity:.55;border:1px dashed color-mix(in srgb,var(--line) 82%,transparent)!important;background:transparent!important}
+.focus-more-sections:hover{opacity:1;color:var(--accent)!important;border-color:var(--accent)!important}
+.sidebar-footer{background:transparent!important}
+.sidebar .product-credit,.parent-product-credit,.parent-observer-footer .product-credit{display:none!important}
+
+.topbar{height:var(--focus-topbar-height);justify-content:flex-start;gap:12px;padding:0 24px}
+.sidebar-collapse{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px}
+.sidebar-collapse svg,.notification-button svg,.mobile-search-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.topbar-context{display:grid;min-width:0;line-height:1.15}
+.topbar-context strong{overflow:hidden;color:var(--text);font:750 17px/1.2 'Space Grotesk',Inter,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.topbar-context small{overflow:hidden;margin-top:3px;color:var(--muted);font-size:9px;text-overflow:ellipsis;white-space:nowrap}
+.top-actions{margin-left:auto;min-width:0}
+.topbar-page-actions{display:flex;align-items:center;gap:8px;min-width:0}
+.topbar-page-actions:empty{display:none}
+.topbar-page-actions>.btn,.topbar-page-actions>.job-head-actions .btn{min-height:38px;padding:9px 13px;white-space:nowrap}
+.topbar-page-actions>.job-head-actions{display:flex;gap:8px}
+.mobile-search-btn{display:none}
+.notification-button .dot.hidden{display:none!important}
+
+.view{padding-top:20px}
+.view>.page-head{display:none!important}
+
+.focus-search-popover{position:fixed;z-index:70;left:calc(var(--focus-sidebar-width) + 22px);top:calc(var(--focus-topbar-height) + 10px);width:min(480px,calc(100vw - var(--focus-sidebar-width) - 44px));padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:0 22px 60px #0004;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px);transition:.18s ease}
+.focus-search-popover.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.focus-search-popover .search-wrap{width:100%;max-width:none;background:var(--panel2)}
+.focus-search-popover>small{display:block;margin:8px 3px 0;color:var(--muted);font-size:9px}
+
+.notification-panel{position:fixed;z-index:75;right:18px;top:calc(var(--focus-topbar-height) + 8px);width:min(380px,calc(100vw - 28px));max-height:min(580px,calc(100vh - 94px));display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:0 22px 70px #0005;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px) scale(.985);transform-origin:top right;transition:.18s ease}
+.notification-panel.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.notification-panel>header{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:1px solid var(--line)}
+.notification-panel>header>span{display:grid;min-width:0}
+.notification-panel>header strong{font:750 15px 'Space Grotesk',Inter,sans-serif}
+.notification-panel>header small{margin-top:3px;color:var(--muted);font-size:9px}
+.notification-panel>header button{margin-left:auto;width:30px;height:30px;border:0;border-radius:8px;background:var(--panel2);color:var(--text);font-size:20px}
+.notification-list{min-height:112px;overflow:auto;padding:8px}
+.notification-item{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:10px;border:0;border-bottom:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);text-align:left}
+.notification-item:last-child{border-bottom:0}
+.notification-item:hover{background:var(--panel2)}
+.notification-item>i{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--accent) 13%,var(--panel2));color:var(--accent);font-style:normal}
+.notification-item>span{display:grid;min-width:0}
+.notification-item b{overflow:hidden;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.notification-item small{overflow:hidden;margin-top:3px;color:var(--muted);font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+.notification-item>em{color:var(--muted);font-size:13px;font-style:normal}
+.notification-empty{display:grid;place-items:center;min-height:150px;padding:22px;color:var(--muted);text-align:center}
+.notification-empty span{display:grid;place-items:center;width:42px;height:42px;margin-bottom:10px;border-radius:13px;background:var(--panel2);color:var(--success);font-size:19px}
+
+body.focus-sidebar-collapsed .app{grid-template-columns:var(--focus-sidebar-rail) minmax(0,1fr)}
+body.focus-sidebar-collapsed .sidebar{width:var(--focus-sidebar-rail);padding-inline:8px}
+body.focus-sidebar-collapsed .sidebar>.focus-brand{justify-content:center;padding-inline:0}
+body.focus-sidebar-collapsed .focus-brand-copy{display:none}
+body.focus-sidebar-collapsed .focus-brand-mark{display:block}
+body.focus-sidebar-collapsed .sidebar nav .nav-entry{display:block}
+body.focus-sidebar-collapsed .sidebar nav .nav-main{justify-content:center;padding-inline:0}
+body.focus-sidebar-collapsed .sidebar nav .nav-label,body.focus-sidebar-collapsed .sidebar nav .nav-help,body.focus-sidebar-collapsed .focus-search-entry span:last-child,body.focus-sidebar-collapsed .focus-more-sections span:last-child,body.focus-sidebar-collapsed .streak-mini div,body.focus-sidebar-collapsed .side-timer strong{display:none!important}
+body.focus-sidebar-collapsed .focus-search-entry,body.focus-sidebar-collapsed .focus-more-sections{display:grid!important;grid-template-columns:1fr;place-items:center;padding-inline:0!important}
+body.focus-sidebar-collapsed .focus-more-sections span:first-child{font-size:18px}
+body.focus-sidebar-collapsed .sidebar-tools{grid-template-columns:1fr}
+body.focus-sidebar-collapsed .analog-clock,body.focus-sidebar-collapsed .side-timer{width:46px;height:46px;margin-inline:auto}
+body.focus-sidebar-collapsed .streak-mini{justify-content:center;padding-inline:5px}
+body.focus-sidebar-collapsed .focus-search-popover{left:calc(var(--focus-sidebar-rail) + 12px);width:min(480px,calc(100vw - var(--focus-sidebar-rail) - 34px))}
+body.focus-sidebar-collapsed #sidebarCollapse svg{transform:scaleX(-1)}
+
+.focus-category-settings{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.focus-category-settings>header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.focus-category-settings h4{margin:0;font-size:11px}
+.focus-category-settings p{margin:3px 0 0;color:var(--muted);font-size:8px}
+.focus-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.focus-category-card{position:relative;display:grid;gap:5px;min-height:88px;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);text-align:left}
+.focus-category-card:hover,.focus-category-card.active{border-color:var(--category-color,var(--accent));box-shadow:inset 0 0 0 1px var(--category-color,var(--accent))}
+.focus-category-card.active:after{content:'✓';position:absolute;right:9px;top:8px;color:var(--category-color,var(--accent));font-weight:900}
+.focus-category-card>i{width:24px;height:6px;border-radius:10px;background:var(--category-color,var(--accent))}
+.focus-category-card strong{font-size:10px}
+.focus-category-card small{color:var(--muted);font-size:7.5px;line-height:1.35}
+.focus-category-card em{color:var(--category-color,var(--accent));font-size:7px;font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.focus-category-setup h2{margin-bottom:6px!important}
+.focus-category-setup>p{margin:0 0 16px;color:var(--muted);line-height:1.55}
+.focus-category-setup .focus-category-grid{grid-template-columns:1fr 1fr}
+.focus-category-setup .focus-category-card{min-height:106px}
+
+.hierarchy-builder{display:grid;gap:9px;margin-top:10px}
+.hierarchy-module{padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}
+.hierarchy-module-head{display:grid;grid-template-columns:minmax(0,1fr) 28px;gap:8px;align-items:center}
+.hierarchy-module input,.hierarchy-module textarea{width:100%}
+.hierarchy-module textarea{min-height:72px;margin-top:8px;resize:vertical;line-height:1.45}
+.hierarchy-module button{width:28px;height:28px;border:0;border-radius:8px;background:color-mix(in srgb,var(--danger) 12%,var(--panel));color:var(--danger)}
+.optional-settings{margin-top:14px;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--panel2) 52%,transparent);overflow:hidden}
+.optional-settings>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;color:var(--text);font-size:10px;font-weight:800;cursor:pointer;list-style:none}
+.optional-settings>summary::-webkit-details-marker{display:none}
+.optional-settings>summary:after{content:'⌄';color:var(--muted);font-size:15px;transition:transform .18s ease}
+.optional-settings[open]>summary:after{transform:rotate(180deg)}
+.optional-settings>.form-grid,.optional-settings>.optional-body{padding:0 13px 13px}
+.optional-settings label{margin:10px 0 0}
+.structure-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.structure-actions small{color:var(--muted);font-size:8px}
+.topic-row-actions{display:flex;gap:4px}
+.topic-row-actions .topic-edit{font-size:12px}
+.module-head-actions{display:flex;align-items:center;gap:6px}
+
+.appearance-theme-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.appearance-theme-grid .theme-chip{width:100%;height:64px;display:flex;align-items:flex-end;padding:7px;border-color:var(--line);background:linear-gradient(135deg,var(--theme-bg,#f8fafc) 0 58%,var(--swatch) 58%);color:var(--theme-text,#172033);text-align:left}
+.appearance-theme-grid .theme-chip span{padding:3px 5px;border-radius:6px;background:#fffddf;color:#172033;font-size:7px;font-weight:800;box-shadow:0 2px 8px #0002}
+.appearance-theme-grid .theme-chip.active{border-color:var(--swatch);box-shadow:inset 0 0 0 1px var(--swatch)}
+.appearance-advanced-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.appearance-advanced-grid label{display:grid;gap:6px;color:var(--muted);font-size:9px;font-weight:700}
+.category-theme-note{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px;border-radius:10px;background:var(--panel2);font-size:8px;color:var(--muted)}
+
+body[data-focus-density="compact"] .view{padding:14px 20px}
+body[data-focus-density="compact"] .card,body[data-focus-density="compact"] .stat{padding:12px}
+body[data-focus-density="compact"] .setting-row{padding:9px 0}
+body[data-focus-density="spacious"] .view{padding:30px 34px}
+body[data-focus-density="spacious"] .grid{gap:20px}
+body[data-focus-density="spacious"] .card,body[data-focus-density="spacious"] .stat{padding:22px}
+body[data-focus-radius="square"]{--radius:8px}
+body[data-focus-radius="rounded"]{--radius:22px}
+body[data-focus-motion="reduced"] *,body[data-focus-motion="reduced"] *:before,body[data-focus-motion="reduced"] *:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+
+/* First-login category themes. */
+body.theme-category-blank{--bg:#f4f6f9;--panel:#fff;--panel2:#f1f4f8;--line:#dce2ea;--text:#182231;--muted:#6d7887;--accent:#56647a;--accent2:#718096;--sidebar-bg:#fff;--shadow:0 16px 42px #7d8da51c}
+body.theme-category-school{--bg:#eef5ff;--panel:#fff;--panel2:#edf4ff;--line:#cfdef2;--text:#152a47;--muted:#667a96;--accent:#2869d8;--accent2:#1599c4;--sidebar-bg:#f8fbff;--shadow:0 16px 42px #3e73ad1d}
+body.theme-category-business{--bg:#fbf7eb;--panel:#fffdf8;--panel2:#f7f0d9;--line:#e8dcc0;--text:#30291d;--muted:#7d715e;--accent:#b47a12;--accent2:#d49a21;--sidebar-bg:#fffaf0;--shadow:0 16px 42px #87651f1c}
+body.theme-category-personal{--bg:#eff7f1;--panel:#fff;--panel2:#edf5ef;--line:#d1e3d6;--text:#193326;--muted:#667b6d;--accent:#27754b;--accent2:#42a96c;--sidebar-bg:#f8fcf9;--shadow:0 16px 42px #3b7c501b}
+body.theme-focus-paper{--bg:#f7f3eb;--panel:#fffdf8;--panel2:#f2ece1;--line:#ded4c5;--text:#2d2923;--muted:#746d63;--accent:#835f3f;--accent2:#aa7a4c;--sidebar-bg:#fcf8f1;--shadow:0 16px 42px #7055371c}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .sidebar,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .topbar{background:color-mix(in srgb,var(--sidebar-bg) 94%,transparent);border-color:var(--line)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .topbar{background:color-mix(in srgb,var(--panel) 92%,transparent)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) input,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) textarea,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) select,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .search-wrap{background:#fff;color:var(--text);border-color:var(--line)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .card,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .stat{background:var(--panel);border-color:var(--line);box-shadow:var(--shadow)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .sidebar nav button{color:var(--muted)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .sidebar nav button:hover,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .sidebar nav button.active,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .sidebar nav .nav-entry.active .nav-main{background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accent);box-shadow:inset 3px 0 var(--accent)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .btn{background:var(--panel2);color:var(--text)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .btn.primary{background:var(--accent);color:#fff}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .icon-btn{background:var(--panel);color:var(--text);border-color:var(--line)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .task-row,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .entity-row,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .note-item,
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .dashboard-module-links button{background:var(--panel2);color:var(--text);border-color:var(--line)}
+body:is(.theme-category-blank,.theme-category-school,.theme-category-business,.theme-category-personal,.theme-focus-paper) .progress-ring:after{background:var(--panel)}
+
+@media(max-width:1050px){
+  .topbar-context small{display:none}
+  .topbar-page-actions .btn{font-size:0;width:38px;padding:0}
+  .topbar-page-actions .btn:before{content:'+';font-size:18px}
+  .appearance-theme-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .focus-category-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:760px){
+  :root{--focus-topbar-height:64px}
+  .app,.app.focus-sidebar-collapsed{display:block}
+  .sidebar{width:260px;padding:0 14px 14px}
+  body.focus-sidebar-collapsed .sidebar{width:260px;padding:0 14px 14px}
+  body.focus-sidebar-collapsed .focus-brand-copy{display:flex}
+  body.focus-sidebar-collapsed .focus-brand-mark{display:none}
+  body.focus-sidebar-collapsed .sidebar nav .nav-entry{display:grid}
+  body.focus-sidebar-collapsed .sidebar nav .nav-label,body.focus-sidebar-collapsed .sidebar nav .nav-help,body.focus-sidebar-collapsed .focus-search-entry span:last-child,body.focus-sidebar-collapsed .focus-more-sections span:last-child,body.focus-sidebar-collapsed .streak-mini div,body.focus-sidebar-collapsed .side-timer strong{display:initial!important}
+  body.focus-sidebar-collapsed .focus-search-entry,body.focus-sidebar-collapsed .focus-more-sections{display:grid!important;grid-template-columns:20px minmax(0,1fr);place-items:initial;padding:8px 10px!important}
+  .sidebar-collapse{display:none}
+  .topbar{padding:0 12px;gap:9px}
+  .topbar-context{flex:1}
+  .topbar-context strong{font-size:14px}
+  .top-actions{margin-left:0;gap:6px}
+  .topbar-page-actions,#quickAdd{display:none!important}
+  .mobile-search-btn{display:grid;place-items:center}
+  .top-actions .btn{display:none}
+  .focus-search-popover,body.focus-sidebar-collapsed .focus-search-popover{left:12px;right:12px;top:72px;width:auto}
+  .view{padding-top:14px}
+  .appearance-theme-grid{grid-template-columns:1fr 1fr}
+  .appearance-advanced-grid{grid-template-columns:1fr}
+  .focus-category-setup .focus-category-grid{grid-template-columns:1fr}
+  .focus-category-setup .focus-category-card{min-height:88px}
+}
+
+@media(max-width:520px){
+  .focus-category-grid{grid-template-columns:1fr}
+  .notification-panel{right:8px;width:calc(100vw - 16px)}
+  .topbar-context small{display:none}
+  .avatar,.icon-btn{width:36px;height:36px}
+}
+
 /* offline-mode.css */
 /* Device-only overrides bundled into pavenro-focus-offline.html. */
 body.offline-mode .google-button,
@@ -573,7 +784,10 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
 
   <div id="app" class="app hidden">
     <aside class="sidebar">
-      <div class="brand"><img class="brand-wordmark" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-pavenro-wordmark alt="PAVENRO"><small>Focus</small></div>
+      <div class="brand focus-brand" aria-label="PAVENRO Focus">
+        <img class="focus-brand-mark" src="pavenro-mark.svg" alt="">
+        <span class="focus-brand-copy"><strong>PAVENRO</strong><i>|</i><small>FOCUS</small></span>
+      </div>
       <nav id="nav">
         <button data-view="dashboard" class="active"><span>⌂</span>Dashboard</button>
         <button data-view="subjects"><span>◫</span>Subjects</button>
@@ -588,7 +802,6 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
           <button id="sideTimer" class="side-timer" aria-label="Open study timer"><span>◉</span><strong>Study<br>Timer</strong></button>
         </div>
         <div class="streak-mini compact"><span>🔥</span><div><strong id="sideStreak">0 days</strong></div></div>
-        <div class="product-credit"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-pavenro-wordmark alt="PAVENRO"><span><small>Designed &amp; developed by PAVENRO</small><em>© 2026</em></span></div>
       </div>
     </aside>
     <button id="sidebarScrim" class="sidebar-scrim" type="button" aria-label="Close navigation"></button>
@@ -596,13 +809,30 @@ body{font-family:Inter,Segoe UI,system-ui,-apple-system,sans-serif}</style></hea
     <main class="main">
       <header class="topbar">
         <button id="menuBtn" class="icon-btn mobile-only" aria-label="Open navigation">☰</button>
-        <div class="search-wrap"><span>⌕</span><input id="globalSearch" placeholder="Search subjects, tasks, notes..." /></div>
+        <button id="sidebarCollapse" class="icon-btn sidebar-collapse" type="button" aria-label="Collapse navigation" title="Collapse navigation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM9 5v14M13 9l-3 3 3 3"/></svg>
+        </button>
+        <div id="topbarContext" class="topbar-context" aria-live="polite"><strong id="topbarTitle">Dashboard</strong><small id="topbarSubtitle">Your Focus workspace</small></div>
         <div class="top-actions">
+          <div id="topbarPageActions" class="topbar-page-actions"></div>
           <button id="quickAdd" class="btn primary">+ New task</button>
-          <button id="notifBtn" class="icon-btn" aria-label="Notifications">♢<span id="notifDot" class="dot"></span></button>
+          <button id="mobileSearchBtn" class="icon-btn mobile-search-btn" type="button" aria-label="Search" title="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          </button>
+          <button id="notifBtn" class="icon-btn notification-button" type="button" aria-label="Notifications" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 8h18c0-1-3-1-3-8M9.5 20h5"/></svg><span id="notifDot" class="dot"></span>
+          </button>
           <button class="avatar" id="avatar" aria-label="Open user settings"><img id="avatarImage" alt="" class="hidden"><span id="avatarInitial">P</span></button>
         </div>
       </header>
+      <div id="focusSearchPopover" class="focus-search-popover" aria-hidden="true">
+        <div class="search-wrap"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search subjects, tasks, notes..." autocomplete="off" /></div>
+        <small>Search across the sections enabled in this workspace.</small>
+      </div>
+      <aside id="notificationPanel" class="notification-panel" aria-hidden="true" aria-label="Notifications">
+        <header><span><strong>Notifications</strong><small id="notificationSummary">Your latest Focus updates</small></span><button id="notificationClose" type="button" aria-label="Close notifications">×</button></header>
+        <div id="notificationList" class="notification-list"></div>
+      </aside>
       <div id="view" class="view"></div>
     </main>
   </div>
@@ -944,14 +1174,14 @@ const PEN_MODULES=[
 function datePlus(days){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
 function penSubject(){const total=PEN_MODULES.reduce((n,x)=>n+x[1].split('|').length,0);let i=0;return {id:'pen200',name:'PEN-200 (2023)',description:'Penetration Testing with Kali Linux — 90-day book plan',color:'#7c5cff',icon:'P2',modules:PEN_MODULES.map(([name,list])=>({id:uid(),name,topics:list.split('|').map(name=>({id:uid(),name,status:'not-started',due:datePlus(Math.min(89,Math.floor(i++*90/total))) }))}))}}
 function sampleSubject(){const modules=[['1. Getting Started',['Define your learning goal','Set a target completion date','Choose study resources','Plan weekly study time','Create your first milestone']],['2. Core Concepts',['Read the introduction','Learn key terminology','Review the first concept','Summarize important ideas','Complete a short knowledge check']],['3. Guided Practice',['Follow a worked example','Repeat the example independently','Record useful notes','Identify difficult areas','Complete the practice exercise']],['4. Applied Learning',['Plan a small project','Complete project step one','Complete project step two','Review your results','Document what you learned']],['5. Review & Completion',['Revise important concepts','Retry incomplete exercises','Complete the final assessment','Write a learning summary','Mark the subject complete']]];let day=0;return {id:'sample-subject',name:'Sample Learning Course',description:'Example subject showing how modules, topics, deadlines and progress work. Edit or delete it when you are ready.',color:'#7c5cff',icon:'EX',modules:modules.map(([name,topics])=>({id:uid(),name,topics:topics.map(name=>({id:uid(),name,status:'not-started',due:datePlus(day++)}))}))}}
-const seed={profile:null,settings:{theme:'nestlyra',sounds:true,notifications:true,fontStyle:'modern',textScale:'normal',loginImage:'',loginImagePosition:'center',loginImageShade:'balanced'},subjects:[sampleSubject()],tasks:[],events:[],jobApplications:[],notes:[{id:uid(),title:'How to use this sample',subjectId:'sample-subject',content:'Open the sample subject, update topic statuses, change due dates, add your own modules, or delete the sample and create a real subject.',updated:today()}],activity:[],activeWorkspace:'primary',workspaces:[{id:'primary',name:'My First Workspace',archived:false}]};
+const seed={profile:null,settings:{theme:'nestlyra',sounds:true,notifications:true,fontStyle:'modern',textScale:'normal',density:'comfortable',radiusStyle:'soft',motion:'full',focusCategory:'blank',categorySetupPending:false,themeManuallyChosen:false,loginImage:'',loginImagePosition:'center',loginImageShade:'balanced'},subjects:[sampleSubject()],tasks:[],events:[],jobApplications:[],notes:[{id:uid(),title:'How to use this sample',subjectId:'sample-subject',content:'Open the sample subject, update topic statuses, change due dates, add your own modules, or delete the sample and create a real subject.',updated:today()}],activity:[],activeWorkspace:'primary',workspaces:[{id:'primary',name:'My First Workspace',archived:false}]};
 const cloudConfig=window.STUDY_TRACKER_CONFIG||{},sb=cloudConfig.supabaseUrl&&window.supabase?window.supabase.createClient(cloudConfig.supabaseUrl,cloudConfig.supabaseAnonKey):null;
 let cloudUser=null,syncTimer=null,invalidatingSession=false,state=load(),viewName='dashboard',selectedSubject=state.subjects[0]?.id||'',selectedNote=state.notes[0]?.id,calDate=new Date(),timerSeconds=25*60,timerInitial=25*60,timerHandle=null,jobQuery='',jobFilter='All',jobSort='newest';
 function normalizeState(x){const next=Object.assign(structuredClone(seed),x||{});next.settings={...seed.settings,...(x?.settings||{})};next.jobApplications=Array.isArray(next.jobApplications)?next.jobApplications:[];return next}
 function load(){try{return normalizeState(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{return structuredClone(seed)}}
 function save(){if(state?.workspaces?.length&&typeof storeWorkspace==='function')storeWorkspace();localStorage.setItem(KEY,JSON.stringify(state));applyTheme();if(cloudUser&&sb){clearTimeout(syncTimer);syncTimer=setTimeout(syncCloud,450)}}
 async function syncCloud(){if(!cloudUser||!sb)return;const payload=structuredClone(state);if(payload.profile)delete payload.profile.pin;const {error}=await sb.from('user_tracker_data').upsert({user_id:cloudUser.id,data:payload},{onConflict:'user_id'});if(error){console.error('Cloud sync failed',error.message);const check=await sb.auth.getUser();if(check.error||!check.data?.user)invalidateCloudSession('This account no longer exists. Create a new account to continue.')}else if(typeof groupPublishProgress==='function')groupPublishProgress()}
-async function loadCloud(){const {data,error}=await sb.from('user_tracker_data').select('data').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;if(data?.data){state=normalizeState(data.data);state.profile=state.profile||{name:cloudUser.user_metadata?.full_name||cloudUser.email.split('@')[0]}}else{state=structuredClone(seed);state.profile={name:cloudUser.user_metadata?.full_name||cloudUser.email.split('@')[0],email:cloudUser.email};await syncCloud()}selectedSubject=state.subjects[0]?.id||'';selectedNote=state.notes[0]?.id;localStorage.setItem(KEY,JSON.stringify(state))}
+async function loadCloud(){const {data,error}=await sb.from('user_tracker_data').select('data').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;if(data?.data){state=normalizeState(data.data);state.profile=state.profile||{name:cloudUser.user_metadata?.full_name||cloudUser.email.split('@')[0]}}else{state=structuredClone(seed);state.profile={name:cloudUser.user_metadata?.full_name||cloudUser.email.split('@')[0],email:cloudUser.email};state.settings.categorySetupPending=true;await syncCloud()}selectedSubject=state.subjects[0]?.id||'';selectedNote=state.notes[0]?.id;localStorage.setItem(KEY,JSON.stringify(state))}
 function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function pct(subject){const t=subject.modules.flatMap(m=>m.topics);return t.length?Math.round(t.filter(x=>x.status==='completed').length/t.length*100):0}
 function allTopics(){return state.subjects.flatMap(s=>s.modules.flatMap(m=>m.topics.map(t=>({...t,subjectId:s.id,subject:s.name,module:m.name}))))}
@@ -975,8 +1205,8 @@ function rememberAppearance(settings=state.settings){try{localStorage.setItem(AP
 function applyTheme(useProfile=false){const local=localAppearance(),s={...seed.settings,...state.settings,...(!useProfile&&local?local:{})};document.body.classList.remove('theme-nestlyra','theme-cyber','theme-matrix','theme-ocean','theme-light');let theme=s.theme;if(theme==='auto')theme=matchMedia('(prefers-color-scheme: light)').matches?'nestlyra':'dark';if(theme&&theme!=='dark')document.body.classList.add(`theme-${theme}`);document.body.dataset.fontStyle=s.fontStyle||'modern';document.body.dataset.textScale=s.textScale||'normal';document.body.dataset.loginShade=s.loginImageShade||'balanced';const positions={left:'30% 34%',center:'center 34%',right:'70% 34%'};document.documentElement.style.setProperty('--login-position',positions[s.loginImagePosition]||positions.center);if(s.loginImage)document.documentElement.style.setProperty('--login-image',`url("${s.loginImage}")`);else document.documentElement.style.removeProperty('--login-image');if(useProfile)rememberAppearance(s)}
 function beep(){if(!state.settings.sounds)return;try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=520;g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.18);o.start();o.stop(c.currentTime+.18)}catch{}}
 async function login(e){e.preventDefault();if(typeof familyPrepareLearnerLogin==='function')familyPrepareLearnerLogin();const name=loginName.value.trim(),pin=loginPin.value;if(sb&&name.includes('@')){const button=e.submitter;button.disabled=true;button.textContent='Signing in…';try{const result=await sb.auth.signInWithPassword({email:name,password:pin});if(result.error)throw Error('Account not found or password incorrect. Use Create new account if this account was deleted.');cloudUser=result.data.user;if(typeof familyResolveAuthenticatedRole==='function')await familyResolveAuthenticatedRole(cloudUser);await loadCloud();showApp()}catch(error){await sb.auth.signOut({scope:'local'});cloudUser=null;toast(error.message||'Sign-in failed')}finally{button.disabled=false;button.innerHTML='Sign in <span>→</span>'}return}if(!state.profile)return toast('No local account exists. Use Create new account.');if(state.profile.name.toLowerCase()!==name.toLowerCase()||state.profile.pin!==pin)return toast('Incorrect local name or PIN');showApp()}
-async function createLearnerAccount(){if(typeof familyPrepareLearnerLogin==='function')familyPrepareLearnerLogin();const name=loginName.value.trim(),pin=loginPin.value;if(!name||pin.length<4)return toast('Enter a name or email and a password of at least 4 characters');createLearnerAccountBtn.disabled=true;createLearnerAccountBtn.textContent='Creating account…';try{if(sb&&name.includes('@')){const {data,error}=await sb.auth.signUp({email:name,password:pin,options:{data:{full_name:name.split('@')[0]}}});if(error)throw error;if(!data.session)return toast('Check your email to confirm the new account, then sign in.');cloudUser=data.user;if(typeof familyResolveAuthenticatedRole==='function')await familyResolveAuthenticatedRole(cloudUser);await loadCloud();showApp();return}if(state.profile)throw Error('A local account already exists. Sign in or delete it from Settings.');state.profile={name,pin};save();showApp()}catch(error){try{await sb?.auth.signOut({scope:'local'})}catch{}cloudUser=null;toast(error.message||'Account could not be created')}finally{createLearnerAccountBtn.disabled=false;createLearnerAccountBtn.textContent='Create new account'}}
-function showApp(){if(cloudUser)markCloudAccount();restoreView();applyTheme(true);document.documentElement.classList.remove('session-pending');authScreen.classList.add('hidden');app.classList.remove('hidden');avatar.textContent=(state.profile?.name||'P')[0].toUpperCase();rememberView();updateViewHistory(viewName,{replace:true});render();if(typeof familyOnAppShown==='function')familyOnAppShown();if(typeof familyScheduleBriefing==='function')familyScheduleBriefing();else setTimeout(welcomeBriefing,300)}
+async function createLearnerAccount(){if(typeof familyPrepareLearnerLogin==='function')familyPrepareLearnerLogin();const name=loginName.value.trim(),pin=loginPin.value;if(!name||pin.length<4)return toast('Enter a name or email and a password of at least 4 characters');createLearnerAccountBtn.disabled=true;createLearnerAccountBtn.textContent='Creating account…';try{if(sb&&name.includes('@')){const {data,error}=await sb.auth.signUp({email:name,password:pin,options:{data:{full_name:name.split('@')[0]}}});if(error)throw error;if(!data.session)return toast('Check your email to confirm the new account, then sign in.');cloudUser=data.user;if(typeof familyResolveAuthenticatedRole==='function')await familyResolveAuthenticatedRole(cloudUser);await loadCloud();showApp();return}if(state.profile)throw Error('A local account already exists. Sign in or delete it from Settings.');state.profile={name,pin};state.settings.categorySetupPending=true;save();showApp()}catch(error){try{await sb?.auth.signOut({scope:'local'})}catch{}cloudUser=null;toast(error.message||'Account could not be created')}finally{createLearnerAccountBtn.disabled=false;createLearnerAccountBtn.textContent='Create new account'}}
+function showApp(){if(cloudUser)markCloudAccount();restoreView();applyTheme(true);document.documentElement.classList.remove('session-pending');authScreen.classList.add('hidden');app.classList.remove('hidden');avatar.textContent=(state.profile?.name||'P')[0].toUpperCase();rememberView();updateViewHistory(viewName,{replace:true});render();if(state.settings?.categorySetupPending)setTimeout(()=>window.openFocusCategorySetup?.(),120);if(typeof familyOnAppShown==='function')familyOnAppShown();if(typeof familyScheduleBriefing==='function')familyScheduleBriefing();else setTimeout(welcomeBriefing,300)}
 function welcomeBriefing(){const d=document.querySelector('#modal');if(d.open)return;const name=escapeHtml((state.profile?.name||cloudUser?.user_metadata?.full_name||'Learner').split(' ')[0]),pending=state.tasks.filter(t=>t.status!=='completed'),overdue=pending.filter(t=>t.due&&t.due<today()),todayTasks=pending.filter(t=>t.due===today()),todayTopics=allTopics().filter(t=>t.status!=='completed'&&t.due===today()),upcoming=allTopics().filter(t=>t.status!=='completed'&&t.due>today()).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,5),jobs=state.jobApplications||[],followUps=jobs.filter(jobDue),interviews=jobs.filter(j=>j.status==='Interview').length,positive=jobs.filter(j=>['Selected','Offer'].includes(j.status)).length;const plan=[...todayTasks.map(t=>({title:t.title,meta:`Task · ${t.time||'Any time'}`})),...todayTopics.map(t=>({title:t.name,meta:`Topic · ${t.subject}`}))].slice(0,5);modal(`<div class="briefing"><span class="eyebrow">DAILY BRIEFING</span><h2>Welcome back, ${name}</h2><p class="briefing-date">${new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}</p><div class="briefing-stats"><div class="${overdue.length?'attention':''}"><strong>${overdue.length}</strong><span>Overdue</span></div><div><strong>${plan.length}</strong><span>Today</span></div><div><strong>${upcoming.length}</strong><span>Upcoming</span></div><div class="${followUps.length?'attention':''}"><strong>${followUps.length}</strong><span>Job follow-ups</span></div></div><section><div class="card-title"><h3>Today's plan</h3><span>${plan.length} item${plan.length===1?'':'s'}</span></div>${plan.length?`<div class="briefing-list">${plan.map(x=>`<div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.meta)}</small></div>`).join('')}</div>`:'<div class="briefing-empty">Nothing planned for today.</div>'}</section><section><div class="card-title"><h3>Coming up</h3><span>Next topics</span></div>${upcoming.length?`<div class="briefing-list">${upcoming.map(x=>`<div><b>${escapeHtml(x.name)}</b><small>${escapeHtml(x.subject)} · ${x.due}</small></div>`).join('')}</div>`:'<div class="briefing-empty">No upcoming topic deadlines.</div>'}</section><section class="job-brief"><div><h3>Job Tracker</h3><p>${jobs.length} applications · ${interviews} interviews · ${positive} selected/offers</p></div><strong class="${followUps.length?'due':''}">${followUps.length?`${followUps.length} follow-up${followUps.length===1?'':'s'} due`:'No follow-ups due'}</strong></section><div class="modal-actions"><button type="button" class="btn ghost" onclick="openBriefingView('jobs')">Job Tracker</button><button type="button" class="btn ghost" onclick="openBriefingView('calendar')">Open calendar</button><button type="button" class="btn primary" onclick="closeModal()">Start my day</button></div></div>`)}
 window.openBriefingView=n=>{closeModal();setView(n)};
 function head(title,sub,action=''){return `<div class="page-head"><div><span class="eyebrow">NESTLYRA FOCUS</span><h1>${title}</h1><p>${sub}</p></div>${action}</div>`}
@@ -1907,7 +2137,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
   const baseAppearance=window.appearanceSettingsMarkup;window.appearanceSettingsMarkup=appearanceMarkup;
   const baseGroupSettings=window.groupSettingsCard;if(baseGroupSettings)window.groupSettingsCard=()=>baseGroupSettings().replace('<div class="modal-actions">','<div class="modal-actions"><button class="btn ghost" onclick="groupSharingModal()">Shared data controls</button>');
   const baseManualCard=window.familyManualSettingsCard;if(baseManualCard)window.familyManualSettingsCard=()=>baseManualCard().replace('<div class="modal-actions">','<div class="modal-actions"><button type="button" class="btn ghost" onclick="startNestlyraWalkthrough()">Start walkthrough</button>');
-  const baseShowApp=window.showApp;window.showApp=()=>{const looksNew=(state.subjects||[]).length===1&&state.subjects[0]?.id==='sample-subject'&&!(state.tasks||[]).length&&!state.settings?.walkthroughCompleted;if(looksNew)window.nestlyraOnboardingActive=true;baseShowApp();updateAvatar();if(looksNew)setTimeout(startNestlyraWalkthrough,500)};
+  const baseShowApp=window.showApp;window.showApp=()=>{const looksNew=(state.subjects||[]).length===1&&state.subjects[0]?.id==='sample-subject'&&!(state.tasks||[]).length&&!state.settings?.walkthroughCompleted;if(looksNew)window.nestlyraOnboardingActive=true;baseShowApp();updateAvatar();if(looksNew&&!state.settings?.categorySetupPending)setTimeout(startNestlyraWalkthrough,500)};
   const baseRender=window.render;window.render=()=>{baseRender();if(ENTITY[viewName]){view.innerHTML=richEntityView(viewName);view.classList.add('fit-view');view.dataset.currentView=viewName}if(viewName==='timer'){view.innerHTML=customTimerView();view.classList.add('fit-view')}if(viewName==='help'){const transfer=document.querySelector('#manual-transfer');if(transfer&&!transfer.querySelector('.selective-export-manual'))transfer.insertAdjacentHTML('beforeend','<p class="selective-export-manual"><strong>Selective export:</strong> Settings → Subjects import / export opens a checkbox list. Choose one subject or any combination; unselected subjects and unrelated workspace data never enter the file.</p>')}updateAvatar();injectGroupShareControls();sectionPulse()};
 
   if(typeof groupPublishProgress==='function')window.groupPublishProgress=async(force=false)=>{if(!sb||!cloudUser||typeof groupState==='undefined'||groupState.schemaReady===false||(!force&&Date.now()-groupState.lastPublish<30000))return;groupState.lastPublish=Date.now();try{if(!groupState.groups.length){const {data,error}=await sb.rpc('group_list');if(error)return;groupState.groups=data||[]}for(const group of groupState.groups){const config=groupConfig(group.group_id),fields=new Set(config.fields||[]);if(group.share_progress===false&&group.share_activity===false)continue;for(const row of groupRows().filter(x=>(config.modules||[]).includes(x.module_type))){const payload={...row};if(group.share_progress===false||!fields.has('progress'))payload.progress_percent=0;if(group.share_progress===false||!fields.has('counts')){payload.completed_count=0;payload.total_count=0}if(group.share_progress===false||!fields.has('study'))payload.study_minutes=0;if(group.share_progress===false||!fields.has('mock'))payload.mock_average=0;if(group.share_activity===false||!fields.has('activity')){payload.active_minutes=0;payload.screen_changes=0;payload.last_seen=null}await sb.rpc('group_publish_snapshot',{p_group_id:group.group_id,p_snapshot:payload})}}}catch(error){console.warn('Group projection',error.message)}};
@@ -2160,6 +2390,252 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
     }
   }).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['src','alt','title','aria-label','placeholder']});
   window.PAVENRO_BRAND={name:'PAVENRO',product:'Focus',version:'45',process};
+})();
+
+/* focus-v48.js */
+/* PAVENRO Focus v48 — category-aware shell and interaction update. */
+(()=>{
+  if(window.__PAVENRO_FOCUS_V48__)return;
+  window.__PAVENRO_FOCUS_V48__=true;
+
+  const NAV_LIMIT=8;
+  const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';
+  const CATEGORY={
+    blank:{label:'Blank',theme:'category-blank',color:'#56647a',tag:'Clean light',description:'A neutral workspace you can shape yourself.',modules:['subjects','calendar']},
+    school:{label:'School',theme:'category-school',color:'#2869d8',tag:'Blue default',description:'Subjects, assignments and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},
+    business:{label:'Business',theme:'category-business',color:'#b47a12',tag:'Yellow default',description:'Projects, plans, resources and team goals.',modules:['projects','tasks','calendar','notes','goals','resources','groups']},
+    personal:{label:'Personal',theme:'category-personal',color:'#27754b',tag:'Green default',description:'Habits, goals and a calmer personal plan.',modules:['tasks','calendar','notes','habits','goals','projects','groups']}
+  };
+  const THEME_NAMES=['category-blank','category-school','category-business','category-personal','focus-paper'];
+  const h=value=>typeof escapeHtml==='function'?escapeHtml(value):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const q=(selector,root=document)=>root.querySelector(selector);
+  const all=(selector,root=document)=>[...root.querySelectorAll(selector)];
+  const moduleOn=id=>typeof trackerModuleEnabled!=='function'||trackerModuleEnabled(id);
+
+  function categoryCards(compact=false){
+    const current=state.settings?.focusCategory||'blank';
+    return `<div class="focus-category-grid">${Object.entries(CATEGORY).map(([key,item])=>`<button type="button" class="focus-category-card ${current===key?'active':''}" style="--category-color:${item.color}" onclick="applyFocusCategory('${key}')"><i></i><strong>${item.label}</strong><small>${compact?item.description:`${item.description} ${item.modules.length+1} starter sections.`}</small><em>${item.tag}</em></button>`).join('')}</div>`;
+  }
+
+  window.openFocusCategorySetup=()=>{
+    if(!state.settings?.categorySetupPending)return;
+    window.nestlyraOnboardingActive=true;
+    familyCancelBriefing?.();
+    modal(`<div class="focus-category-setup"><span class="eyebrow">FIRST WORKSPACE</span><h2>What will you focus on?</h2><p>This only chooses your starting sections and theme. You can change every part later.</p>${categoryCards(true)}<div class="modal-actions"><button type="button" class="btn ghost" onclick="applyFocusCategory('blank')">Start blank</button></div></div>`);
+  };
+
+  window.applyFocusCategory=key=>{
+    const item=CATEGORY[key];if(!item)return;
+    state.settings=state.settings||{};
+    state.settings.focusCategory=key;
+    state.settings.categorySetupPending=false;
+    if(!state.settings.themeManuallyChosen){state.settings.theme=item.theme;rememberAppearance?.(state.settings)}
+    state.moduleConfig={version:Math.max(2,Number(state.moduleConfig?.version||0)),preset:'custom',enabled:[...new Set([...item.modules,'settings','help'])]};
+    save();
+    if(q('#modal')?.open)closeModal();
+    render();
+    toast(`${item.label} workspace applied`);
+    if(!state.settings.walkthroughCompleted)setTimeout(()=>startNestlyraWalkthrough?.(),260);
+    else window.nestlyraOnboardingActive=false;
+  };
+
+  window.useFocusCategoryTheme=()=>{
+    const item=CATEGORY[state.settings?.focusCategory||'blank'];
+    state.settings.themeManuallyChosen=false;
+    state.settings.theme=item.theme;
+    rememberAppearance?.(state.settings);save();render();toast(`${item.label} theme restored`);
+  };
+
+  const originalApplyTheme=window.applyTheme;
+  window.applyTheme=(useProfile=false)=>{
+    document.body.classList.remove(...THEME_NAMES.map(name=>`theme-${name}`));
+    originalApplyTheme?.(useProfile);
+    const settings=state.settings||{};
+    document.body.dataset.focusDensity=settings.density||'comfortable';
+    document.body.dataset.focusRadius=settings.radiusStyle||'soft';
+    document.body.dataset.focusMotion=settings.motion||'full';
+  };
+  try{applyTheme=window.applyTheme}catch{}
+
+  window.setTheme=theme=>{
+    state.settings.themeManuallyChosen=true;
+    updateAppearance('theme',theme);
+  };
+
+  function appearanceMarkup(){
+    const s=state.settings||{};
+    const themes=[
+      ['category-blank','Blank Light','#56647a','#f4f6f9','#182231'],
+      ['category-school','School Blue','#2869d8','#eef5ff','#152a47'],
+      ['category-business','Business Gold','#b47a12','#fbf7eb','#30291d'],
+      ['category-personal','Personal Green','#27754b','#eff7f1','#193326'],
+      ['nestlyra','Focus Indigo','#4C5FD5','#f5f7ff','#1c2333'],
+      ['auto','Automatic','#7181EA','#e9edf5','#1c2333'],
+      ['dark','Midnight','#7c5cff','#09111d','#edf4ff'],
+      ['ocean','Ocean','#1b9cff','#071421','#edf8ff'],
+      ['cyber','Cyber','#ff3e9d','#0b0d1c','#fff'],
+      ['matrix','Matrix','#3cdb71','#07140c','#effff3'],
+      ['focus-paper','Warm Paper','#835f3f','#f7f3eb','#2d2923']
+    ];
+    const category=CATEGORY[s.focusCategory||'blank'];
+    return `<div class="card-title"><h3>Appearance</h3><span>Saved to this account</span></div>
+      <div class="appearance-group"><h4>Theme collection</h4><div class="appearance-theme-grid">${themes.map(([name,label,color,bg,text])=>`<button type="button" title="${label}" class="theme-chip ${s.theme===name?'active':''}" style="--swatch:${color};--theme-bg:${bg};--theme-text:${text}" onclick="setTheme('${name}')"><span>${label}</span></button>`).join('')}</div></div>
+      <div class="category-theme-note"><span>Your ${h(category.label)} starting theme is <strong>${h(category.tag)}</strong>. Manual theme choices are kept when the category changes.</span><button type="button" class="btn ghost" onclick="useFocusCategoryTheme()">Use category default</button></div>
+      <div class="appearance-advanced-grid">
+        <label>Text style<select onchange="updateAppearance('fontStyle',this.value)"><option value="modern" ${s.fontStyle==='modern'?'selected':''}>Modern — Inter + Poppins</option><option value="system" ${s.fontStyle==='system'?'selected':''}>System — Segoe UI</option><option value="editorial" ${s.fontStyle==='editorial'?'selected':''}>Editorial — Georgia</option></select></label>
+        <label>Text size<select onchange="updateAppearance('textScale',this.value)"><option value="compact" ${s.textScale==='compact'?'selected':''}>Compact</option><option value="normal" ${!s.textScale||s.textScale==='normal'?'selected':''}>Comfortable</option><option value="large" ${s.textScale==='large'?'selected':''}>Large</option></select></label>
+        <label>Layout density<select onchange="updateAppearance('density',this.value)"><option value="compact" ${s.density==='compact'?'selected':''}>Compact</option><option value="comfortable" ${!s.density||s.density==='comfortable'?'selected':''}>Comfortable</option><option value="spacious" ${s.density==='spacious'?'selected':''}>Spacious</option></select></label>
+        <label>Corner style<select onchange="updateAppearance('radiusStyle',this.value)"><option value="square" ${s.radiusStyle==='square'?'selected':''}>Structured</option><option value="soft" ${!s.radiusStyle||s.radiusStyle==='soft'?'selected':''}>Soft</option><option value="rounded" ${s.radiusStyle==='rounded'?'selected':''}>Rounded</option></select></label>
+        <label>Interface motion<select onchange="updateAppearance('motion',this.value)"><option value="full" ${!s.motion||s.motion==='full'?'selected':''}>Full motion</option><option value="reduced" ${s.motion==='reduced'?'selected':''}>Reduced motion</option></select></label>
+        <label>Login image framing<select onchange="updateAppearance('loginImagePosition',this.value)"><option value="left" ${s.loginImagePosition==='left'?'selected':''}>Focus left</option><option value="center" ${!s.loginImagePosition||s.loginImagePosition==='center'?'selected':''}>Focus center</option><option value="right" ${s.loginImagePosition==='right'?'selected':''}>Focus right</option></select></label>
+      </div>`;
+  }
+  window.appearanceSettingsMarkup=appearanceMarkup;
+
+  function injectCategorySettings(){
+    const card=q('.tracker-module-settings');if(!card||q('.focus-category-settings',card))return;
+    const block=document.createElement('div');block.className='focus-category-settings';
+    block.innerHTML=`<header><div><h4>Workspace category</h4><p>Category sets first-login modules and theme; every switch below remains editable.</p></div><span class="eyebrow">4 STARTS</span></header>${categoryCards()}`;
+    const description=card.querySelector('.task-meta');
+    description?.insertAdjacentElement('afterend',block);
+  }
+
+  window.openFocusModuleSettings=()=>{
+    sessionStorage.setItem('studyTracker.settings.category','modules');
+    setView('settings');
+    setTimeout(()=>{const card=q('.tracker-module-settings');card?.scrollIntoView({behavior:state.settings?.motion==='reduced'?'auto':'smooth',block:'start'})},120);
+  };
+
+  function navLabel(entry){return entry.querySelector('.nav-label')?.textContent.trim()||entry.textContent.trim()}
+  function syncNavigation(){
+    const navigation=q('#nav');if(!navigation)return;
+    q('#focusSearchEntry',navigation)?.remove();q('#focusMoreSections',navigation)?.remove();
+    const search=document.createElement('button');search.id='focusSearchEntry';search.type='button';search.className='focus-search-entry';search.title='Search this workspace';search.setAttribute('aria-label','Search this workspace');search.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>Search</span>';search.onclick=event=>{event.stopPropagation();toggleSearch()};
+    navigation.prepend(search);
+    const entries=all('.nav-entry',navigation);
+    entries.forEach(entry=>{entry.classList.remove('focus-nav-overflow');entry.style.removeProperty('display');entry.title=navLabel(entry)});
+    entries.filter(entry=>['settings','help'].includes(entry.dataset.navEntry)).forEach(entry=>entry.style.setProperty('display','none','important'));
+    const sections=entries.filter(entry=>!['settings','help'].includes(entry.dataset.navEntry));
+    sections.slice(NAV_LIMIT).forEach(entry=>{entry.classList.add('focus-nav-overflow');entry.style.setProperty('display','none','important')});
+    const more=document.createElement('button');more.id='focusMoreSections';more.type='button';more.className='focus-more-sections';more.title='Navigation & modules';more.innerHTML='<span>＋</span><span>More sections</span>';more.onclick=openFocusModuleSettings;navigation.appendChild(more);
+  }
+
+  function setSearch(open){
+    const pop=q('#focusSearchPopover');if(!pop)return;
+    pop.classList.toggle('open',Boolean(open));pop.setAttribute('aria-hidden',open?'false':'true');
+    if(open)setTimeout(()=>q('#globalSearch')?.focus(),40);
+  }
+  function toggleSearch(){setSearch(!q('#focusSearchPopover')?.classList.contains('open'))}
+
+  function syncTopbar(){
+    const host=q('#view'),pageHead=host?.querySelector(':scope > .page-head'),title=q('#topbarTitle'),subtitle=q('#topbarSubtitle'),actions=q('#topbarPageActions');
+    actions?.replaceChildren();
+    if(pageHead){
+      const copy=pageHead.firstElementChild;
+      if(title)title.textContent=copy?.querySelector('h1')?.textContent?.trim()||'Focus';
+      if(subtitle)subtitle.textContent=copy?.querySelector('p')?.textContent?.trim()||'Your Focus workspace';
+      [...pageHead.children].slice(1).forEach(node=>actions?.appendChild(node));
+      pageHead.remove();
+    }else{
+      const active=q('#nav .nav-entry.active .nav-label');
+      if(title)title.textContent=active?.textContent?.trim()||String(viewName||'Focus').replace(/(^|-)([a-z])/g,(_,dash,letter)=>(dash?' ':'')+letter.toUpperCase());
+      if(subtitle)subtitle.textContent=viewName==='groups'?'Group controls remain available even when hidden from navigation.':'Your Focus workspace';
+    }
+    document.body.classList.toggle('focus-has-page-action',Boolean(actions?.children.length));
+    const quick=q('#quickAdd');if(quick)quick.style.display=actions?.children.length?'none':'';
+  }
+
+  function removeDuplicateBranding(){
+    all('#app .product-credit,#app .parent-product-credit').forEach(node=>node.remove());
+    all('.observer-brand img,.observer-brand small').forEach(node=>node.remove());
+  }
+
+  function notificationItems(){
+    const items=[];
+    if(moduleOn('tasks'))(state.tasks||[]).filter(item=>item.status!=='completed'&&item.due&&item.due<=today()).forEach(item=>items.push({key:`task:${item.id}:${item.due}`,icon:'◷',title:item.title,meta:item.due<today()?`Overdue since ${item.due}`:'Due today',view:'tasks',rank:item.due<today()?0:2}));
+    if(moduleOn('subjects'))allTopics().filter(item=>item.status!=='completed'&&item.due&&item.due<=today()).forEach(item=>items.push({key:`topic:${item.id}:${item.due}`,icon:'◫',title:item.name,meta:`${item.subject} · ${item.due<today()?'overdue':'due today'}`,view:'subject',subjectId:item.subjectId,rank:item.due<today()?1:3}));
+    if(moduleOn('jobs'))(state.jobApplications||[]).filter(item=>typeof jobDue==='function'&&jobDue(item)).forEach(item=>items.push({key:`job:${item.id}:${item.followUpDate}`,icon:'▤',title:`Follow up with ${item.company}`,meta:item.jobTitle||'Job application',view:'jobs',rank:2}));
+    if(moduleOn('revision'))(state.revisionItems||[]).filter(item=>item.nextReview&&item.nextReview<=today()).forEach(item=>items.push({key:`revision:${item.id}:${item.nextReview}`,icon:'↻',title:item.topic||'Revision item',meta:`Review ${item.nextReview<today()?'overdue':'due today'}`,view:'revision',rank:2}));
+    if(moduleOn('assignments'))(state.assignments||[]).filter(item=>item.status!=='Graded'&&item.dueDate&&item.dueDate<=today()).forEach(item=>items.push({key:`assignment:${item.id}:${item.dueDate}`,icon:'▣',title:item.title,meta:`Assignment ${item.dueDate<today()?'overdue':'due today'}`,view:'assignments',rank:2}));
+    if(moduleOn('calendar'))(state.events||[]).filter(item=>item.date===today()).forEach(item=>items.push({key:`event:${item.id}:${item.date}`,icon:'▦',title:item.title,meta:item.time?`Today at ${item.time}`:'Today · all day',view:'calendar',rank:4}));
+    return items.sort((a,b)=>a.rank-b.rank||a.title.localeCompare(b.title)).slice(0,14);
+  }
+
+  function notificationSignature(items=notificationItems()){return items.map(item=>item.key).join('|')}
+  function paintNotifications(){
+    const items=notificationItems(),list=q('#notificationList'),summary=q('#notificationSummary'),dot=q('#notifDot');if(!list)return;
+    if(summary)summary.textContent=items.length?`${items.length} item${items.length===1?'':'s'} need attention`:'Nothing needs attention';
+    list.innerHTML=items.length?items.map((item,index)=>`<button type="button" class="notification-item" data-notice-index="${index}"><i>${item.icon}</i><span><b>${h(item.title)}</b><small>${h(item.meta)}</small></span><em>›</em></button>`).join(''):'<div class="notification-empty"><div><span>✓</span><strong>You are all caught up</strong><p>No overdue work or follow-ups right now.</p></div></div>';
+    const unseen=Boolean(items.length&&state.settings?.notifications!==false&&state.settings?.notificationSeenSignature!==notificationSignature(items));
+    dot?.classList.toggle('hidden',!unseen);
+    all('[data-notice-index]',list).forEach(button=>button.onclick=()=>{const item=items[Number(button.dataset.noticeIndex)];if(item?.subjectId)selectedSubject=item.subjectId;closeNotifications();if(item)setView(item.view)});
+  }
+  function setNotifications(open){const panel=q('#notificationPanel'),button=q('#notifBtn');if(!panel)return;panel.classList.toggle('open',Boolean(open));panel.setAttribute('aria-hidden',open?'false':'true');button?.setAttribute('aria-expanded',open?'true':'false');if(open){paintNotifications();state.settings.notificationSeenSignature=notificationSignature();save();q('#notifDot')?.classList.add('hidden')}}
+  function closeNotifications(){setNotifications(false)}
+
+  function optionalDetails(title,body,open=false){return `<details class="optional-settings" ${open?'open':''}><summary>${title}</summary><div class="${body.includes('form-grid')?'':'optional-body'}">${body}</div></details>`}
+  function hierarchyModuleMarkup(module={}){return `<section class="hierarchy-module" data-hierarchy-module data-module-id="${h(module.id||'')}"><div class="hierarchy-module-head"><input data-hierarchy-module-name value="${h(module.name||'')}" placeholder="Module name"><button type="button" title="Remove module" onclick="this.closest('[data-hierarchy-module]').remove()">×</button></div><textarea data-hierarchy-topics placeholder="One topic per line">${h((module.topics||[]).map(topic=>topic.name).join('\n'))}</textarea></section>`}
+  window.addSubjectHierarchyModule=()=>{const host=q('#subjectHierarchyBuilder');if(host)host.insertAdjacentHTML('beforeend',hierarchyModuleMarkup())};
+
+  window.subjectModal=id=>{
+    const subject=state.subjects.find(item=>item.id===id),modules=subject?.modules||[];
+    modal(`<h2>${subject?'Edit':'Add'} subject</h2><div class="form-grid"><label class="full">Subject name<input id="fName" value="${h(subject?.name||'')}" placeholder="e.g. Mathematics"></label><label>Short icon<input id="fIcon" maxlength="3" value="${h(subject?.icon||'')}" placeholder="MA"></label><label>Subject type<select id="fSubjectType">${['Course','Academic','Certification','Project','Personal','Other'].map(value=>`<option ${subject?.subjectType===value?'selected':''}>${value}</option>`).join('')}</select></label></div>
+      ${optionalDetails('Modules & topics (optional)',`<div id="subjectHierarchyBuilder" class="hierarchy-builder">${(modules.length?modules:[{}]).map(hierarchyModuleMarkup).join('')}</div><div class="structure-actions"><small>Add topics one per line. You can also build the hierarchy later.</small><button type="button" class="btn ghost" onclick="addSubjectHierarchyModule()">+ Module</button></div>`,Boolean(modules.length))}
+      ${optionalDetails('Additional settings',`<div class="form-grid"><label class="full">Description<input id="fDesc" value="${h(subject?.description||'')}" placeholder="What this subject covers"></label><label>Color<input id="fColor" type="color" value="${subject?.color||'#4C5FD5'}"></label><label>Difficulty<select id="fSubjectDifficulty">${['Not set','Beginner','Intermediate','Advanced'].map(value=>`<option ${subject?.difficulty===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Target date<input id="fSubjectTarget" type="date" value="${h(subject?.targetDate||'')}"></label><label>Weekly study goal<input id="fSubjectWeekly" type="number" min="0" max="80" step="0.5" value="${h(subject?.weeklyHours||'')}" placeholder="Hours"></label></div>`,Boolean(subject?.description||subject?.targetDate||subject?.weeklyHours))}
+      <div class="modal-actions">${subject?`<button type="button" class="btn danger" onclick="deleteSubject('${subject.id}')">Delete</button>`:''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveSubjectV48('${id||''}')">Save subject</button></div>`);
+  };
+
+  window.saveSubjectV48=id=>{
+    const existing=state.subjects.find(item=>item.id===id),name=q('#fName')?.value.trim();if(!name)return toast('Subject name is required');
+    const moduleRows=all('[data-hierarchy-module]');
+    const modules=moduleRows.map(row=>{const moduleId=row.dataset.moduleId,old=(existing?.modules||[]).find(item=>item.id===moduleId),moduleName=q('[data-hierarchy-module-name]',row)?.value.trim(),topicNames=(q('[data-hierarchy-topics]',row)?.value||'').split(/\n+/).map(value=>value.trim()).filter(Boolean);if(!moduleName&&!topicNames.length)return null;return{id:old?.id||uid(),name:moduleName||`Module ${(existing?.modules||[]).length+1}`,description:old?.description||'',targetDate:old?.targetDate||'',estimatedHours:old?.estimatedHours||'',topics:topicNames.map((topicName,index)=>{const topic=old?.topics?.[index];return{id:topic?.id||uid(),name:topicName,status:topic?.status||'not-started',due:topic?.due||'',priority:topic?.priority||'Normal',estimatedMinutes:topic?.estimatedMinutes||'',notes:topic?.notes||''}})}}).filter(Boolean);
+    const data={name,icon:(q('#fIcon')?.value.trim()||name.slice(0,2)).toUpperCase(),subjectType:q('#fSubjectType')?.value||'Course',description:q('#fDesc')?.value.trim()||'',color:q('#fColor')?.value||'#4C5FD5',difficulty:q('#fSubjectDifficulty')?.value||'Not set',targetDate:q('#fSubjectTarget')?.value||'',weeklyHours:Number(q('#fSubjectWeekly')?.value||0),modules};
+    if(existing)Object.assign(existing,data);else state.subjects.push({id:uid(),...data});
+    save();closeModal();render();toast(existing?'Subject updated':'Subject created');
+  };
+
+  window.moduleModal=(sid,mid='')=>{
+    const subject=state.subjects.find(item=>item.id===sid),module=subject?.modules.find(item=>item.id===mid);
+    modal(`<h2>${module?'Edit':'Add'} module</h2><label>Module name<input id="fModule" value="${h(module?.name||'')}" placeholder="e.g. Core concepts"></label>${optionalDetails('Topics & additional settings',`<div class="form-grid"><label class="full">Topics<textarea id="fModuleTopics" rows="5" placeholder="One topic per line">${h((module?.topics||[]).map(topic=>topic.name).join('\n'))}</textarea></label><label class="full">Description<input id="fModuleDescription" value="${h(module?.description||'')}"></label><label>Target date<input id="fModuleTarget" type="date" value="${h(module?.targetDate||'')}"></label><label>Estimated hours<input id="fModuleHours" type="number" min="0" step="0.5" value="${h(module?.estimatedHours||'')}"></label></div>`,Boolean(module?.topics?.length||module?.description||module?.targetDate))}<div class="modal-actions">${module?`<button type="button" class="btn danger" onclick="deleteModuleV48('${sid}','${mid}')">Delete</button>`:''}<button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveModuleV48('${sid}','${mid}')">Save module</button></div>`);
+  };
+  window.saveModuleV48=(sid,mid='')=>{const subject=state.subjects.find(item=>item.id===sid),existing=subject?.modules.find(item=>item.id===mid),name=q('#fModule')?.value.trim();if(!subject||!name)return toast('Module name is required');const names=(q('#fModuleTopics')?.value||'').split(/\n+/).map(value=>value.trim()).filter(Boolean),data={name,description:q('#fModuleDescription')?.value.trim()||'',targetDate:q('#fModuleTarget')?.value||'',estimatedHours:Number(q('#fModuleHours')?.value||0),topics:names.map((topicName,index)=>{const topic=existing?.topics?.[index];return{id:topic?.id||uid(),name:topicName,status:topic?.status||'not-started',due:topic?.due||'',priority:topic?.priority||'Normal',estimatedMinutes:topic?.estimatedMinutes||'',notes:topic?.notes||''}})};if(existing)Object.assign(existing,data);else subject.modules.push({id:uid(),...data});save();closeModal();render();toast(existing?'Module updated':'Module added')};
+  window.deleteModuleV48=(sid,mid)=>{if(!confirm('Delete this module and all its topics?'))return;const subject=state.subjects.find(item=>item.id===sid);subject.modules=subject.modules.filter(item=>item.id!==mid);save();closeModal();render();toast('Module deleted')};
+
+  window.topicModal=(sid,mid,tid='')=>{
+    const module=state.subjects.find(item=>item.id===sid)?.modules.find(item=>item.id===mid),topic=module?.topics.find(item=>item.id===tid);
+    modal(`<h2>${topic?'Edit':'Add'} topic</h2><label>Topic name<input id="fTopic" value="${h(topic?.name||'')}" placeholder="Topic title"></label>${optionalDetails('Additional settings',`<div class="form-grid"><label>Due date<input id="fDue" type="date" value="${h(topic?.due||'')}"></label><label>Status<select id="fStatus"><option value="not-started" ${!topic||topic.status==='not-started'?'selected':''}>Not started</option><option value="in-progress" ${topic?.status==='in-progress'?'selected':''}>In progress</option><option value="completed" ${topic?.status==='completed'?'selected':''}>Completed</option></select></label><label>Priority<select id="fTopicPriority">${['Low','Normal','High'].map(value=>`<option ${topic?.priority===value?'selected':''}>${value}</option>`).join('')}</select></label><label>Estimated minutes<input id="fTopicMinutes" type="number" min="0" step="5" value="${h(topic?.estimatedMinutes||'')}"></label><label class="full">Notes<textarea id="fTopicNotes" rows="4">${h(topic?.notes||'')}</textarea></label></div>`,Boolean(topic?.due||topic?.notes||topic?.estimatedMinutes))}<div class="modal-actions"><button class="btn ghost">Cancel</button><button type="button" class="btn primary" onclick="saveTopicV48('${sid}','${mid}','${tid}')">Save topic</button></div>`);
+  };
+  window.saveTopicV48=(sid,mid,tid='')=>{const module=state.subjects.find(item=>item.id===sid)?.modules.find(item=>item.id===mid),existing=module?.topics.find(item=>item.id===tid),name=q('#fTopic')?.value.trim();if(!module||!name)return toast('Topic name is required');const data={name,due:q('#fDue')?.value||'',status:q('#fStatus')?.value||'not-started',priority:q('#fTopicPriority')?.value||'Normal',estimatedMinutes:Number(q('#fTopicMinutes')?.value||0),notes:q('#fTopicNotes')?.value.trim()||''};if(existing)Object.assign(existing,data);else module.topics.push({id:uid(),...data});save();closeModal();render();toast(existing?'Topic updated':'Topic added')};
+
+  function enhanceSubjectHierarchy(){
+    if(viewName!=='subject')return;const subject=state.subjects.find(item=>item.id===selectedSubject)||state.subjects[0];if(!subject)return;
+    all('.module',q('#view')).forEach((card,index)=>{const module=subject.modules[index],head=card.querySelector('.module-head'),add=head?.querySelector('[onclick*="topicModal"]');if(!module||!head||head.querySelector('.module-edit'))return;const edit=document.createElement('button');edit.type='button';edit.className='btn ghost module-edit';edit.textContent='Edit module';edit.onclick=()=>moduleModal(subject.id,module.id);head.insertBefore(edit,add||null);all('.subtopic-row',card).forEach((row,topicIndex)=>{const topic=module.topics[topicIndex],remove=row.lastElementChild;if(!topic||row.querySelector('.topic-edit'))return;const button=document.createElement('button');button.type='button';button.className='kebab topic-edit';button.title='Edit topic';button.textContent='✎';button.onclick=()=>topicModal(subject.id,module.id,topic.id);row.insertBefore(button,remove)})})
+  }
+
+  function syncShell(){
+    syncNavigation();syncTopbar();injectCategorySettings();enhanceSubjectHierarchy();removeDuplicateBranding();paintNotifications();
+  }
+
+  const baseRender=window.render;
+  window.render=()=>{setSearch(false);closeNotifications();baseRender();syncShell()};
+  try{render=window.render}catch{}
+
+  function bindChrome(){
+    const collapsed=localStorage.getItem(SIDEBAR_KEY)==='1';document.body.classList.toggle('focus-sidebar-collapsed',collapsed);
+    const collapse=q('#sidebarCollapse');if(collapse)collapse.onclick=()=>{const next=!document.body.classList.contains('focus-sidebar-collapsed');document.body.classList.toggle('focus-sidebar-collapsed',next);localStorage.setItem(SIDEBAR_KEY,next?'1':'0');collapse.setAttribute('aria-label',next?'Expand navigation':'Collapse navigation');collapse.title=next?'Expand navigation':'Collapse navigation'};
+    const notification=q('#notifBtn');if(notification)notification.onclick=event=>{event.stopPropagation();setNotifications(!q('#notificationPanel')?.classList.contains('open'));setSearch(false)};
+    const notificationClose=q('#notificationClose');if(notificationClose)notificationClose.onclick=closeNotifications;
+    const mobileSearch=q('#mobileSearchBtn');if(mobileSearch)mobileSearch.onclick=event=>{event.stopPropagation();toggleSearch();closeNotifications()};
+    document.addEventListener('click',event=>{if(!event.target.closest('#notificationPanel,#notifBtn'))closeNotifications();if(!event.target.closest('#focusSearchPopover,#focusSearchEntry,#mobileSearchBtn'))setSearch(false)},true);
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeNotifications();setSearch(false)}});
+    applyTheme();syncShell();
+    if(state.settings?.categorySetupPending&&q('#app:not(.hidden)'))setTimeout(openFocusCategorySetup,90);
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(bindChrome,0),{once:true});else setTimeout(bindChrome,0);
+  const focusUpdateApi={version:'48',categories:CATEGORY,refresh:syncShell};
+  if(['localhost','127.0.0.1'].includes(location.hostname))focusUpdateApi.getState=()=>state;
+  window.PAVENRO_FOCUS_UPDATE=focusUpdateApi;
 })();
 
 /* offline-mode.js */

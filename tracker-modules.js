@@ -396,7 +396,7 @@
   render=()=>{
     ensureTrackerState();
     const optionalView=MODULES.some(item=>item.id===viewName);
-    if(optionalView&&!trackerModuleEnabled(viewName)&&!['settings','help'].includes(viewName))viewName='dashboard';
+    if(optionalView&&!trackerModuleEnabled(viewName)&&!['settings','help','groups'].includes(viewName))viewName='dashboard';
     const custom=ENTITY_DEFS[viewName];
     updateTrackerNavigation();
     if(viewName==='groups'&&typeof groupsView==='function'){sideStreak.textContent=`${streak()} days`;view.innerHTML=groupsView()}else if(custom){sideStreak.textContent=`${streak()} days`;view.innerHTML=trackerEntityView(viewName)}else baseRender();
