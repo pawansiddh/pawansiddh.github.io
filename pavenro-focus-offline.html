@@ -798,6 +798,16 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .focus-more-sections:hover{border:0!important;background:transparent!important;color:var(--sidebar-accent,var(--accent))!important;opacity:1!important}
 
 /* Certification records keep their primary and destructive actions distinct. */
+#view .cert-stage-line{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0 0 14px;padding:12px 10px 17px;border-bottom:1px solid var(--line);overflow:visible}
+#view .cert-stage-line>span{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr);align-items:center;gap:9px;min-width:0;color:var(--muted);font-size:inherit;font-weight:400}
+#view .cert-stage-line>span:after{content:"";position:absolute;z-index:0;left:28px;right:0;top:14px;height:2px;background:var(--line)}
+#view .cert-stage-line>span:last-child:after{display:none}
+#view .cert-stage-line>span>i{position:relative;z-index:1;display:grid;width:28px;height:28px;place-items:center;border:2px solid color-mix(in srgb,var(--muted) 32%,var(--line));border-radius:50%;background:var(--panel);color:var(--muted);font:700 9px/1 'Space Grotesk',Inter,sans-serif}
+#view .cert-stage-line>span>div{position:relative;z-index:1;display:grid;min-width:0;justify-items:start;padding-right:9px;background:var(--panel)}
+#view .cert-stage-line>span strong{color:var(--text);font-size:10px;line-height:1.2;white-space:nowrap}
+#view .cert-stage-line>span small{margin-top:3px;padding:2px 6px;border-radius:999px;background:var(--panel2);color:var(--muted);font-size:8px;line-height:1.25;white-space:nowrap}
+#view .cert-stage-line>span.has-items>i{border-color:var(--accent);background:var(--accent);color:var(--on-accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 10%,transparent)}
+#view .cert-stage-line>span.has-items small{background:var(--accent-soft);color:var(--accent);font-weight:700}
 .cert-cards{grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),420px));justify-content:start}
 .cert-cards article{min-width:0}
 .cert-cards footer{display:grid;grid-template-columns:minmax(112px,auto) 34px;justify-content:start;gap:7px;min-width:0}
@@ -2495,7 +2505,8 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
   function certificationsView(){
     const rows=items('certifications');if(!rows.length)return shell('certifications',`<section class="cert-path card">${empty('certifications')}</section>`);
     const stages=['Planning','Learning','Revision','Booked','Completed'];
-    return shell('certifications',`<section class="cert-path card"><div class="cert-stage-line">${stages.map(stage=>`<span><i></i>${stage}<b>${rows.filter(item=>item.status===stage).length}</b></span>`).join('')}</div><div class="cert-cards">${rows.map(item=>{const pct=progress('certifications',item),days=dateDelta(item.examDate);return `<article><div class="v42-ring" style="--p:${pct}"><strong>${pct}%</strong></div><div><small>${h(item.provider||'Credential')}</small><h3>${h(label('certifications',item))}</h3><p>${h(item.nextStep||'Add the next evidence milestone')}</p><span>${days===null?'No exam date':days<0?'Exam date passed':`${days} days to exam`} · ${h(item.status||'Planning')}</span></div><footer>${edit('certifications',item,'Open pathway')}${remove('certifications',item)}</footer></article>`}).join('')}</div></section>`);
+    const stageMarkup=stages.map((stage,index)=>{const count=rows.filter(item=>item.status===stage).length;return `<span class="${count?'has-items':''}"><i aria-hidden="true">${index+1}</i><div><strong>${stage}</strong><small>${count} ${count===1?'credential':'credentials'}</small></div></span>`}).join('');
+    return shell('certifications',`<section class="cert-path card"><div class="cert-stage-line" aria-label="Certification pathway stages">${stageMarkup}</div><div class="cert-cards">${rows.map(item=>{const pct=progress('certifications',item),days=dateDelta(item.examDate);return `<article><div class="v42-ring" style="--p:${pct}"><strong>${pct}%</strong></div><div><small>${h(item.provider||'Credential')}</small><h3>${h(label('certifications',item))}</h3><p>${h(item.nextStep||'Add the next evidence milestone')}</p><span>${days===null?'No exam date':days<0?'Exam date passed':`${days} days to exam`} · ${h(item.status||'Planning')}</span></div><footer>${edit('certifications',item,'Open pathway')}${remove('certifications',item)}</footer></article>`}).join('')}</div></section>`);
   }
 
   function examsView(){

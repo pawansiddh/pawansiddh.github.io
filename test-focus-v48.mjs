@@ -5,6 +5,7 @@ import {JSDOM,VirtualConsole} from 'jsdom';
 const source=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const css=[fs.readFileSync(new URL('./focus-v48.css',import.meta.url),'utf8'),fs.readFileSync(new URL('./focus-professional-v49.css',import.meta.url),'utf8')].join('\n');
 assert.match(css,/body \.mini-btn\{[^}]*font-size:11px/,'Shared record controls must use compact professional typography');
+assert.match(css,/#view \.cert-stage-line>span>i\{[^}]*width:28px;height:28px/,'Certification stages must use clear numbered milestones');
 const errors=[];
 const virtualConsole=new VirtualConsole();
 virtualConsole.on('jsdomError',error=>{if(!/navigation|canvas|not implemented/i.test(error.message))errors.push(error.detail?.stack||error.stack||error.message)});
