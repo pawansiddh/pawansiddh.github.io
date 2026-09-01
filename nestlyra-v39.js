@@ -1,9 +1,9 @@
 /* Nestlyra Focus v39 — live SVG dolls and polished sign-in interactions. */
 (() => {
   'use strict';
-  const colors=[['#9d385e','#ef8e68'],['#2875b7','#82d2f2'],['#da8b32','#f6c75e'],['#3e9b73','#8bd4a8'],['#7441a8','#c497e5'],['#d94d74','#f5a1b8'],['#2868a5','#70bce8']];
+  const colors=[['#315f46','#9bb48d'],['#426f62','#a6bfa1'],['#5c8f8b','#b9cec7'],['#6f835d','#bdca9e'],['#2f675a','#82a99e'],['#536f50','#aebf8e'],['#3d756d','#91b8ae']];
   const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
-  const dollSvg=(index,[base,accent])=>`<svg viewBox="0 0 240 350" role="img" aria-label="Interactive Nestlyra focus doll ${index+1}">
+  const dollSvg=(index,[base,accent])=>`<svg viewBox="0 0 240 350" role="img" aria-label="Interactive TULSHII Focus doll ${index+1}">
     <defs><linearGradient id="dress${index}" x1="35" y1="42" x2="206" y2="319" gradientUnits="userSpaceOnUse"><stop stop-color="${accent}"/><stop offset=".38" stop-color="${base}"/><stop offset="1" stop-color="${base}"/></linearGradient><linearGradient id="face${index}" x1="85" y1="90" x2="153" y2="170"><stop stop-color="#fff6e8"/><stop offset="1" stop-color="#edc5a7"/></linearGradient></defs>
     <path class="shell" d="M120 18C72 18 47 55 47 100c0 27 8 49 18 67-26 33-39 72-39 113 0 36 31 53 94 53s94-17 94-53c0-41-13-80-39-113 10-18 18-40 18-67 0-45-25-82-73-82Z" fill="url(#dress${index})" stroke="#fff" stroke-opacity=".72" stroke-width="5"/>
     <path d="M57 112c12-42 35-69 63-69s51 27 63 69c-22-13-43-20-63-20s-41 7-63 20Z" fill="${base}" opacity=".95"/>
@@ -23,7 +23,7 @@
 
   function setLiveState(stage,mode){
     stage.dataset.dollState=mode;
-    const copy={point:['Following your focus','Every character responds to your cursor.'],watch:['Focus mode','The Nestlyra family is cheering while you type.'],idle:['Privacy pause','Hands up, eyes covered—your password stays yours.']}[mode];
+    const copy={point:['Following your focus','Every character responds to your cursor.'],watch:['Focus mode','The TULSHII family is cheering while you type.'],idle:['Privacy pause','Hands up, eyes covered—your password stays yours.']}[mode];
     const title=document.querySelector('#dollStateTitle'),text=document.querySelector('#dollStateText');
     if(title)title.textContent=copy[0];if(text)text.textContent=copy[1];
   }

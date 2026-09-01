@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="pavenro-brand.css?v=49" />
   <link rel="stylesheet" href="focus-v48.css?v=49" />
   <link rel="stylesheet" href="focus-professional-v49.css?v=57" />
+  <link rel="stylesheet" href="tulshii-auth-v58.css?v=58" />
   <link rel="manifest" href="manifest.webmanifest?v=49" />
   <link rel="icon" type="image/svg+xml" href="tulshii-mark.svg" />
 </head>
@@ -28,23 +29,33 @@
 
   <section id="authScreen" class="auth-shell">
     <div class="auth-art" aria-live="polite">
-      <div class="auth-visual-brand"><img src="tulshii-wordmark.svg" alt="TULSHII"><span><small>Focus workspace</small></span></div>
-      <div class="auth-art-copy"><span class="eyebrow">BUILT FOR STEADY PROGRESS</span><h1>Bring every goal into focus.</h1><p>A private, flexible workspace for learning, exams, projects and career preparation.</p></div>
+      <div class="auth-visual-brand"><img src="tulshii-wordmark.svg" alt="TULSHII"><span class="auth-product-lockup"><small>TULSHII PRODUCT</small><strong>FOCUS</strong></span></div>
+      <div class="auth-art-copy">
+        <span class="eyebrow">PLAN · FOCUS · GROW</span>
+        <h1>Your ambition,<br><em>beautifully organised.</em></h1>
+        <p>One calm workspace for learning, exams, projects and the work that moves your future forward.</p>
+        <div class="auth-feature-grid" aria-label="TULSHII Focus capabilities">
+          <article><span>01</span><div><strong>Plan precisely</strong><small>Subjects, tasks and calendar</small></div></article>
+          <article><span>02</span><div><strong>Practice deliberately</strong><small>Mocks, revision and certifications</small></div></article>
+          <article><span>03</span><div><strong>Progress together</strong><small>Groups, goals and career tracking</small></div></article>
+        </div>
+      </div>
       <div class="doll-stage" data-doll-state="point">
         <div id="liveDollStack" class="live-dolls" aria-label="Seven interactive TULSHII Focus dolls"></div>
         <div class="doll-caption"><strong id="dollStateTitle">Privacy mode</strong><span id="dollStateText">We look away when you pause.</span></div>
       </div>
-      <div class="auth-art-note"><i></i>Original live animation · move your cursor</div>
+      <div class="auth-art-note"><i></i>Private-first · built for steady progress</div>
     </div>
     <div class="auth-panel">
       <form id="loginForm" class="auth-card">
-        <div class="auth-card-brand"><img src="tulshii-wordmark.svg" alt="TULSHII"><span><small>Focus</small></span></div>
-        <div class="auth-card-intro"><span class="eyebrow">WELCOME BACK</span><h2>Continue your journey</h2><p>Use one account for your personal workspace and every group you join.</p></div>
-        <div class="auth-account-note"><span>◎</span><div><strong>One secure TULSHII account</strong><small>Cloud sync when online · local mode when offline</small></div></div>
+        <div class="auth-card-brand"><img src="tulshii-wordmark.svg" alt="TULSHII"><span class="auth-product-lockup"><small>TULSHII PRODUCT</small><strong>FOCUS</strong></span></div>
+        <div class="auth-card-intro"><span class="eyebrow">WELCOME BACK</span><h2>Return to your focus.</h2><p>Sign in to continue your private workspace, personal plans and shared progress.</p></div>
+        <div class="auth-account-note"><span aria-hidden="true">✓</span><div><strong>One secure TULSHII account</strong><small>Cloud continuity online · local access offline</small></div></div>
+        <div class="auth-access-points" aria-label="Account benefits"><span>✓ Personal workspace</span><span>✓ Group ready</span><span>✓ Offline continuity</span></div>
         <label class="login-field"><span>Email or local account name</span><span class="login-field-shell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg><input id="loginName" required autocomplete="username" placeholder="you@example.com" /></span></label>
         <label class="login-field"><span>Password or local PIN</span><span class="login-field-shell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input id="loginPin" type="password" minlength="4" required autocomplete="current-password" placeholder="Enter your password" /><button id="loginPasswordToggle" class="password-visibility" type="button" aria-label="Show password">◉</button></span></label>
         <div class="auth-actions"><button class="btn primary wide" type="submit">Sign in <span>→</span></button><div class="auth-divider">or</div><button id="googleLoginBtn" class="btn ghost wide google-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.6 12.2c0-.7-.1-1.5-.2-2.2H12v4.3h6a5.1 5.1 0 0 1-2.2 3.3v2.8h3.6c2.1-1.9 3.2-4.7 3.2-8.2Z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.4-2.6l-3.6-2.8c-1 .7-2.3 1-3.8 1a6.5 6.5 0 0 1-6.1-4.5H2.2V17A11.2 11.2 0 0 0 12 23Z"/><path fill="#FBBC05" d="M5.9 14.1a6.7 6.7 0 0 1 0-4.2V7H2.2a11.1 11.1 0 0 0 0 10l3.7-2.9Z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.3 1.7l3.2-3.2A10.7 10.7 0 0 0 2.2 7l3.7 2.9A6.5 6.5 0 0 1 12 5.4Z"/></svg>Continue with Google</button><button id="createLearnerAccountBtn" class="btn wide create-account-button" type="button">New to TULSHII? Create an account</button></div>
-        <div class="auth-security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.7 7.9 7 10 4.3-2.1 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg><span><strong>Basic Google sign-in only.</strong> Drive PDF storage is coming soon; no Drive permission is requested.</span></div>
+        <div class="auth-security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.7 7.9 7 10 4.3-2.1 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg><span><strong>Private by design.</strong> Google sign-in requests basic identity only; Drive access is never requested.</span></div>
         <button class="auth-help-link" data-login-faq type="button">❔ Login help &amp; FAQ</button>
         <small class="auth-legal">© 2026 TULSHII · Designed for focused, private progress.</small>
       </form>
@@ -124,7 +135,7 @@
   <script src="app.js?v=55"></script>
   <script src="tracker-modules.js?v=55"></script>
   <script src="nestlyra-v37.js?v=48"></script>
-  <script src="nestlyra-v39.js?v=45"></script>
+  <script src="nestlyra-v39.js?v=58"></script>
   <script src="nestlyra-v42.js?v=57"></script>
   <script src="pavenro-brand.js?v=49"></script>
   <script src="focus-v48.js?v=54"></script>

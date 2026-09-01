@@ -8,7 +8,7 @@ const data = (file,type) => `data:${type};base64,${fs.readFileSync(path.join(roo
 const escapeScript = source => source.replaceAll('</script','<\\/script');
 const escapeStyle = source => source.replaceAll('</style','<\\/style');
 
-const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','focus-professional-v49.css','offline-mode.css'];
+const cssFiles=['styles.css','enhancements.css','tracker-update.css','nestlyra-v37.css','nestlyra-v39.css','nestlyra-v42.css','nestlyra-v43.css','pavenro-brand.css','focus-v48.css','focus-professional-v49.css','tulshii-auth-v58.css','offline-mode.css'];
 const scriptFiles=['jobs.js','family.js','app.js','tracker-modules.js','nestlyra-v37.js','nestlyra-v39.js','nestlyra-v42.js','pavenro-brand.js','focus-v48.js','focus-professional-v49.js','offline-mode.js'];
 const wordmark=data('tulshii-wordmark.svg','image/svg+xml');
 const icon=data('tulshii-mark.svg','image/svg+xml');
@@ -26,14 +26,14 @@ html=html
   .replace(/\s*<button data-view="groups"[^>]*>.*?<\/button>/,'')
   .replace(/\s*<button id="floatingMessages"[\s\S]*?<\/button>/,'')
   .replace(/\s*<div class="parent-product-credit">[\s\S]*?<\/div>/,'')
-  .replace('Cloud sync when online · local mode when offline','Private local storage · no account server')
+  .replace('Cloud continuity online · local access offline','Private local storage · no account server')
   .replace('Email or local account name','Local account name')
   .replace('you@example.com','Your name')
   .replace('Password or local PIN','Local PIN')
   .replace('Enter your password','Enter your PIN')
   .replace('New to TULSHII? Create an account','Create local account')
-  .replace('<strong>Basic Google sign-in only.</strong> Drive PDF storage is coming soon; no Drive permission is requested.','<strong>100% device-only.</strong> No Google, Supabase or cloud permission is used.')
-  .replace('Use one account for your personal workspace and every group you join.','A private workspace stored only in this browser.')
+  .replace('<strong>Private by design.</strong> Google sign-in requests basic identity only; Drive access is never requested.','<strong>100% device-only.</strong> No Google, Supabase or cloud permission is used.')
+  .replace('Sign in to continue your private workspace, personal plans and shared progress.','A private workspace stored only in this browser.')
   .replace(/\s*<script src="https:\/\/cdn\.jsdelivr\.net[\s\S]*?<script src="focus-professional-v49\.js\?v=51"><\/script>/,buildScripts());
 
 if(/<script src=/.test(html))throw new Error('Offline build still contains a script src');
