@@ -1246,7 +1246,7 @@ window.addEventListener('message',e=>{if(e.source!==window||e.data?.type!=='STUD
 /* family.js */
 /* Nestlyra Focus local activity, briefing voice, and legacy Family compatibility.
    Parent/Learner is no longer an account role. Cloud collaboration is handled by groups.js. */
-const FAMILY_KEY='studyTracker.family.v1';
+const FAMILY_KEY='tulshiiFocusOffline.preferences.v3';
 let familyData=loadFamily(),activityTimer=null,lastActivityAt=Date.now(),lastActivityTick=Date.now(),trackedView='dashboard',cloudFamilyUser=null,cloudActivitySyncAt=0,briefingVoiceTimer=null,briefingPopupTimer=null;
 
 function loadFamily(){
@@ -1321,7 +1321,7 @@ function familySettingsCards(){
   return `<section class="card"><div class="card-title"><h3>Voice & accessibility</h3><span>5 profiles</span></div><label class="workspace-switcher">Briefing voice<select onchange="setFamilyVoice('voice',this.value)">${voiceProfiles().map(([value,name])=>`<option value="${value}" ${voice===value?'selected':''}>${name}</option>`).join('')}</select></label><div class="setting-row"><span>Read briefing automatically</span><button class="toggle ${s.autoBriefing?'on':''}" onclick="setFamilyVoice('autoBriefing',!${s.autoBriefing});render()"></button></div><label>Speaking speed<input type="range" min="0.7" max="1.3" step="0.1" value="${s.voiceRate}" onchange="setFamilyVoice('voiceRate',this.value)"></label><div class="modal-actions"><button class="btn ghost" onclick="familyStopVoice()">■ Stop</button><button class="btn primary" onclick="familySpeak('Hello ${escapeHtml(state.profile?.name||'user')}. Your Nestlyra Focus voice is ready.')">▶ Test voice</button></div></section><section class="card"><div class="card-title"><h3>Daily briefing popup</h3><span>Configurable</span></div><label class="workspace-switcher">Show popup<select onchange="setFamilySetting('briefingFrequency',this.value);render()"><option value="every-login" ${s.briefingFrequency==='every-login'?'selected':''}>Every login</option><option value="daily" ${s.briefingFrequency==='daily'?'selected':''}>Once per day</option><option value="off" ${s.briefingFrequency==='off'?'selected':''}>Off / manual only</option></select></label><label class="workspace-switcher">Open after<select onchange="setFamilySetting('briefingDelay',Number(this.value));render()">${[[.3,'Immediately'],[3,'3 seconds'],[5,'5 seconds'],[10,'10 seconds']].map(([value,name])=>`<option value="${value}" ${Number(s.briefingDelay)===value?'selected':''}>${name}</option>`).join('')}</select></label><label>Custom greeting<input maxlength="100" value="${escapeHtml(s.briefingGreeting||'')}" placeholder="Welcome back, {name}" onchange="setFamilySetting('briefingGreeting',this.value.trim())"></label><div class="setting-row"><span>Include today’s plan</span><button class="toggle ${s.briefingToday?'on':''}" onclick="setFamilySetting('briefingToday',!${s.briefingToday});render()"></button></div><div class="setting-row"><span>Include upcoming topics</span><button class="toggle ${s.briefingUpcoming?'on':''}" onclick="setFamilySetting('briefingUpcoming',!${s.briefingUpcoming});render()"></button></div><div class="setting-row"><span>Include Job Tracker updates</span><button class="toggle ${s.briefingJobs?'on':''}" onclick="setFamilySetting('briefingJobs',!${s.briefingJobs});render()"></button></div><div class="modal-actions"><button class="btn primary" onclick="familyPreviewBriefing()">Preview briefing</button></div></section>${groupCard}<section class="card"><div class="card-title"><h3>Activity privacy</h3><span>This app only</span></div><p class="task-meta">Tracks focused Nestlyra Focus time, idle time, section visits and screen changes. It never records keystrokes or activity outside this application. All activity summaries remain on this device.</p><div class="setting-row"><span>Today active</span><strong>${formatDuration(day?.activeMs)}</strong></div><div class="setting-row"><span>Today screen changes</span><strong>${day?.viewChanges||0}</strong></div></section>`;
 }
 
-function familyBriefingStorageKey(){return `studyTracker.briefing.${cloudFamilyUser?.id||state?.profile?.familyUserId||'local'}`}
+function familyBriefingStorageKey(){return `tulshiiFocusOffline.briefing.v3.${cloudFamilyUser?.id||state?.profile?.familyUserId||'local'}`}
 function familyShouldShowBriefing(){const frequency=familyData.settings.briefingFrequency||'every-login';if(frequency==='off')return false;if(frequency==='daily'&&localStorage.getItem(familyBriefingStorageKey())===today())return false;return true}
 function familyConfigureBriefing(){const briefing=document.querySelector('.briefing');if(!briefing)return;const s=familyData.settings,name=(state.profile?.name||'User').split(' ')[0],custom=(s.briefingGreeting||'').trim();if(custom)briefing.querySelector('h2').textContent=custom.replaceAll('{name}',name);const stats=briefing.querySelectorAll('.briefing-stats>div'),sections=[...briefing.querySelectorAll('section')];if(!s.briefingToday){stats[1]?.remove();sections.find(x=>x.querySelector('h3')?.textContent==="Today's plan")?.remove()}if(!s.briefingUpcoming){stats[2]?.remove();sections.find(x=>x.querySelector('h3')?.textContent==='Coming up')?.remove()}if(!s.briefingJobs){stats[3]?.remove();briefing.querySelector('.job-brief')?.remove();briefing.querySelector('[onclick*="jobs"]')?.remove()}if((s.briefingFrequency||'every-login')==='daily')localStorage.setItem(familyBriefingStorageKey(),today());const actions=briefing.querySelector('.modal-actions');if(actions&&!actions.querySelector('.briefing-snooze'))actions.insertAdjacentHTML('afterbegin','<button type="button" class="btn ghost briefing-snooze" onclick="familyBriefingSnoozeToday()">Do not show again today</button>')}
 function familyOnBriefing(){familyStopVoice();briefingVoiceTimer=setTimeout(()=>{briefingVoiceTimer=null;const dialog=document.querySelector('#modal'),actions=document.querySelector('.briefing .modal-actions');if(!dialog?.open||!actions)return;const button=document.createElement('button');button.type='button';button.className='btn ghost';button.textContent='🔊 Read aloud';button.onclick=familySpeakBriefing;actions.prepend(button);if(familyData.settings.autoBriefing&&dialog.open)familySpeakBriefing()},80)}
@@ -1350,7 +1350,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 /* app.js */
-const KEY='studyTracker.v30',CLOUD_ACCOUNT_KEY='studyTracker.cloudAccount',APPEARANCE_KEY='studyTracker.appearance.v1',NOTICE_KEY='studyTracker.notice',LAST_VIEW_PREFIX='studyTracker.lastView.v1';
+const KEY='tulshiiFocusOffline.workspace.v3',CLOUD_ACCOUNT_KEY='tulshiiFocusOffline.cloudAccount.v3',APPEARANCE_KEY='tulshiiFocusOffline.appearance.v3',NOTICE_KEY='tulshiiFocusOffline.notice.v3',LAST_VIEW_PREFIX='tulshiiFocusOffline.lastView.v3';
 const today=()=>new Date().toISOString().slice(0,10);
 const uid=()=>Math.random().toString(36).slice(2,10);
 const PEN_MODULES=[
@@ -2209,7 +2209,7 @@ boot();
     setupAnimatedLogin();
     sessionStorage.removeItem('nestlyra.driveToken');
     document.querySelectorAll('.product-credit img,.parent-product-credit img').forEach(img=>{img.src='pavenro-wordmark-primary.png';img.alt='PAVENRO'});
-    if(state.settings?.loginImage){delete state.settings.loginImage;delete state.settings.loginImagePosition;delete state.settings.loginImageShade;try{localStorage.removeItem('studyTracker.appearance.v1')}catch{}save()}
+    if(state.settings?.loginImage){delete state.settings.loginImage;delete state.settings.loginImagePosition;delete state.settings.loginImageShade;try{localStorage.removeItem('tulshiiFocusOffline.appearance.v3')}catch{}save()}
     updateAvatar();
   });
   addEventListener('keydown',event=>{if(event.key==='Escape'&&document.querySelector('#nestlyraWalkthrough')){event.preventDefault();finishNestlyraWalkthrough()}});
@@ -2460,7 +2460,7 @@ boot();
   if(window.__PAVENRO_FOCUS_V48__)return;
   window.__PAVENRO_FOCUS_V48__=true;
 
-  const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';
+  const SIDEBAR_KEY='tulshiiFocusOffline.sidebar.v3';
   const CATEGORY={
     blank:{label:'Blank',theme:'category-blank',color:'#40576b',tag:'Studio Slate',description:'A composed neutral workspace you can shape yourself.',modules:['subjects','calendar']},
     school:{label:'School',theme:'category-school',color:'#235b8e',tag:'Scholar Cobalt',description:'Clear blue structure for subjects and day-to-day learning.',modules:['subjects','assignments','tasks','calendar','notes','habits','groups','timer']},

@@ -43,6 +43,7 @@ function buildScripts(){
     let source=read(file);
     if(file==='app.js'){
       source=source
+        .replace("const KEY='studyTracker.v30',CLOUD_ACCOUNT_KEY='studyTracker.cloudAccount',APPEARANCE_KEY='studyTracker.appearance.v1',NOTICE_KEY='studyTracker.notice',LAST_VIEW_PREFIX='studyTracker.lastView.v1';","const KEY='tulshiiFocusOffline.workspace.v3',CLOUD_ACCOUNT_KEY='tulshiiFocusOffline.cloudAccount.v3',APPEARANCE_KEY='tulshiiFocusOffline.appearance.v3',NOTICE_KEY='tulshiiFocusOffline.notice.v3',LAST_VIEW_PREFIX='tulshiiFocusOffline.lastView.v3';")
         .replace(/^function save\(\)\{.*$/m,"function save(){if(state?.workspaces?.length&&typeof storeWorkspace==='function')storeWorkspace();localStorage.setItem(KEY,JSON.stringify(state));applyTheme()}")
         .replace(/^async function syncCloud\(\).*\n?/m,'')
         .replace(/^async function loadCloud\(\).*\n?/m,'')
@@ -72,6 +73,8 @@ function buildScripts(){
     }
     if(file==='family.js'){
       source=source
+        .replace("const FAMILY_KEY='studyTracker.family.v1';","const FAMILY_KEY='tulshiiFocusOffline.preferences.v3';")
+        .replace('return `studyTracker.briefing.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`','return `tulshiiFocusOffline.briefing.v3.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`')
         .replace(/^async function getCloudFamilyUser\(\).*$/m,'async function getCloudFamilyUser(){return null}')
         .replace(/^async function registerCloudRole\(\).*\n?/m,'')
         .replace(/^window\.familyResolveAuthenticatedRole=.*\n?/m,'')
@@ -109,12 +112,14 @@ function buildScripts(){
     }
     if(file==='focus-v48.js'){
       source=source
+        .replace("const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';","const SIDEBAR_KEY='tulshiiFocusOffline.sidebar.v3';")
         .replace('<span>Account saved</span>','<span>Saved on this device</span>')
         .replace(/\s*<label>Login image framing<select[\s\S]*?<\/select><\/label>/,'')
         .replace(/\s*<section class="appearance-group login-image-settings">[\s\S]*?<\/section>/,'');
     }
     if(file==='nestlyra-v37.js'||file==='nestlyra-v42.js'){
       source=source
+        .replaceAll("'studyTracker.appearance.v1'","'tulshiiFocusOffline.appearance.v3'")
         .replaceAll('<button class="btn ghost" type="button" disabled title="Google Drive PDF storage is coming soon">☁ Drive PDF · Coming soon</button>','')
         .replaceAll('<button class="btn ghost" disabled title="Available after Google OAuth verification">☁ Drive PDF · Coming soon</button>','')
         .replaceAll("['Drive PDFs','Soon']","['Local resources',items.length]")
