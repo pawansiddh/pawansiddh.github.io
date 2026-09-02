@@ -13,7 +13,7 @@
   if (typeof baseSave === 'function') window.save = save = function offlineSave(){stripCloudModules();return baseSave()};
 
   const basePreset = window.applyTrackerPreset;
-  if (typeof basePreset === 'function') window.applyTrackerPreset = key => {basePreset(key);stripCloudModules();baseSave?.();render()};
+  if (typeof basePreset === 'function') window.applyTrackerPreset = key => {basePreset(key);stripCloudModules();baseSave?.()};
 
   const baseToggle = window.toggleTrackerModule;
   if (typeof baseToggle === 'function') window.toggleTrackerModule = id => ['groups','messages'].includes(id) ? toast('Groups and messaging are available in the online edition') : baseToggle(id);

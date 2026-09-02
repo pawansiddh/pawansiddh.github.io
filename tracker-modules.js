@@ -253,9 +253,21 @@
     return `<section class="card tracker-module-settings"><div class="card-title"><h3>Navigation & modules</h3><span>Per workspace</span></div><p class="task-meta">Choose a ready-made Nestlyra Focus style or build your own. Hidden modules stop appearing in navigation, search, dashboard summaries, reminders and settings, while their saved data remains protected.</p><div class="preset-grid">${Object.entries(PRESETS).map(([key,preset])=>`<button type="button" class="preset-card ${state.moduleConfig.preset===key?'active':''}" onclick="applyTrackerPreset('${key}')"><strong>${preset.label}</strong><small>${preset.description}</small></button>`).join('')}</div><div class="module-setting-group"><h4>Tracker sections</h4>${toggles(MODULES.filter(item=>!item.utility))}</div><div class="module-setting-group"><h4>Access & support</h4>${toggles(MODULES.filter(item=>item.utility))}</div><p class="settings-note"><strong>Settings</strong> and <strong>Manual & FAQ</strong> are enabled by default. If hidden, open Settings from the profile avatar and open a section manual from its sidebar ? button. These choices apply only to <strong>${escapeHtml(state.workspaces.find(x=>x.id===state.activeWorkspace)?.name||'this workspace')}</strong>.</p></section>`;
   }
 
+  function renderModuleSettingsInPlace(focusLabel='') {
+    const grid=document.querySelector('.settings-grid'),nav=document.querySelector('.sidebar nav');
+    const gridTop=grid?.scrollTop||0,navTop=nav?.scrollTop||0;
+    render();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const nextGrid=document.querySelector('.settings-grid'),nextNav=document.querySelector('.sidebar nav');
+      if(nextGrid)nextGrid.scrollTop=gridTop;
+      if(nextNav)nextNav.scrollTop=navTop;
+      if(focusLabel)document.querySelector(`[aria-label="${focusLabel}"]`)?.focus({preventScroll:true});
+    }));
+  }
+
   window.applyTrackerPreset=key=>{
     const preset=PRESETS[key];if(!preset)return;
-    state.moduleConfig={version:MODULE_CONFIG_VERSION,preset:key,enabled:[...preset.modules]};save();sessionStorage.setItem('studyTracker.settings.category','modules');viewName='settings';render();toast(`${preset.label} workspace applied`);
+    state.moduleConfig={version:MODULE_CONFIG_VERSION,preset:key,enabled:[...preset.modules]};save();sessionStorage.setItem('studyTracker.settings.category','modules');viewName='settings';renderModuleSettingsInPlace();toast(`${preset.label} workspace applied`);
   };
 
   window.toggleTrackerModule=id=>{
@@ -263,7 +275,7 @@
     const enabled=new Set(state.moduleConfig.enabled);enabled.has(id)?enabled.delete(id):enabled.add(id);
     state.moduleConfig={version:MODULE_CONFIG_VERSION,preset:'custom',enabled:[...enabled]};save();
     if(viewName===id&&!['settings','help'].includes(id))viewName='dashboard';
-    sessionStorage.setItem('studyTracker.settings.category','modules');render();
+    sessionStorage.setItem('studyTracker.settings.category','modules');renderModuleSettingsInPlace(`Toggle ${MODULES.find(item=>item.id===id)?.label||id}`);
   };
 
   function filterDisabledSettings() {

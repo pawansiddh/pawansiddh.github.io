@@ -11,6 +11,8 @@ assert.doesNotMatch(html,/serviceWorker\.register/,'A downloaded file must not a
 assert.doesNotMatch(html,/id="(?:authScreen|loginForm|loginName|loginPin|googleLoginBtn|createLearnerAccountBtn)"/,'Offline bundle must not contain login or account creation UI');
 assert.match(html,/body\.offline-mode canvas \{display:block;width:100%!important;max-width:100%\}/,'Offline canvases must stay centered inside narrow cards');
 assert.doesNotMatch(html,/Google Drive sync is planned|driveFileId\?'Google Drive'/,'Offline workflows must not advertise unavailable Drive synchronization');
+assert.doesNotMatch(html,/pavenro-focus-job-capture\.zip|Browser extension/,'Offline Job Tracker must not advertise an unavailable browser extension');
+assert.match(html,/renderModuleSettingsInPlace/,'Module settings must preserve scroll position while re-rendering');
 
 const browserErrors=[],networkCalls=[];
 const virtualConsole=new VirtualConsole();
