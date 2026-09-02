@@ -13,9 +13,10 @@ assert.match(html,/body\.offline-mode canvas \{display:block;width:100%!importan
 assert.doesNotMatch(html,/Google Drive sync is planned|driveFileId\?'Google Drive'/,'Offline workflows must not advertise unavailable Drive synchronization');
 assert.doesNotMatch(html,/pavenro-focus-job-capture\.zip|Browser extension/,'Offline Job Tracker must not advertise an unavailable browser extension');
 assert.match(html,/renderModuleSettingsInPlace/,'Module settings must preserve scroll position while re-rendering');
-assert.match(html,/tulshiiFocusOffline\.workspace\.v4/,'Download must use a versioned offline workspace store');
-assert.match(html,/tulshiiFocusOffline\.appearance\.v4/,'Download must isolate its appearance from older and online editions');
-assert.match(html,/tulshiiFocusOffline\.preferences\.v4/,'Download must isolate its briefing and voice preferences');
+assert.match(html,/tulshiiFocusOffline\.workspace\.v5/,'Download must use a versioned offline workspace store');
+assert.match(html,/tulshiiFocusOffline\.appearance\.v5/,'Download must isolate its appearance from older and online editions');
+assert.match(html,/tulshiiFocusOffline\.preferences\.v5/,'Download must isolate its briefing and voice preferences');
+assert.match(html,/grid-template-columns:32px minmax\(0,1fr\) minmax\(118px,132px\) minmax\(110px,124px\) 32px 32px/,'Enhanced topic rows must reserve separate edit and delete columns');
 
 const browserErrors=[],networkCalls=[];
 const virtualConsole=new VirtualConsole();
