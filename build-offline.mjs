@@ -3,6 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
+const verifiedOutput='TULSHII-Focus-Offline-Verified-v4.html';
 const read = file => fs.readFileSync(path.join(root,file),'utf8');
 const data = (file,type) => `data:${type};base64,${fs.readFileSync(path.join(root,file)).toString('base64')}`;
 const escapeScript = source => source.replaceAll('</script','<\\/script');
@@ -35,7 +36,8 @@ if(/<script src=/.test(html))throw new Error('Offline build still contains a scr
 if(/<link[^>]+href="https?:/i.test(html))throw new Error('Offline build still contains an external link resource');
 if(/id="(?:authScreen|loginForm|loginName|loginPin|googleLoginBtn|createLearnerAccountBtn)"/.test(html))throw new Error('Offline build still contains authentication UI');
 fs.writeFileSync(path.join(root,'tulshii-focus-offline.html'),html);
-console.log(`Built tulshii-focus-offline.html (${(Buffer.byteLength(html)/1024/1024).toFixed(2)} MiB)`);
+fs.writeFileSync(path.join(root,verifiedOutput),html);
+console.log(`Built tulshii-focus-offline.html and ${verifiedOutput} (${(Buffer.byteLength(html)/1024/1024).toFixed(2)} MiB each)`);
 
 function buildScripts(){
   const chart=escapeScript(read('offline-chart.js'));
@@ -43,7 +45,7 @@ function buildScripts(){
     let source=read(file);
     if(file==='app.js'){
       source=source
-        .replace("const KEY='studyTracker.v30',CLOUD_ACCOUNT_KEY='studyTracker.cloudAccount',APPEARANCE_KEY='studyTracker.appearance.v1',NOTICE_KEY='studyTracker.notice',LAST_VIEW_PREFIX='studyTracker.lastView.v1';","const KEY='tulshiiFocusOffline.workspace.v3',CLOUD_ACCOUNT_KEY='tulshiiFocusOffline.cloudAccount.v3',APPEARANCE_KEY='tulshiiFocusOffline.appearance.v3',NOTICE_KEY='tulshiiFocusOffline.notice.v3',LAST_VIEW_PREFIX='tulshiiFocusOffline.lastView.v3';")
+        .replace("const KEY='studyTracker.v30',CLOUD_ACCOUNT_KEY='studyTracker.cloudAccount',APPEARANCE_KEY='studyTracker.appearance.v1',NOTICE_KEY='studyTracker.notice',LAST_VIEW_PREFIX='studyTracker.lastView.v1';","const KEY='tulshiiFocusOffline.workspace.v4',CLOUD_ACCOUNT_KEY='tulshiiFocusOffline.cloudAccount.v4',APPEARANCE_KEY='tulshiiFocusOffline.appearance.v4',NOTICE_KEY='tulshiiFocusOffline.notice.v4',LAST_VIEW_PREFIX='tulshiiFocusOffline.lastView.v4';")
         .replace(/^function save\(\)\{.*$/m,"function save(){if(state?.workspaces?.length&&typeof storeWorkspace==='function')storeWorkspace();localStorage.setItem(KEY,JSON.stringify(state));applyTheme()}")
         .replace(/^async function syncCloud\(\).*\n?/m,'')
         .replace(/^async function loadCloud\(\).*\n?/m,'')
@@ -73,8 +75,8 @@ function buildScripts(){
     }
     if(file==='family.js'){
       source=source
-        .replace("const FAMILY_KEY='studyTracker.family.v1';","const FAMILY_KEY='tulshiiFocusOffline.preferences.v3';")
-        .replace('return `studyTracker.briefing.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`','return `tulshiiFocusOffline.briefing.v3.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`')
+        .replace("const FAMILY_KEY='studyTracker.family.v1';","const FAMILY_KEY='tulshiiFocusOffline.preferences.v4';")
+        .replace('return `studyTracker.briefing.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`','return `tulshiiFocusOffline.briefing.v4.${cloudFamilyUser?.id||state?.profile?.familyUserId||\'local\'}`')
         .replace(/^async function getCloudFamilyUser\(\).*$/m,'async function getCloudFamilyUser(){return null}')
         .replace(/^async function registerCloudRole\(\).*\n?/m,'')
         .replace(/^window\.familyResolveAuthenticatedRole=.*\n?/m,'')
@@ -112,14 +114,14 @@ function buildScripts(){
     }
     if(file==='focus-v48.js'){
       source=source
-        .replace("const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';","const SIDEBAR_KEY='tulshiiFocusOffline.sidebar.v3';")
+        .replace("const SIDEBAR_KEY='pavenro.focus.sidebar.collapsed.v1';","const SIDEBAR_KEY='tulshiiFocusOffline.sidebar.v4';")
         .replace('<span>Account saved</span>','<span>Saved on this device</span>')
         .replace(/\s*<label>Login image framing<select[\s\S]*?<\/select><\/label>/,'')
         .replace(/\s*<section class="appearance-group login-image-settings">[\s\S]*?<\/section>/,'');
     }
     if(file==='nestlyra-v37.js'||file==='nestlyra-v42.js'){
       source=source
-        .replaceAll("'studyTracker.appearance.v1'","'tulshiiFocusOffline.appearance.v3'")
+        .replaceAll("'studyTracker.appearance.v1'","'tulshiiFocusOffline.appearance.v4'")
         .replaceAll('<button class="btn ghost" type="button" disabled title="Google Drive PDF storage is coming soon">☁ Drive PDF · Coming soon</button>','')
         .replaceAll('<button class="btn ghost" disabled title="Available after Google OAuth verification">☁ Drive PDF · Coming soon</button>','')
         .replaceAll("['Drive PDFs','Soon']","['Local resources',items.length]")
