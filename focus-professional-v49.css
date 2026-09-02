@@ -179,9 +179,11 @@ body :is(.task-row,.note-item,.cal-day,.job-search,.job-quick button,.job-files 
 body :is(.briefing-stats>div,.briefing-list>div){border:1px solid var(--line);background:var(--panel2);color:var(--text)}
 body :is(.task-row,.note-item,.cal-day,.preset-card):hover{background:color-mix(in srgb,var(--accent) 6%,var(--panel2))}
 body .preset-card.active{border-color:color-mix(in srgb,var(--accent) 52%,var(--line));background:color-mix(in srgb,var(--accent) 9%,var(--panel2));color:var(--text)}
+body .manual-body{color:var(--muted)}
+body .manual-body strong{color:var(--text)}
 body .subtopic-row{grid-template-columns:32px minmax(0,1fr) minmax(118px,132px) minmax(110px,124px) 32px 32px;gap:10px;border-bottom-color:var(--line)}
 body .subtopic-row>.kebab{display:grid;width:32px;height:32px;padding:0;place-items:center;border-radius:8px}
-body .stat-icon,body .job-role>i,body .job-company-badge{background:var(--accent-soft);color:var(--accent)}
+body .stat-icon,body .job-role>i,body .job-company-badge,body .manual-icon,body .topic-state{background:var(--accent-soft);color:var(--accent)}
 body .avatar{background:var(--accent);color:var(--on-accent)}
 body .dot,body .floating-message-badge{background:var(--danger)}
 body .side-timer{border-color:var(--line);background:var(--panel2);color:var(--text)}
