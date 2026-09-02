@@ -162,8 +162,8 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 .theme-preview-card-a{left:29%;width:27%}.theme-preview-card-b{left:60%;right:5%}
 .theme-preview-card-a:before,.theme-preview-card-b:before{content:'';position:absolute;left:7px;right:30%;top:8px;height:3px;border-radius:3px;background:color-mix(in srgb,var(--theme-text) 22%,transparent);box-shadow:0 8px color-mix(in srgb,var(--theme-text) 12%,transparent)}
 .theme-preview-chart{left:64%;right:9%;bottom:20px;height:13px;border-bottom:2px solid var(--theme-accent);border-left:2px solid transparent;transform:skewY(-10deg)}
-.theme-card-copy{display:grid;gap:3px;padding:11px 12px 6px}.theme-card-copy strong{font-size:11px}.theme-card-copy small{color:var(--muted);font-size:8px;line-height:1.4}
-.theme-swatches{display:flex;gap:5px;padding:0 12px 11px}.theme-swatches i{width:13px;height:13px;border:1px solid color-mix(in srgb,var(--text) 12%,transparent);border-radius:50%}
+.theme-card-copy{display:grid;gap:3px;padding:11px 12px 6px;background:var(--theme-panel);color:var(--theme-text)}.theme-card-copy strong{font-size:11px}.theme-card-copy small{color:color-mix(in srgb,var(--theme-text) 66%,transparent);font-size:8px;line-height:1.4}
+.theme-swatches{display:flex;gap:5px;padding:0 12px 11px;background:var(--theme-panel)}.theme-swatches i{width:13px;height:13px;border:1px solid color-mix(in srgb,var(--theme-text) 16%,transparent);border-radius:50%}
 .appearance-theme-grid .theme-chip>em{position:absolute;top:8px;left:calc(24% + 8px);z-index:2;padding:4px 6px;border-radius:12px;background:color-mix(in srgb,var(--theme-panel) 88%,transparent);color:var(--theme-accent);font-size:7px;font-style:normal;font-weight:800;letter-spacing:.04em;box-shadow:0 2px 8px #0002}
 .category-theme-note{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 26px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--accent) 7%,var(--panel));color:var(--muted)}
 .category-theme-note>span{display:grid;gap:2px}.category-theme-note small{color:var(--muted);font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.category-theme-note strong{color:var(--text);font-size:12px}.category-theme-note i{color:var(--muted);font-size:9px;font-style:normal;line-height:1.45}
@@ -176,6 +176,7 @@ body :is(button,a,input,textarea,select):focus-visible{outline:3px solid color-m
 
 /* One semantic surface system across every module. */
 body :is(.task-row,.note-item,.cal-day,.job-search,.job-quick button,.job-files button,.modal-close,.preset-card,.manual-component-directory,.family-room-panel,.family-compose){border-color:var(--line);background:var(--panel2);color:var(--text)}
+body :is(.briefing-stats>div,.briefing-list>div){border:1px solid var(--line);background:var(--panel2);color:var(--text)}
 body :is(.task-row,.note-item,.cal-day,.preset-card):hover{background:color-mix(in srgb,var(--accent) 6%,var(--panel2))}
 body .stat-icon,body .job-role>i,body .job-company-badge{background:var(--accent-soft);color:var(--accent)}
 body .avatar{background:var(--accent);color:var(--on-accent)}

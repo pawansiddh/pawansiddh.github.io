@@ -1,17 +1,15 @@
-/* Device-only overrides bundled into pavenro-focus-offline.html. */
-body.offline-mode .google-button,
-body.offline-mode .auth-divider,
+/* Device-only overrides bundled into tulshii-focus-offline.html. */
+body.offline-mode #authScreen,
 body.offline-mode #floatingMessages,
 body.offline-mode .parent-product-credit,
 body.offline-mode .setting-row:has(button[aria-label="Toggle Groups"]),
-body.offline-mode button[onclick*="openDrivePdfPicker"],
-body.offline-mode button[title*="Drive PDF"],
 body.offline-mode .group-sharing-button {display:none!important}
 
-body.offline-mode .auth-account-note span {color:#20a491}
 body.offline-mode .offline-badge {display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--panel)}
 body.offline-mode .offline-badge::before {content:"";width:7px;height:7px;border-radius:50%;background:#20b8a6;box-shadow:0 0 0 4px rgba(32,184,166,.13)}
 body.offline-mode .top-actions {align-items:center}
+body.offline-mode canvas {display:block;width:100%!important;max-width:100%}
+body.offline-mode .v42-overall>div:nth-child(2),body.offline-mode .mock-gauge-body {min-width:0;overflow:hidden}
 body.offline-mode .offline-storage-card .offline-data-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
 body.offline-mode .offline-storage-card .offline-data-grid div {padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel-soft)}
 body.offline-mode .offline-storage-card .offline-data-grid strong {display:block;color:var(--text);font-size:13px;margin-bottom:3px}
